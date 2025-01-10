@@ -1,0 +1,27 @@
+.alert {
+    width: 250px; /* Ancho suficiente para texto */
+    height: auto; /* Permitir altura dinámica */
+    position: fixed;
+    right: 20px; /* Esquina superior derecha */
+    top: 20px; /* Primer alerta desde arriba */
+    margin-bottom: 10px; /* Separación entre alertas apiladas */
+    padding: 10px; /* Espaciado interno */
+    border-radius: 5px; /* Bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra */
+    z-index: 1000; /* Prioridad sobre otros elementos */
+    text-align: center; /* Centrar el texto */
+    color: black;
+}
+
+#infoAlert {
+    background-color: yellow;
+     /* Contraste para texto */
+}
+
+#errorAlert {
+    background-color: red;
+}
+
+#warningAlert {
+    background-color: blue;
+}
