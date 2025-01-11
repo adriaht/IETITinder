@@ -78,6 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IETinder - Login</title>
     <link rel="stylesheet" href="style.css">
+    <script src="index.js"></script>
 </head>
 <body class="body-login">
     <div class="container">
@@ -94,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label for="password">Contrasenya</label>
                     <div class="password-input">
                         <input type="password" id="password" placeholder="••••••••" required>
-                        <button type="button" id="togglePassword" class="toggle-password">👁️</button>
+                        <!--<button type="button" id="togglePassword" class="toggle-password">👁️</button>-->
                     </div>
                 </div>
 
@@ -111,53 +112,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <p class="footer-text">Troba l'amor a l'Institut Esteve Terradas i Illa</p>
         </div>
     </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const loginForm = document.getElementById('loginForm');
-            const emailInput = document.getElementById('email');
-            const passwordInput = document.getElementById('password');
-            const togglePassword = document.getElementById('togglePassword');
-            const submitButton = document.getElementById('submitButton');
-            const errorMessage = document.getElementById('errorMessage');
-
-            // Visibilidad de la contraseña
-            togglePassword.addEventListener('click', () => {
-                const type = passwordInput.type === 'password' ? 'text' : 'password';
-                passwordInput.type = type;
-                togglePassword.textContent = type === 'password' ? '👁️' : '🔒';
-            });
-
-            // Gestionar el envio del formulario
-            loginForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                
-                errorMessage.textContent = '';
-                
-                try {
-                    const response = await fetch('login.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            email: emailInput.value,
-                            password: passwordInput.value
-                        })
-                    });
-
-                    const data = await response.json();
-
-                    if (data.success) {
-                        window.location.href = 'discover.php';
-                    } else {
-                        errorMessage.textContent = data.message || 'Error d\'inici de sessió';
-                    }
-                } catch (error) {
-                    errorMessage.textContent = 'Error de connexió amb el servidor';
-                }
-            });
-        });
-    </script>
 </body>
 </html>
