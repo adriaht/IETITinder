@@ -25,3 +25,7 @@
 #warningAlert {
     background-color: blue;
 }
+
+#edit-profile-image{
+    border-radius: 50%;
+}
