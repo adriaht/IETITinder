@@ -29,3 +29,10 @@
 #edit-profile-image{
     border-radius: 50%;
 }
+
+#map {
+    height: 33%;
+    /* El mapa ocupará toda la altura de la ventana */
+    width: 460px;
+    /* El mapa ocupará todo el ancho */
+}
