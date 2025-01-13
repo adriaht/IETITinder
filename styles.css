@@ -1,0 +1,151 @@
+     /* PARTE BASE ---------------------------------------------------------------------------------------------- */
+     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@400;500;600&family=Poppins:wght@600;700&display=swap');
+
+     * {
+
+         margin: 0;
+         padding: 0;
+         box-sizing: border-box;
+         font-family: 'Inter', sans-serif;
+         
+     }
+
+     body {
+
+         min-height: 100vh;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         background: linear-gradient(135deg, #ff6b6b, #cc2faa, #7873f5);
+         background-size: 200% 200%;
+
+     }
+
+     .container {
+
+         width: 100%;
+         max-width: 460px;
+
+     }
+
+     .card {
+
+         background: white;
+         border-radius: 20px;
+         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+
+         height: 840px;
+         max-height: 840px;
+
+     }
+
+     /* PARTE BASE FINAL --------------------------------------------------------------------- */
+
+     /* HEADER */
+
+     header {
+         padding: 1.1rem;
+         height: 10%;
+
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+     }
+
+     header p {
+         font-size: 1.2rem;
+         font-weight: bold;
+         font-family: 'Poppins', sans-serif;
+     }
+
+     .logo {
+
+         color: #FF6B6B;
+         font-size: 1.5rem;
+         font-weight: bold;
+         animation: pulse 2s infinite;
+         font-family: 'Poppins', sans-serif;
+
+     }
+
+     /* CONTENT */
+
+     main {
+
+         padding: 0.2rem;
+         height: 82%;
+         position: relative;
+
+     }
+
+     /* PARTE DINÁMICA */
+     
+     main img {
+         width: 100%;
+         height: 92%;
+         object-fit: cover;
+         object-position: center;
+     }
+
+     main div.buttons {
+         position: absolute;
+         top: 85%;
+         left: 50%; /* Move the element to the center based on its left edge */
+         transform: translateX(-50%); /* Offset the element by half of its width */
+         display: flex;
+         justify-content: center;
+         gap: 40px;
+     }
+
+     main div.buttons button {
+
+         width: 90px; /* Adjust size as needed */
+         height: 90px; /* Make sure width and height are equal */
+         border-radius: 50%; /* Makes it a perfect circle */
+
+         color: white;
+         font-weight: bold;
+         font-size: 1.25rem; /* Adjust font size */
+
+         cursor: pointer; /* Pointer cursor on hover */
+         display: flex; /* Center text inside */
+         align-items: center; /* Center text vertically */
+         justify-content: center; /* Center text horizontally */
+         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional: add shadow */
+         transition: background-color 0.3s ease; /* Optional: smooth hover effect */
+     }
+
+     main div.buttons .no {
+         border: 8px solid darkred; /* Optional: remove border */
+         background-color: red; /* Button color */
+     }
+
+     main div.buttons .si {
+         border: 8px solid darkgreen; /* Optional: remove border */
+         background-color: green; /* Button color */
+     }
+
+     /* NAV */
+
+     nav {
+
+         padding: 1.1rem;
+
+         height: 8%;
+     }
+
+     nav ul {
+
+         list-style-type: none;
+         display: flex;
+         justify-content: space-between;
+         font-size: 1.2rem;
+         font-weight: bold;
+
+     }
+
+     nav ul li a {
+
+         color: black;
+         text-decoration: none;
+     } 

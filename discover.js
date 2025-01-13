@@ -1,12 +1,4 @@
-// MAIN EXECUTION
-
 document.addEventListener("DOMContentLoaded", async () => {
-
-    // PLACEHOLDER
-    const userContainer = document.createElement('div');
-    userContainer.id = 'user-c  ontainer';
-    // lo pone al final del documento.
-    document.body.appendChild(userContainer);
 
     // Gets array of fetched users
     const fetchedUsers = await fetchUsers();
@@ -15,7 +7,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (fetchedUsers && fetchedUsers.length > 0) {
 
         console.log(fetchedUsers)
-
+        renderUserCard(fetchedUsers, 0);
         // EVENT TO RENDER USER CARDS
 
         // LOG
@@ -24,8 +16,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         // LOG
 
-        // EVENT
-        // Show message there's no users left to show
+        renderNoUsersLeft();
+
         console.log("No users left")
 
     }
@@ -53,3 +45,215 @@ async function fetchUsers() {
         return [];
     }
 }
+
+function renderNoUsersLeft() {
+    const container = document.getElementById('content');
+    const endMessage = document.createElement('h2');
+    endMessage.textContent = 'No hi ha perfils disponibles';
+    endMessage.style.textAlign = "center";
+    endMessage.style.marginTop = "45%";
+    container.appendChild(endMessage);
+}
+
+
+
+function renderUserCard(users, index) {
+
+    // PARA DEBBUG
+    /*
+    console.log(`INDEX = ${index}`);
+    console.log(`USERS: `);
+    console.log(users);
+    */
+
+    // Delete all html inside the main content Div
+    const container = document.getElementById('content');
+    container.innerHTML = ''; // Limpiar contenido anterior
+
+    // If there are no users left after render, set empty content
+    if (index >= users.length) {
+        renderNoUsersLeft();
+        return;
+    }
+
+    // Get user from userIndex
+    const user = users[index];
+
+    // IMAGE 
+
+    const image = document.createElement('img');
+    image.src = user.photos[0];
+    image.alt =`photo_of_${user.info.alias}`;
+    image.style.width = "100%";
+    image.style.height = "92%";
+    image.style.objectFit = "cover";
+    image.style.objectPosition = "center";
+
+    // BUTTON DIV
+    const buttonsContainer = document.createElement('div');
+    buttonsContainer.style.position = "absolute";
+    buttonsContainer.style.top = "85%";
+    buttonsContainer.style.left = "50%";
+    buttonsContainer.style.transform = "translateX(-50%)";
+    buttonsContainer.style.display = "flex";
+    buttonsContainer.style.justifyContent = "center";
+    buttonsContainer.style.gap = "40px";
+
+    // NO BUTTON
+    const noButton = document.createElement('button');
+    noButton.textContent = 'NOP';
+    noButton.id = "no-button";
+    noButton.style.width = '90px';
+    noButton.style.height = '90px';
+    noButton.style.borderRadius = '50%';
+    noButton.style.color = 'white';
+    noButton.style.fontWeight = 'bold';
+    noButton.style.fontSize = '1.25rem';
+    noButton.style.cursor = 'pointer';
+    noButton.style.display = 'flex';
+    noButton.style.alignItems = 'center';
+    noButton.style.justifyContent = 'center';
+    // Difference with yes
+    noButton.style.border = '8px solid darkred';
+    noButton.style.backgroundColor = 'red';
+    // Event
+    noButton.addEventListener('click', function() {
+        clickedNoButton(user, users, index);
+    });
+
+    // YES BUTTON
+    const yesButton = document.createElement('button');
+    yesButton.textContent = 'YES';
+    yesButton.id = "yes-button";
+    yesButton.style.width = '90px';
+    yesButton.style.height = '90px';
+    yesButton.style.borderRadius = '50%';
+    yesButton.style.color = 'white';
+    yesButton.style.fontWeight = 'bold';
+    yesButton.style.fontSize = '1.25rem';
+    yesButton.style.cursor = 'pointer';
+    yesButton.style.display = 'flex';
+    yesButton.style.alignItems = 'center';
+    yesButton.style.justifyContent = 'center';
+    // Difference with no
+    yesButton.style.border = '8px solid darkgreen';
+    yesButton.style.backgroundColor = 'green';
+    // Event
+    yesButton.addEventListener('click', async () => {
+
+        clickedYesButton(user, users, index)
+
+    });
+
+    buttonsContainer.appendChild(noButton);
+    buttonsContainer.appendChild(yesButton);
+    container.appendChild(image);
+    container.appendChild(buttonsContainer);
+
+}
+
+function clickedNoButton(user, users, index){
+
+    console.log(`Usuario ${user.info.user_ID} - ${user.info.alias}: NO`);
+
+    // insertInteraction(user.info.user_ID, 'dislike');
+   
+    renderUserCard(users, index + 1);
+
+}
+
+function clickedYesButton(user, users, index) {
+
+    console.log(`Usuario ${user.info.user_ID} - ${user.info.alias}: SI`);
+
+    //insertInteraction(user.info.user_ID, 'like');
+
+    //const isMatch = await checkMatch(user.info.user_ID);
+    const isMatch = true;
+
+    if (isMatch) {
+
+        //insertMatch(user.info.user_ID);
+        showOptionBox(user, users, index)
+    } else {
+
+        renderUserCard(users, index + 1);
+
+    }
+}
+
+function showOptionBox(user, users, index) {
+
+    const container = document.getElementById('content');
+
+    // Disable buttons while selecting users
+    const yesButton = document.getElementById('yes-button');
+    const noButton = document.getElementById('no-button');
+    yesButton.disabled = true;
+    noButton.disabled = true;
+    yesButton.style.cursor = "default";
+    noButton.style.cursor = "default";
+    
+    const optionBox = document.createElement('div');
+    optionBox.style.position = 'absolute';
+    optionBox.style.top = '45%';
+    optionBox.style.left = '50%';
+    optionBox.style.transform = 'translate(-50%, -50%)';
+    optionBox.style.backgroundColor = 'white';
+    optionBox.style.borderRadius = '8px';
+    optionBox.style.padding = '20px';
+    optionBox.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.5)';
+    optionBox.style.textAlign = 'center';
+
+    const matchTitle = document.createElement('h3');
+    matchTitle.textContent = "Has fet Match!";
+
+    const optionButtonBox = document.createElement('div');
+    optionButtonBox.style.display = 'flex';
+    optionButtonBox.style.gap = '10px';
+    optionButtonBox.style.marginTop = '15px';
+    optionButtonBox.style.flexDirection = 'column';
+
+    const goToMessageButton = document.createElement('button');
+    goToMessageButton.textContent = 'Anar a la conversa';
+    goToMessageButton.style.padding = '10px 20px';
+    goToMessageButton.style.border = 'none';
+    goToMessageButton.style.borderRadius = '4px';
+    goToMessageButton.style.cursor = 'pointer';
+    goToMessageButton.style.fontSize = '16px';
+    goToMessageButton.style.backgroundColor = "#FF6B6B";
+    goToMessageButton.style.color = "#fff";
+    goToMessageButton.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
+
+    goToMessageButton.addEventListener('click', () => {
+        window.location.href = 'messages.php'; // Redirigir a messages.php
+    });
+
+    const keepDiscoveringButton = document.createElement('button');
+    keepDiscoveringButton.textContent = 'Seguir descobrint';
+    keepDiscoveringButton.style.padding = '10px 20px';
+    keepDiscoveringButton.style.border = 'none';
+    keepDiscoveringButton.style.borderRadius = '4px';
+    keepDiscoveringButton.style.cursor = 'pointer';
+    keepDiscoveringButton.style.fontSize = '16px';
+    keepDiscoveringButton.style.backgroundColor = "#e0e0e0";
+    keepDiscoveringButton.style.color = "#333";
+    keepDiscoveringButton.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
+
+    keepDiscoveringButton.addEventListener('click', () => {
+        yesButton.disabled = false;
+        noButton.disabled = false;
+        yesButton.style.cursor = "pointer";
+        noButton.style.cursor = "pointer";
+        renderUserCard(users, index + 1);
+        optionBox.remove();
+    });
+
+    optionButtonBox.appendChild(goToMessageButton);
+    optionButtonBox.appendChild(keepDiscoveringButton);
+    optionBox.appendChild(matchTitle);
+    optionBox.appendChild(optionButtonBox);
+    container.appendChild(optionBox);
+    
+}
+

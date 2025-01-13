@@ -3,6 +3,7 @@
 // Init sessión
 session_start();
 
+
 // Check if session is active. Otherwise, get to login
 if (!isset($_SESSION['user'])) {
     header('Location: login.php');
@@ -11,6 +12,7 @@ if (!isset($_SESSION['user'])) {
 
 // Store loggedUser Object
 $loggedUser = searchUserInDatabase("*", "users", $_SESSION['user']["user_ID"]);
+
 
 function searchUserInDatabase($whatYouWant, $whereYouWant, $userYouWant) {
 
@@ -37,7 +39,7 @@ function searchUserInDatabase($whatYouWant, $whereYouWant, $userYouWant) {
         unset($stmt);
         unset($pdo);
 
-        return $user;
+        return $data;
 
     } catch (PDOException $e) {
 
@@ -101,30 +103,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
         $userID = $loggedUser["user_ID"];
         $userSexTarget = setUserPreferenceForQuery($loggedUser["sex"], $loggedUser["sexual_orientation"]);
         $userSexualOrientation = $loggedUser["sexual_orientation"];
-        //$userLatitude = 
-        //$userLongitude = 
+        $userLatitude = $loggedUser["latitude"];
+        $userLongitude = $loggedUser["longitude"];
         //$userBirthdate = 
         
+        $sql = "SELECT user_ID, alias, birth_date, sex, sexual_orientation, last_login_date, creation_date, 
+                (6371 * acos(cos(radians(:loggedUserLatitude)) 
+                            * cos(radians(latitude)) 
+                            * cos(radians(longitude) - radians(:loggedUserLongitude)) 
+                            + sin(radians(:loggedUserLatitude)) 
+                            * sin(radians(latitude)))
+                ) AS distance
+                FROM users
+                WHERE user_ID != :loggedUserId 		
+                AND sex IN (:loggedUserSexTarget)	
+                AND sexual_orientation IN (:loggedUserSexualOrientation, 'bisexual')
+                AND user_ID NOT IN (SELECT `to` FROM interactions WHERE `from` = :loggedUserId AND state = 'like')
+                ORDER BY last_login_date DESC, creation_date, distance ASC";
 
         // Algorithm query
         //$sql = "SELECT user_ID, email, name, surname, sex 
          //       FROM users 
          //       WHERE sex IN (:userSexTarget) 
-         //       AND user_ID != :loggedUserId";
-
-        $sql = "SELECT user_ID, alias, birth_date, latitude, longitude, sex, sexual_orientation, last_login_date, creation_date FROM users 
-                WHERE user_ID != :loggedUserId 		
-                AND sex IN (:loggedUserSexTarget)	
-                AND sexual_orientation IN (:loggedUserSexualOrientation, 'bisexual')
-                AND user_ID NOT IN (SELECT `to` FROM interactions WHERE `from` = :loggedUserId AND state = 'like')
-                ORDER BY last_login_date DESC, creation_date";
-        
+         //       AND user_ID != :loggedUserId";  
 
         $stmt = $pdo->prepare($sql);
         $stmt->bindParam(':loggedUserId', $userID);
         $stmt->bindParam(':loggedUserSexTarget', $userSexTarget);
         $stmt->bindParam(':loggedUserSexualOrientation', $userSexualOrientation);
-        
+        $stmt->bindParam(':loggedUserLatitude', $userLatitude);
+        $stmt->bindParam(':loggedUserLongitude', $userLongitude);
         $stmt->execute();
 
         // Load user info from the query
@@ -136,7 +144,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
                 'alias' => $row['alias'],
                 'sex' => $row['sex'],
                 'sexual_orientation' => $row['sexual_orientation'],
-                'birth_date' => $row['birth_date']
+                'last_login_date' => $row['last_login_date'],
+                'distance' => $row['distance']
             ];
         }
 
@@ -308,19 +317,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Usuario Logueado</title>
+    <title>IETinder - Discover</title>
+    <link rel="stylesheet" type="text/css" href="styles.css?t=<?php echo time();?>" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="discover.js"></script>
 </head>
-<body>
-    <h1>Bienvenido</h1>
-    <?php foreach ($loggedUser as $key => $value): ?>
-        <p><?php echo htmlspecialchars(ucfirst(str_replace('_', ' ', $key))); ?>: <?php echo htmlspecialchars($value); ?></p>
-    <?php endforeach; ?>
-    <form method="POST" action="logout.php">
-        <input type="submit" value="Cerrar sesión">
-    </form>
-     <h1>DISCOVER</h1>
-    
+<body class="body">
+
+    <div class="container">
+
+        <div class="card">
+
+            <header>
+                <p class="logo">IETinder ❤️</p>
+                <p>Cercar</p>
+            </header>
+
+            <main id="content" class="content">
+
+             
+
+            </main>
+
+            <nav>
+                <ul>
+                    <li><a href="/discover.php">Descobrir</a></li>
+                    <li><a href="/messages.php">Missatges</a></li>
+                    <li><a href="/profile.php">Perfil</a></li>
+                </ul>
+            </nav>
+        
+        </div>
+        
+    </div>
+
 </body>
 </html>
 
