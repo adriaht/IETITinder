@@ -20,8 +20,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         // LOG
 
-       
-
     } else {
 
         // LOG
