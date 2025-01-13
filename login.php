@@ -16,6 +16,7 @@ function startPDO() {
         ]);
         return $pdo;
     } catch (PDOException $e) {
+        // LOG (Error en la conexión a la BDD)
         error_log("Error de conexión a la BDD: " . $e->getMessage());
         die(json_encode(['success' => false, 'message' => 'Error de connexió a la base de dades.']));
     }
@@ -67,10 +68,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $updateStmt->bindParam(':id', $user['user_ID']);
         $updateStmt->execute();
         
-        $_SESSION['user'] = $user;
+        $_SESSION['user'] = $user['user_ID'];
+        // LOG (Login correcto)
         echo json_encode(['success' => true, 'message' => $user]);
 
     } catch (PDOException $e) {
+        // LOG (Error en la base de datos)
         error_log('Database error: ' . $e->getMessage());
         echo json_encode(['success' => false, 'message' => 'Error de connexió. Torna-ho a intentar més tard.']);
     }
@@ -89,10 +92,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body class="body-login">
 <div class="container">
-        <div class="login-card">
-            <div class="logo-login">IETinder ❤️</div>
-            <p class="footer-text">Troba l'amor a l'Institut Esteve Terradas i Illa</p>
-            
+        <div class="card" id="login-card">
+            <div class="card-header">
+                <div class="logo-login">IETinder ❤️</div>
+                <p class="footer-text">Troba l'amor a l'Institut Esteve Terradas i Illa</p>
+            </div>
+
             <form id="loginForm">
                 <div class="input-group" id="emailGroup">
                     <label for="email">Correu electrònic</label>

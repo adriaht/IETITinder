@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const emailGroup = document.getElementById('emailGroup');
     const passwordGroup = document.getElementById('passwordGroup');
     const errorMessage = document.getElementById('errorMessage');
+    const togglePassword = document.getElementById('togglePassword');
 
     // Visibilidad de la contraseña
     //togglePassword.addEventListener('click', () => {
@@ -48,6 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
 
             if (data.success) {
+                // LOG (Inicio de sesión exitoso)
                 window.location.href = 'discover.php';
             } else {
                 // Gestionar errores de usuario y contraseña
@@ -65,6 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         } catch (error) {
+            // LOG (Error en la conexión con el servidor)
             errorMessage.textContent = 'Error de connexió amb el servidor';
         }
     });
