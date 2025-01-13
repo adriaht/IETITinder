@@ -11,7 +11,7 @@ if (!isset($_SESSION['user'])) {
 }
 
 // Store loggedUser Object
-$loggedUser = searchUserInDatabase("*", "users", $_SESSION['user']["user_ID"]);
+$loggedUser = searchUserInDatabase("*", "users", $_SESSION['user']);
 
 
 function searchUserInDatabase($whatYouWant, $whereYouWant, $userYouWant) {
