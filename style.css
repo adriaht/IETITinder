@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@400;500;600&family=Poppins:wght@600;700&display=swap');
 
-
 * {
     margin: 0;
     padding: 0;
@@ -39,7 +38,7 @@
 
 .logo-login {
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
     color: #FF6B6B;
     font-size: 2.5rem;
     font-weight: bold;
@@ -55,6 +54,15 @@
 
 .input-group {
     margin-bottom: 1rem;
+}
+
+.input-group.error input {
+    border-color: #e53e3e;
+    background-color: #fff5f5;
+}
+
+.input-group.error label {
+    color: #e53e3e;
 }
 
 label {
@@ -84,18 +92,6 @@ input:focus {
     position: relative;
 }
 
-.toggle-password {
-    position: absolute;
-    right: 1rem;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 1.25rem;
-    color: #718096;
-}
-
 .primary-button {
     width: 100%;
     padding: 0.75rem 1rem;
@@ -108,7 +104,7 @@ input:focus {
     cursor: pointer;
     transition: all 0.2s;
     position: relative;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
     font-family: 'Montserrat', sans-serif;
 }
 
@@ -121,27 +117,22 @@ input:focus {
     cursor: not-allowed;
 }
 
-.button-group {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-    margin-top: 1rem;
+.links-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
 }
 
-.secondary-button {
-    padding: 0.75rem 0.75rem;
-    background: #f7fafc;
+.secondary-link {
     color: #4a5568;
-    border: 1px solid #e2e8f0;
-    border-radius: 0.5rem;
+    text-decoration: none;
     font-size: 0.875rem;
-    cursor: pointer;
-    transition: all 0.2s;
     font-family: 'Montserrat', sans-serif;
+    transition: color 0.2s;
 }
 
-.secondary-button:hover {
-    background: #edf2f7;
+.secondary-link:hover {
+    color: #ff6b6b;
 }
 
 .error-message {
@@ -156,5 +147,6 @@ input:focus {
     text-align: center;
     color: #718096;
     font-size: 0.875rem;
-    margin-top: 2rem;
+    margin-bottom: 2rem;
+    font-family: 'Inter', sans-serif;
 }

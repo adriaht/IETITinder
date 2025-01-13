@@ -1,13 +1,30 @@
 <?php
 session_start();
 
-// Handle AJAX login request
+// Función para iniciar la conexión a la base de datos
+function startPDO() {
+    $hostname = "localhost";
+    $dbname = "IETinder";
+    $username = "admin";
+    $password = "admin123";
+
+    try {
+        $pdo = new PDO("mysql:host=$hostname;dbname=$dbname;charset=utf8", $username, $password, [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_EMULATE_PREPARES => false
+        ]);
+        return $pdo;
+    } catch (PDOException $e) {
+        error_log("Error de conexión a la BDD: " . $e->getMessage());
+        die(json_encode(['success' => false, 'message' => 'Error de connexió a la base de dades.']));
+    }
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header('Content-Type: application/json');
     
-    // Get JSON input
     $input = json_decode(file_get_contents('php://input'), true);
-
     if (!$input) {
         echo json_encode(['success' => false, 'message' => 'Dades invàlides']);
         exit;
@@ -17,18 +34,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $input['password'] ?? '';
 
     try {
-        $hostname = "localhost";
-        $dbname = "IETinder";
-        $username = "admin";
-        $pw = "holacaracola";
-        $pdo = new PDO("mysql:host=$hostname;dbname=$dbname", "$username", "$pw");
-        
-        // Busca el usuario
+        $pdo = startPDO(); // Llamamos a la función para conectar a la base de datos
+
+        // Buscar el usuario
         $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
         $stmt->bindParam(':email', $email);
         $stmt->execute();
         
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        $user = $stmt->fetch();
         
         if (!$user) {
             echo json_encode(['success' => false, 'message' => 'Usuari no trobat']);
@@ -39,38 +52,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo json_encode(['success' => false, 'message' => 'Contrasenya incorrecta']); //Cambiar a password_verify() cuando las contraseñas esten encriptadas
             exit;
         }
-        
-        
-        // Actualizar ultimo login
+
+        // Actualizar último login
         $updateStmt = $pdo->prepare("UPDATE users SET last_login_date = CURRENT_TIMESTAMP WHERE user_ID = :id");
         $updateStmt->bindParam(':id', $user['user_ID']);
         $updateStmt->execute();
         
-        // Session
-        $_SESSION['user'] = [
-            'id' => $user['user_ID'],
-            'email' => $user['email'],
-            'name' => $user['name']
-        ];
-        
-        
-        echo json_encode([
-            'success' => true,
-            'message' => [
-                'id' => $user['user_ID'],
-                'email' => $user['email'],
-                'name' => $user['name']
-            ]
-        ]);
-        
+        // Guardar sesión
+        $_SESSION['user'] = $user;
+        echo json_encode(['success' => true, 'message' => 'Inicio de sesión exitoso']);
+
     } catch (PDOException $e) {
         error_log('Database error: ' . $e->getMessage());
         echo json_encode(['success' => false, 'message' => 'Error de connexió. Torna-ho a intentar més tard.']);
     }
     exit;
 }
-
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -81,21 +80,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script src="index.js"></script>
 </head>
 <body class="body-login">
-    <div class="container">
+<div class="container">
         <div class="login-card">
             <div class="logo-login">IETinder ❤️</div>
+            <p class="footer-text">Troba l'amor a l'Institut Esteve Terradas i Illa</p>
             
             <form id="loginForm">
-                <div class="input-group">
+                <div class="input-group" id="emailGroup">
                     <label for="email">Correu electrònic</label>
-                    <input type="email" id="email" placeholder="alumne@ieti.site" required>
+                    <input type="email" id="email" placeholder="" autocomplete="off" required>
                 </div>
 
-                <div class="input-group">
+                <div class="input-group" id="passwordGroup">
                     <label for="password">Contrasenya</label>
                     <div class="password-input">
-                        <input type="password" id="password" placeholder="••••••••" required>
-                        <!--<button type="button" id="togglePassword" class="toggle-password">👁️</button>-->
+                        <input type="password" id="password" placeholder="" autocomplete="off" required>
                     </div>
                 </div>
 
@@ -103,13 +102,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <button type="submit" id="submitButton" class="primary-button">Iniciar Sessió</button>
 
-                <div class="button-group">
-                    <button type="button" class="secondary-button">Recuperar Compte</button>
-                    <button type="button" class="secondary-button">Crear Compte</button>
+                <div class="links-group">
+                    <a href="#" class="secondary-link">¿Has oblidat la contrasenya?</a>
+                    <a href="#" class="secondary-link">Crea una compte nova</a>
                 </div>
             </form>
-
-            <p class="footer-text">Troba l'amor a l'Institut Esteve Terradas i Illa</p>
         </div>
     </div>
 </body>
