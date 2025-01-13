@@ -1,3 +1,7 @@
+CREATE USER 'admin'@'localhost' IDENTIFIED BY 'admin123';
+GRANT ALL PRIVILEGES ON *.* TO 'admin'@'localhost' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
+
 DROP DATABASE IF EXISTS IETinder;
 CREATE DATABASE IETinder;
 
@@ -204,6 +208,7 @@ VALUES
 
 INSERT INTO interactions (`from`, `to`, `state`) VALUES (1, 4, "like");
 INSERT INTO interactions (`from`, `to`, `state`) VALUES (4, 1, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (10, 1, "like");
 INSERT INTO interactions (`from`, `to`, `state`) VALUES (1, 14, "dislike");
 INSERT INTO interactions (`from`, `to`, `state`) VALUES (1, 14, "like");
 INSERT INTO interactions (`from`, `to`, `state`) VALUES (14, 1, "like");
@@ -214,6 +219,7 @@ INSERT INTO interactions (`from`, `to`, `state`) VALUES (19, 1, "dislike");
 INSERT INTO interactions (`from`, `to`, `state`) VALUES (19, 1, "dislike");
 INSERT INTO interactions (`from`, `to`, `state`) VALUES (19, 1, "like");
 
+
 INSERT INTO matches (participant1, participant2) VALUES (1, 4);
 INSERT INTO matches (participant1, participant2) VALUES (1, 14);
 INSERT INTO matches (participant1, participant2) VALUES (1, 19);
@@ -221,8 +227,8 @@ INSERT INTO matches (participant1, participant2) VALUES (1, 19);
 INSERT INTO conversations (match_ID, sender_id, content, creation_date) 
 VALUES 
 (1, 1, "Primer mensaje de John", '2025-01-30 08:00:00'),
-    (1, 4, "Primer mensaje de Emily", '2025-01-30 08:15:00'),
-    (1, 4, "Segundo mensaje de Emily", '2025-01-30 08:30:00'),
-    (1, 4, "Tercer mensaje de Emily", '2025-01-30 08:45:00'),
-    (1, 1, "Segundo mensaje de John", '2025-01-30 09:00:00');
+(1, 4, "Primer mensaje de Emily", '2025-01-30 08:15:00'),
+(1, 4, "Segundo mensaje de Emily", '2025-01-30 08:30:00'),
+(1, 4, "Tercer mensaje de Emily", '2025-01-30 08:45:00'),
+(1, 1, "Segundo mensaje de John", '2025-01-30 09:00:00');
 
