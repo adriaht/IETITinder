@@ -37,7 +37,7 @@ async function fetchUsers() {
 
     try {
 
-        const response = await fetch("dashboard.php?action=get_users");
+        const response = await fetch("discover.php?action=get_users");
         const users = await response.json();
 
         // IF SUCCESS = returns array of users data | ELSE = returns empty array

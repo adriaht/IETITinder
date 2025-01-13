@@ -10,8 +10,43 @@ if (!isset($_SESSION['user'])) {
 }
 
 // Store loggedUser Object
-$loggedUser = $_SESSION['user'];
+$loggedUser = searchUserInDatabase("*", "users", $_SESSION['user']["user_ID"]);
 
+function searchUserInDatabase($whatYouWant, $whereYouWant, $userYouWant) {
+
+    try {
+
+        $pdo = startPDO();
+
+        // Create and return a new PDO instance
+
+        $sql = "SELECT $whatYouWant FROM $whereYouWant WHERE user_ID = :loggedUserId";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':loggedUserId', $userYouWant);
+        $stmt->execute();
+
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$data) {
+
+            // LOG
+            die("Data not found");
+        }
+
+        // Cerramos conexión
+        unset($stmt);
+        unset($pdo);
+
+        return $user;
+
+    } catch (PDOException $e) {
+
+        // LOG
+        die("Error en la conexión: " . $e->getMessage());
+    }
+
+    
+}
 
 // FUNCTION TO ESTABLISH USER preference. Ex: if heterosexual, then return opposite sex.
 // Used in query to get users based on the loggedUser gender sex (sex IN (home, dona...) )
