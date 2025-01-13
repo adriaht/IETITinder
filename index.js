@@ -4,7 +4,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const passwordInput = document.getElementById('password');
     const emailGroup = document.getElementById('emailGroup');
     const passwordGroup = document.getElementById('passwordGroup');
-    const submitButton = document.getElementById('submitButton');
     const errorMessage = document.getElementById('errorMessage');
 
     // Visibilidad de la contraseña
@@ -52,16 +51,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.location.href = 'discover.php';
             } else {
                 // Gestionar errores de usuario y contraseña
-                if (data.message === 'Usuari no trobat') {
+                if (data.message === 'Usuari i contrasenya incorrectes') {
                     emailGroup.classList.add('error');
-                    errorMessage.textContent = 'Usuari no trobat';
+                    passwordGroup.classList.add('error');
+                    errorMessage.textContent = 'Usuari i contrasenya incorrectes';
                 } else if (data.message === 'Contrasenya incorrecta') {
                     passwordGroup.classList.add('error');
                     errorMessage.textContent = 'Contrasenya incorrecta';
                 } else {
                     emailGroup.classList.add('error');
                     passwordGroup.classList.add('error');
-                    errorMessage.textContent = data.message || 'Error d\'inici de sessió';
+                    errorMessage.textContent = data.message || 'Usuari i contrasenya incorrectes';
                 }
             }
         } catch (error) {

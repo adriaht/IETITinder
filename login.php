@@ -34,33 +34,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $input['password'] ?? '';
 
     try {
-        $pdo = startPDO(); // Llamamos a la función para conectar a la base de datos
+        $pdo = startPDO();
 
-        // Buscar el usuario
-        $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
+        // Buscar si el usuario existe
+        $stmt = $pdo->prepare("SELECT user_ID, password FROM users WHERE email = :email");
         $stmt->bindParam(':email', $email);
         $stmt->execute();
-        
+
         $user = $stmt->fetch();
-        
+
+        // Si el usuario no existe, mostrar error
         if (!$user) {
-            echo json_encode(['success' => false, 'message' => 'Usuari no trobat']);
-            exit;
-        }
-        
-        if ($password !== $user['password']) {            
-            echo json_encode(['success' => false, 'message' => 'Contrasenya incorrecta']); //Cambiar a password_verify() cuando las contraseñas esten encriptadas
+            echo json_encode(['success' => false, 'message' => 'Usuari y contrasenya incorrectes']);
             exit;
         }
 
-        // Actualizar último login
+        // Verificar si la contraseña es correcta 
+        $stmtpwd = $pdo->prepare("SELECT COUNT(*) FROM users WHERE email = :email AND password = SHA2(:password, 512)");
+        $stmtpwd->bindParam(':email', $email);
+        $stmtpwd->bindParam(':password', $password);
+        $stmtpwd->execute();
+        
+        $passwordCorrecta = $stmtpwd->fetchColumn(); // Obtiene 1 si la contraseña es correcta, 0 si no        
+
+        if (!$passwordCorrecta) {
+            echo json_encode(['success' => false, 'message' => 'Contrasenya incorrecta']);
+            exit;
+        }
+
+        // Actualizar el último login
         $updateStmt = $pdo->prepare("UPDATE users SET last_login_date = CURRENT_TIMESTAMP WHERE user_ID = :id");
         $updateStmt->bindParam(':id', $user['user_ID']);
         $updateStmt->execute();
         
-        // Guardar sesión
         $_SESSION['user'] = $user;
-        echo json_encode(['success' => true, 'message' => 'Inicio de sesión exitoso']);
+        echo json_encode(['success' => true, 'message' => $user]);
 
     } catch (PDOException $e) {
         error_log('Database error: ' . $e->getMessage());
@@ -71,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ca">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
