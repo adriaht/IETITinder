@@ -274,7 +274,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Usuario Logueado</title>
-    <script src="dashboard.js"></script>
+    <script src="discover.js"></script>
 </head>
 <body>
     <h1>Bienvenido</h1>
