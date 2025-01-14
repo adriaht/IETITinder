@@ -87,7 +87,7 @@ function setUserPreferenceForQuery($userSex, $userOrientation) {
         } else if ($userSex === 'dona') {
             return 'home';
         } else if ($userSex === 'no binari') {
-            return 'home, dona';
+            return "'home', 'dona'";
         }
 
     } else if ($userOrientation === 'homosexual') {
@@ -96,7 +96,7 @@ function setUserPreferenceForQuery($userSex, $userOrientation) {
 
     } else if ($userOrientation === 'bisexual') {
 
-        return 'home, dona, no binari';
+        return "'home', 'dona', 'no binari'";
 
     } else {
 
