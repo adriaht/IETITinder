@@ -3,6 +3,7 @@
 // Init sessión
 session_start();
 
+$_SESSION['user'] = 1;
 
 // Check if session is active. Otherwise, get to login
 if (!isset($_SESSION['user'])) {
@@ -12,6 +13,28 @@ if (!isset($_SESSION['user'])) {
 
 // Store loggedUser Object
 $loggedUser = searchUserInDatabase("*", "users", $_SESSION['user']);
+
+function logOperation($message, $type = "INFO") {
+
+    // Get log directory path
+    $logDir = __DIR__ . '/logs';
+
+    // Create directory if it doesn't exist
+    if (!file_exists($logDir)) {
+        mkdir($logDir, 0755);
+    }
+
+    // Get log file name (formato YYYY-MM-DD.txt)
+    $logFile = $logDir . '/' . date('Y-m-d') . '.txt';
+
+    // Message formatting
+    $timeStamp = date('Y-m-d H:i:s');
+    $logMessage = "[$timeStamp] [$type] $message\n";
+
+    // Write log message in logFile
+    file_put_contents($logFile, $logMessage, FILE_APPEND);
+}
+
 
 
 function searchUserInDatabase($whatYouWant, $whereYouWant, $userYouWant) {
@@ -105,8 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
         $userSexualOrientation = $loggedUser["sexual_orientation"];
         $userLatitude = $loggedUser["latitude"];
         $userLongitude = $loggedUser["longitude"];
-        //$userBirthdate = 
-        
+
         $sql = "SELECT user_ID, alias, birth_date, sex, sexual_orientation, last_login_date, creation_date, 
                 (6371 * acos(cos(radians(:loggedUserLatitude)) 
                             * cos(radians(latitude)) 
@@ -115,17 +137,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
                             * sin(radians(latitude)))
                 ) AS distance
                 FROM users
-                WHERE user_ID != :loggedUserId 		
+                WHERE user_ID != :loggedUserId 
                 AND sex IN (:loggedUserSexTarget)	
-                AND sexual_orientation IN (:loggedUserSexualOrientation, 'bisexual')
+                AND sexual_orientation IN (:loggedUserSexualOrientation, 'bisexual')		
                 AND user_ID NOT IN (SELECT `to` FROM interactions WHERE `from` = :loggedUserId AND state = 'like')
                 ORDER BY last_login_date DESC, creation_date, distance ASC";
 
         // Algorithm query
-        //$sql = "SELECT user_ID, email, name, surname, sex 
-         //       FROM users 
-         //       WHERE sex IN (:userSexTarget) 
-         //       AND user_ID != :loggedUserId";  
 
         $stmt = $pdo->prepare($sql);
         $stmt->bindParam(':loggedUserId', $userID);
@@ -148,24 +166,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
                 'distance' => $row['distance']
             ];
         }
-
-        // Gets ID of users loaded to load images of those users and save each user's photos. 
         
-        // Get keys (those keys are the users_ID)
-        $userIDs = array_keys($users);
-        // Makes a string of all of those users_ID (querry will be user_ID IN (string of those ID))
-        $userIDsString = implode(',', $userIDs);
+        if (count($users) > 0) {
+            // Get keys (those keys are the users_ID)
+            $userIDs = array_keys($users);
+            // Makes a string of all of those users_ID (querry will be user_ID IN (string of those ID))
+            $userIDsString = implode(',', $userIDs);
 
-        // Selects and loads images
-        $sql = "SELECT user_ID, path FROM photos WHERE user_ID IN ($userIDsString)";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute();
+            // Selects and loads images
+            $sql = "SELECT user_ID, path FROM photos WHERE user_ID IN ($userIDsString)";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute();
 
-        // insert in user["photos"]["photo path"]
-        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $users[$row['user_ID']]['photos'][] = $row['path'];
+            // insert in user["photos"]["photo path"]
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $users[$row['user_ID']]['photos'][] = $row['path'];
+            }
         }
-
+        
         // Cleans stored space for pdo and the query used. 
         unset($stmt);
         unset($pdo);
@@ -178,7 +196,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
 
         // LOG
         // catch error and send it to JS
-        echo json_encode(['success' => false, 'message' => 'Error en la conexión: ' . $e->getMessage()]);
+        echo json_encode(['success' => false, 'message' => 'Error en la conexión getUser: ' . $e->getMessage()]);
         exit;
     }
   
@@ -330,7 +348,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <header>
                 <p class="logo">IETinder ❤️</p>
-                <p>Cercar</p>
+                
             </header>
 
             <main id="content" class="content">

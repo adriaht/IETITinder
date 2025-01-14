@@ -6,19 +6,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     // If there is any user to discover
     if (fetchedUsers && fetchedUsers.length > 0) {
 
-        console.log(fetchedUsers)
+        console.log(fetchedUsers);
         renderUserCard(fetchedUsers, 0);
-        // EVENT TO RENDER USER CARDS
 
         // LOG
 
     } else {
 
         // LOG
-
+        console.log("No users left")
         renderNoUsersLeft();
 
-        console.log("No users left")
+
 
     }
 
@@ -46,6 +45,117 @@ async function fetchUsers() {
     }
 }
 
+// JS that makes AJAX call to insert user interaction in BBDD
+async function insertLog(logMessage, type) {
+
+    try {
+        
+        const response = await fetch('discover.php', { 
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({endpoint: "insertLog", logMessage, type})
+        });
+
+        // resultado de JSON a objeto Javascript. PHP devuelve {success: error, message: "abc"}
+        const result = await response.json();
+
+        // Segun resultado, pone mensaje de error o no
+        if (result.success) { 
+            console.log(result.message);
+        } else {
+            console.log(result.message);
+        }
+
+    } catch (error) {
+        console.log('Error al comunicarse con el servidor: ' + error)
+    }
+}
+
+// JS that makes AJAX call to insert user interaction in BBDD
+async function insertInteraction(interactedUserID, interactionState) {
+
+    try {
+        
+        const response = await fetch('discover.php', { 
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({endpoint: "insertInteraction", interactedUserID, interactionState})
+        });
+
+        // resultado de JSON a objeto Javascript. PHP devuelve {success: error, message: "abc"}
+        const result = await response.json();
+
+        // Segun resultado, pone mensaje de error o no
+        if (result.success) { 
+            console.log(result.message);
+        } else {
+            console.log(result.message);
+        }
+
+    } catch (error) {
+        console.log('Error al comunicarse con el servidor: ' + error)
+    }
+}
+
+// JS that makes AJAX call to check if there's a match from the user the loggedUser interacted with
+// Returs TRUE or FALSE depending if there's a like or not. TRUE = like
+// Called in YES BUTTON
+async function checkMatch(interactedUserID){
+
+    try {
+        
+        const response = await fetch('discover.php', { 
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({endpoint: "checkMatch", interactedUserID})
+        });
+
+        // resultado de JSON a objeto Javascript. PHP devuelve {success: error, message: "abc"}
+        const result = await response.json();
+
+        // Segun resultado, pone mensaje de error o no
+        if (result.success) { 
+            console.log(`Consulta correcta: ES MATCH? ${result.match}`);
+            return result.match;
+        } else {
+            console.log(result.message);
+        }
+
+    } catch (error) {
+        console.log('Error al comunicarse con el servidor: ' + error)
+    }
+
+}
+
+// AFTER CHECKING MATCH 
+// JS that makes AJAX call to insert match after checking it
+// Called in YES BUTTON event
+async function insertMatch(interactedUserID) {
+
+    try {
+        const response = await fetch('discover.php', { 
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({endpoint: "insertMatch", interactedUserID})
+        });
+
+        // resultado de JSON a objeto Javascript. PHP devuelve {success: error, message: "abc"}
+        const result = await response.json();
+
+        // Segun resultado, pone mensaje de error o no
+        if (result.success) { 
+            console.log(result.message);
+        } else {
+            console.log(result.message);
+        }
+
+    } catch (error) {
+        console.log('Error al comunicarse con el servidor: ' + error)
+    }
+
+}
+
+// RENDERIZATION
 function renderNoUsersLeft() {
     const container = document.getElementById('content');
     const endMessage = document.createElement('h2');
@@ -56,19 +166,11 @@ function renderNoUsersLeft() {
 }
 
 
-
 function renderUserCard(users, index) {
-
-    // PARA DEBBUG
-    /*
-    console.log(`INDEX = ${index}`);
-    console.log(`USERS: `);
-    console.log(users);
-    */
 
     // Delete all html inside the main content Div
     const container = document.getElementById('content');
-    container.innerHTML = ''; // Limpiar contenido anterior
+    container.innerHTML = ''; 
 
     // If there are no users left after render, set empty content
     if (index >= users.length) {
@@ -154,27 +256,23 @@ function renderUserCard(users, index) {
 
 function clickedNoButton(user, users, index){
 
-    console.log(`Usuario ${user.info.user_ID} - ${user.info.alias}: NO`);
-
-    // insertInteraction(user.info.user_ID, 'dislike');
+    insertInteraction(user.info.user_ID, 'dislike');
    
     renderUserCard(users, index + 1);
 
 }
 
-function clickedYesButton(user, users, index) {
+async function clickedYesButton(user, users, index) {
 
-    console.log(`Usuario ${user.info.user_ID} - ${user.info.alias}: SI`);
+    insertInteraction(user.info.user_ID, 'like');
 
-    //insertInteraction(user.info.user_ID, 'like');
-
-    //const isMatch = await checkMatch(user.info.user_ID);
-    const isMatch = true;
+    const isMatch = await checkMatch(user.info.user_ID);
 
     if (isMatch) {
 
-        //insertMatch(user.info.user_ID);
-        showOptionBox(user, users, index)
+        insertMatch(user.info.user_ID);
+        showMatchOptionBox(user, users, index)
+
     } else {
 
         renderUserCard(users, index + 1);
@@ -182,7 +280,7 @@ function clickedYesButton(user, users, index) {
     }
 }
 
-function showOptionBox(user, users, index) {
+function showMatchOptionBox(user, users, index) {
 
     const container = document.getElementById('content');
 
@@ -226,7 +324,7 @@ function showOptionBox(user, users, index) {
     goToMessageButton.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
 
     goToMessageButton.addEventListener('click', () => {
-        window.location.href = 'messages.php'; // Redirigir a messages.php
+        window.location.href = 'messages.php';
     });
 
     const keepDiscoveringButton = document.createElement('button');
@@ -241,10 +339,12 @@ function showOptionBox(user, users, index) {
     keepDiscoveringButton.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
 
     keepDiscoveringButton.addEventListener('click', () => {
+
         yesButton.disabled = false;
         noButton.disabled = false;
         yesButton.style.cursor = "pointer";
         noButton.style.cursor = "pointer";
+
         renderUserCard(users, index + 1);
         optionBox.remove();
     });
