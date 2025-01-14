@@ -1,6 +1,13 @@
 <?php
 session_start();
 
+// Check if session is active. Otherwise, get to login
+if (isset($_SESSION['user'])) {
+    header('Location: discover.php');
+    exit;
+}
+
+
 // Función para iniciar la conexión a la base de datos
 function startPDO() {
     $hostname = "localhost";
@@ -85,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IETinder</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" type="text/css" href="/styles.css?t=<?php echo time();?>" />
     <script src="index.js"></script>
 </head>
 <body class="body-login">

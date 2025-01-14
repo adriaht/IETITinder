@@ -370,7 +370,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IETinder - Descobrir</title>
-    <link rel="stylesheet" type="text/css" href="styles.css?t=<?php echo time();?>" />
+    <link rel="stylesheet" type="text/css" href="/styles.css?t=<?php echo time();?>" />
     <script src="discover.js"></script>
 </head>
 <body class="body">
