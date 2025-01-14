@@ -49,18 +49,18 @@ body {
 }
 
 
-#login-card {
+.body-login #login-card {
     padding: 2rem;
     display: flex;
     justify-content: center;
     flex-direction: column;
 }
 
-.card-header {
+.body-login .card-header {
     margin-bottom: 2rem;
 }
 
-.logo-login {
+.body-login .logo-login {
     text-align: center;
     margin-bottom: 1rem;
     color: #FF6B6B;
@@ -76,20 +76,20 @@ body {
     100% { transform: scale(1); }
 }
 
-.input-group {
+.body-login .input-group {
     margin-bottom: 1rem;
 }
 
-.input-group.error input {
+.body-login .input-group.error input {
     border-color: #e53e3e;
     background-color: #fff5f5;
 }
 
-.input-group.error label {
+.body-login .input-group.error label {
     color: #e53e3e;
 }
 
-label {
+.body-login label {
     display: block;
     margin-bottom: 0.5rem;
     color: #4a5568;
@@ -97,7 +97,7 @@ label {
     font-family: 'Montserrat', sans-serif;
 }
 
-input {
+.body-login input {
     width: 100%;
     padding: 0.75rem 1rem;
     border: 1px solid #e2e8f0;
@@ -106,17 +106,17 @@ input {
     transition: all 0.2s;
 }
 
-input:focus {
+.body-login input:focus {
     outline: none;
     border-color: #ff6b6b;
     box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
 }
 
-.password-input {
+.body-login .password-input {
     position: relative;
 }
 
-.primary-button {
+.body-login .primary-button {
     width: 100%;
     padding: 0.75rem 1rem;
     background: linear-gradient(to right, #ff6b6b, #cc2faa);
@@ -132,22 +132,22 @@ input:focus {
     font-family: 'Montserrat', sans-serif;
 }
 
-.primary-button:hover {
+.body-login .primary-button:hover {
     opacity: 0.9;
 }
 
-.primary-button:disabled {
+.body-login .primary-button:disabled {
     opacity: 0.7;
     cursor: not-allowed;
 }
 
-.links-group {
+.body-login .links-group {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
 }
 
-.secondary-link {
+.body-login .secondary-link {
     color: #4a5568;
     text-decoration: none;
     font-size: 0.875rem;
@@ -155,11 +155,11 @@ input:focus {
     transition: color 0.2s;
 }
 
-.secondary-link:hover {
+.body-login .secondary-link:hover {
     color: #ff6b6b;
 }
 
-.error-message {
+.body-login .error-message {
     color: #e53e3e;
     font-size: 0.875rem;
     text-align: center;
@@ -167,7 +167,7 @@ input:focus {
     min-height: 1.25rem;
 }
 
-.footer-text {
+.body-login .footer-text {
     text-align: center;
     color: #718096;
     font-size: 0.875rem;
