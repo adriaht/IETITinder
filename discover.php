@@ -11,6 +11,8 @@ if (!isset($_SESSION['user'])) {
     exit;
 }
 
+logOperation("Session started in discover.php for user ".$_SESSION['user'], $input["type"]);
+
 // Store loggedUser Object
 $loggedUser = searchUserInDatabase("*", "users", $_SESSION['user']);
 
@@ -34,8 +36,6 @@ function logOperation($message, $type = "INFO") {
     // Write log message in logFile
     file_put_contents($logFile, $logMessage, FILE_APPEND);
 }
-
-
 
 function searchUserInDatabase($whatYouWant, $whereYouWant, $userYouWant) {
 
@@ -317,6 +317,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             case "insertMatch": 
                 insertMatch($input, $loggedUser["user_ID"]);
                 break;
+            case "insertLog":
+                logOperation($input["logMessage"], $input["type"]);
+
+                echo json_encode(['success' => true, 'message' => "Log inserit correctament"]);
+                exit;
+                
+                break;
             default: // In case of 
                 echo json_encode(['success' => false, 'message' => 'Endpoint desconegut.']);
                 exit;
@@ -335,9 +342,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IETinder - Discover</title>
+    <title>IETinder - Descobrir</title>
     <link rel="stylesheet" type="text/css" href="styles.css?t=<?php echo time();?>" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="discover.js"></script>
 </head>
 <body class="body">

@@ -2,6 +2,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // Gets array of fetched users
     const fetchedUsers = await fetchUsers();
+    
+    insertLog("ESTO ES UN LOG DESDE CLIENTE discover.js", "INFO");
 
     // If there is any user to discover
     if (fetchedUsers && fetchedUsers.length > 0) {

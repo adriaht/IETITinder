@@ -8,59 +8,98 @@ document.addEventListener("DOMContentLoaded", async () => {
     const urlParams = new URLSearchParams(window.location.search);
     const action = urlParams.get('action');
     const userAlias = urlParams.get('user');
+
     console.log(action)
     console.log(userAlias)
 
     // GO TO CONVERSATION
-    if (action === "go_to_conversation"&& userAlias) {
+    if (action === "go_to_conversation" && userAlias) {
+       
+        try {
+
+            generateConversation(userAlias);
+            insertLog(`Loaded conversation in messages.js for user ${userAlias}`, "INFO");
+
+        } catch (error) {
+
+            insertLog(`Failed while loading conversation in messages.js for user ${userAlias}`, "INFO");
+
+        }
+
+        
         // Call a function to generate the conversation
-        generateConversation(userAlias);
+       
     
     // GO TO MATCHES
     } else {
 
-         // Makes AJAX call to get matches
-        const arrMatchedUsers = await fetchMatches();
-        // inserts matches in each array
-        classifyMatches(arrMatchedUsers);
-        
-        if (matchesWithoutMessages.length > 0){
+            insertLog("Loaded main page in messages.js", "INFO");
 
-            const contentContainer = document.createElement("div");
-            contentContainer.id = 'container-without-messages-content';
+            // Makes AJAX call to get matches
+            const arrMatchedUsers = await fetchMatches();
 
-            matchesWithoutMessages.map(match => {
+        try {
 
-                contentContainer.append(generateWithoutMessageCard(match));
+            // inserts matches in each array
+            classifyMatches(arrMatchedUsers);
+            
+            if (matchesWithoutMessages.length > 0){
 
-            })
+                insertLog("User got matches without messages. Generating content", "INFO");
 
-            const container = document.getElementById("container-without-messages");
-            container.appendChild(contentContainer);
+                const contentContainer = document.createElement("div");
+                contentContainer.id = 'container-without-messages-content';
 
-        } else {
+                matchesWithoutMessages.map(match => {
 
-            renderNoMatchWithoutConversation();
+                    contentContainer.append(generateWithoutMessageCard(match));
 
+                })
+
+                const container = document.getElementById("container-without-messages");
+                container.appendChild(contentContainer);
+
+                insertLog("Successfully rendered matches without messages", "INFO");
+
+            } else {
+
+
+                insertLog("Initiating renderization that there are no matches without messages", "INFO");
+
+                renderNoMatchWithoutConversation();
+
+                insertLog("Successfully rendered there are no matches without messages", "INFO");
+
+            }
+    
+            if (matchesWithMessages.length > 0) {
+
+                insertLog("User got matches with messages. Generating content", "INFO");
+
+                const contentContainer = document.createElement("div");
+                contentContainer.id = 'container-with-messages-content';
+
+                matchesWithMessages.map(match => {
+                    contentContainer.append(generateWithMessageCard(match));
+                })
+
+                const container = document.getElementById("container-with-messages");
+                container.appendChild(contentContainer);
+            
+            } else {
+
+                insertLog("Initiating renderization that there are no matches with messages", "INFO");
+
+                renderNoMatchWithConversation();
+
+                insertLog("Successfully rendered there are no matches with messages", "INFO");
+            }
+
+        } catch (error) {
+
+            insertLog(`Failed while loading matches in messages.js: ${error}`, "ERROR");
         }
-  
-        if (matchesWithMessages.length > 0) {
-
-            const contentContainer = document.createElement("div");
-            contentContainer.id = 'container-with-messages-content';
-
-            matchesWithMessages.map(match => {
-                contentContainer.append(generateWithMessageCard(match));
-            })
-
-            const container = document.getElementById("container-with-messages");
-            container.appendChild(contentContainer);
-        
-        } else {
-
-            renderNoMatchWithConversation();
-        }
-    }
+    } 
 
    
     
@@ -194,6 +233,7 @@ function renderNoMatchWithConversation() {
 
 }
 
+// CLEAR NOT USED BY THE MOMENT
 function clearWithoutMessageCard() {
     const container = document.getElementById("container-without-messages");
 
@@ -213,7 +253,6 @@ function clearWithMessageCard() {
     container.appendChild(title);
 }
 
-
 // Function to get matches and user data using AJAX
 async function fetchMatches() {
 
@@ -221,25 +260,50 @@ async function fetchMatches() {
         const response = await fetch("messages.php?action=get_matches");
         const users = await response.json();
         if (users.success){
+            insertLog("Sucessfully loaded matches in messages.js", "INFO");
             return users.message;
         } else {
-            console.log(users.message);
+            insertLog("Sucessfully loaded matches in messages.js", "ERROR");
             return [];
         }
         
     } catch (error) {
-        console.error("Error al cargar usuarios:", error);
+        insertLog(`While loading matches: ${error}`, "ERROR");
         return [];
     }
 
 }
 
-// Classify matches
+// JS that makes AJAX call to insert user interaction in BBDD
+async function insertLog(logMessage, type) {
+
+    try {
+        
+        const response = await fetch('discover.php', { 
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({endpoint: "insertLog", logMessage, type})
+        });
+
+        // resultado de JSON a objeto Javascript. PHP devuelve {success: error, message: "abc"}
+        const result = await response.json();
+
+        // Segun resultado, pone mensaje de error o no
+        if (result.success) { 
+            console.log(result.message);
+        } else {
+            console.log(result.message);
+        }
+
+    } catch (error) {
+        console.log('Error al comunicarse con el servidor: ' + error)
+    }
+}
+
+// Classify matches based on if it hasMessage or not (true/false)
 function classifyMatches(arrMatches){
 
     arrMatches.map(match => {
-
-        console.log(match);
 
         if (match.hasMessage) {
 
@@ -252,6 +316,8 @@ function classifyMatches(arrMatches){
         }
 
     });
+
+    insertLog("Successfully classified matches", "INFO");
 
 }
 

@@ -2,13 +2,14 @@
 
 // Init sessión
 session_start();
-$_SESSION['user'] = 1;
 
 // Check if session is active. Otherwise, get to login
 if (!isset($_SESSION['user'])) {
     header('Location: login.html');
     exit;
 }
+
+logOperation("Session started in messages.php for user ".$_SESSION['user'], $input["type"]);
 
 // Store loggedUser Object
 $loggedUser = searchUserInDatabase("*", "users", $_SESSION['user']);
@@ -34,8 +35,6 @@ function logOperation($message, $type = "INFO") {
     file_put_contents($logFile, $logMessage, FILE_APPEND);
 }
 
-
-
 function searchUserInDatabase($whatYouWant, $whereYouWant, $userYouWant) {
 
     try {
@@ -53,9 +52,11 @@ function searchUserInDatabase($whatYouWant, $whereYouWant, $userYouWant) {
 
         if (!$data) {
 
-            // LOG
+            logOperation("No data found for user $userYouWant in function searchUserInDatabase in messages.php", "INFO");
             die("Data not found");
         }
+
+        logOperation("Found data for $userYouWant in function searchUserInDatabase in messages.php" , "INFO");
 
         // Cerramos conexión
         unset($stmt);
@@ -65,8 +66,8 @@ function searchUserInDatabase($whatYouWant, $whereYouWant, $userYouWant) {
 
     } catch (PDOException $e) {
 
-        // LOG
-        die("Error en la conexión: " . $e->getMessage());
+        logOperation("Connection error in searchUserInDatabase function in messages.php: " . $e->getMessage(), "ERROR");
+        die("Connection error: " . $e->getMessage());
     }
 
     
@@ -147,16 +148,63 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
         unset($stmt);
         unset($pdo);
 
-        // LOG
+        logOperation("Successfully got matches of user ".$loggedUser["user_ID"]." messages.php in GET method get_matches: " . $e->getMessage(), "INFO");
         echo json_encode(['success' => true, 'message' => array_values($matches)]);
         exit;
+
     } catch (PDOException $e) {
-        // LOG
+
+        logOperation("Connection error in messages.php for user ".$loggedUser["user_ID"]." in GET method get_matches: " . $e->getMessage(), "ERROR");
         echo json_encode(['success' => false, 'message' => 'Error en la conexión: ' . $e->getMessage()]);
         exit;
+
     }
 }    
-  
+
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    try {
+
+        // Gets input from the request
+        $input = json_decode(file_get_contents('php://input'), true);
+
+        // Send error if there's no input
+        if (!$input) {
+            logOperation("Invalid input for POST request in messages.php.", "ERROR");
+            echo json_encode(['success' => false, 'message' => 'Dades invàlides']);
+            exit;
+        }
+
+        // Checks if there's an endpoint defined
+        if (!isset($input['endpoint'])) {
+            logOperation("Endpoint not defined for POST request in messages.php.", "ERROR");
+            echo json_encode(['success' => false, 'message' => 'Endpoint no especificat.']);
+            exit;
+        }
+
+        // Gets endpoint and redirects to function that will handle the AJAX call
+        switch ($input['endpoint']){
+        
+            case "insertLog":
+                logOperation($input["logMessage"], $input["type"]);
+                logOperation("Successfully inserted log from client: ".$input["logMessage"], $input["type"]);
+                echo json_encode(['success' => true, 'message' => "Log inserit correctament"]);
+                exit;
+                
+                break;
+            default: // In case of 
+                logOperation("Endpoint not found for POST request in messages.php. Endpoint sended: ".$input["logMessage"], "ERROR");
+                echo json_encode(['success' => false, 'message' => 'Endpoint desconegut.']);
+                exit;
+        }
+
+    } catch (PDOException $e) {
+        logOperation("Connection error in messages.php in POST method: " . $e->getMessage(), "ERROR");
+        echo json_encode(['success' => false, 'message' => 'Error en la conexió: ' . $e->getMessage()]);
+        exit;
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -164,9 +212,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IETinder - Discover</title>
+    <title>IETinder - Missatges</title>
     <link rel="stylesheet" type="text/css" href="styles.css?t=<?php echo time();?>" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="messages.js"></script>
 </head>
 <body class="body">
