@@ -227,5 +227,5 @@ VALUES
 (1, 4, "Soy Emily, encantada", '2025-01-30 08:15:00'),
 (1, 4, "Llevas mucho por aqui?", '2025-01-30 08:30:00'),
 (1, 4, "Igual podríamos tomar un café", '2025-01-30 08:45:00'),
-(1, 1, "Me parece perfecto, que día", '2025-01-30 09:00:00');
+(1, 1, "Me parece perfecto, que día?", '2025-01-30 09:00:00');
 
