@@ -218,7 +218,7 @@ INSERT INTO interactions (`from`, `to`, `state`) VALUES (19, 1, "dislike");
 INSERT INTO interactions (`from`, `to`, `state`) VALUES (19, 1, "dislike");
 INSERT INTO interactions (`from`, `to`, `state`) VALUES (19, 1, "dislike");
 INSERT INTO interactions (`from`, `to`, `state`) VALUES (19, 1, "like");
-
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (24, 1, "like");
 
 INSERT INTO matches (participant1, participant2) VALUES (1, 4);
 INSERT INTO matches (participant1, participant2) VALUES (1, 14);
@@ -226,9 +226,9 @@ INSERT INTO matches (participant1, participant2) VALUES (1, 19);
 
 INSERT INTO conversations (match_ID, sender_id, content, creation_date) 
 VALUES 
-(1, 1, "Primer mensaje de John", '2025-01-30 08:00:00'),
-(1, 4, "Primer mensaje de Emily", '2025-01-30 08:15:00'),
-(1, 4, "Segundo mensaje de Emily", '2025-01-30 08:30:00'),
-(1, 4, "Tercer mensaje de Emily", '2025-01-30 08:45:00'),
-(1, 1, "Segundo mensaje de John", '2025-01-30 09:00:00');
+(1, 1, "Hola, me llamo John", '2025-01-30 08:00:00'),
+(1, 4, "Soy Emily, encantada", '2025-01-30 08:15:00'),
+(1, 4, "Llevas mucho por aqui?", '2025-01-30 08:30:00'),
+(1, 4, "Igual podríamos tomar un café", '2025-01-30 08:45:00'),
+(1, 1, "Me parece perfecto, que día", '2025-01-30 09:00:00');
 
