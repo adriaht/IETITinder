@@ -3,16 +3,18 @@
 // Init sessión
 session_start();
 
+$_SESSION['user'] = 1;
+
 // Check if session is active. Otherwise, get to login
 if (!isset($_SESSION['user'])) {
     header('Location: login.php');
     exit;
 }
 
-logOperation("Session started in discover.php for user ".$_SESSION['user'], $input["type"]);
-
 // Store loggedUser Object
 $loggedUser = searchUserInDatabase("*", "users", $_SESSION['user']);
+
+logOperation("Session started in discover.php for user ".$_SESSION['user'], "INFO");
 
 function logOperation($message, $type = "INFO") {
 
@@ -29,7 +31,11 @@ function logOperation($message, $type = "INFO") {
 
     // Message formatting
     $timeStamp = date('Y-m-d H:i:s');
-    $logMessage = "[$timeStamp] [$type] [USER_ID = ".$loggedUser["user_ID"]."] $message\n";
+
+
+    $logMessage = "[$timeStamp] [$type] [USER_ID = ".$_SESSION['user']."] $message\n";
+
+   
 
     // Write log message in logFile
     file_put_contents($logFile, $logMessage, FILE_APPEND);
