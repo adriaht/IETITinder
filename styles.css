@@ -1,38 +1,108 @@
+body#edit-profile-body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    background: linear-gradient(135deg, #FF6B6B, #FFCC70, #4158D0); /* Naranja, Amarillo, Azul */
+    background-size: 200% 200%;
+}
+
+header#edit-profile-header {
+    position: fixed; /* Fija el encabezado */
+    top: 0;
+    left: 50%; /* Centra el encabezado horizontalmente */
+    transform: translateX(-50%); /* Ajusta la posición para centrar */
+    width: 100%;
+    max-width: 460px; /* Limite de ancho */
+    background-color: rgba(0, 0, 0, 0.8); /* Negro semi-transparente */
+    color: #FFFFFF; /* Blanco */
+    padding: 15px;
+    z-index: 9999;
+    text-align: center;
+}
+
+header#edit-profile-header h1 {
+    margin: 0;
+}
+
 .alert {
-    width: 250px; /* Ancho suficiente para texto */
-    height: auto; /* Permitir altura dinámica */
+    width: 100%; /* Ancho completo del contenedor */
+    max-width: 460px; /* Limite de ancho */
     position: fixed;
-    right: 20px; /* Esquina superior derecha */
-    top: 20px; /* Primer alerta desde arriba */
-    margin-bottom: 10px; /* Separación entre alertas apiladas */
-    padding: 10px; /* Espaciado interno */
-    border-radius: 5px; /* Bordes redondeados */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra */
-    z-index: 1000; /* Prioridad sobre otros elementos */
-    text-align: center; /* Centrar el texto */
-    color: black;
+    top: 66px; /* Justo debajo del header */
+    left: 50%;
+    transform: translateX(-50%); /* Centra la alerta horizontalmente */
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Negro */
+    z-index: 1000;
+    text-align: center;
+    color: #000000; /* Negro */
+    background-color: rgba(0, 0, 0, 0.2); /* Negro semi-transparente */
 }
 
 #infoAlert {
-    background-color: yellow;
-     /* Contraste para texto */
+    background-color: rgba(255, 204, 112, 0.6); /* Amarillo con transparencia */
+    color: #000000; /* Negro */
 }
 
 #errorAlert {
-    background-color: red;
+    background-color: rgba(255, 107, 107, 0.6); /* Naranja con transparencia */
+    color: #FFFFFF; /* Blanco */
 }
 
 #warningAlert {
-    background-color: blue;
+    background-color: rgba(65, 88, 208, 0.6); /* Azul con transparencia */
+    color: #FFFFFF; /* Blanco */
 }
 
-#edit-profile-image{
+#edit-profile-image {
     border-radius: 50%;
 }
 
 #map {
     height: 33%;
-    /* El mapa ocupará toda la altura de la ventana */
     width: 460px;
-    /* El mapa ocupará todo el ancho */
+}
+
+#linkChangeImagePerfil {
+    text-decoration: none;
+    padding: 10px;
+    background-color: #4158D0; /* Azul */
+    color: #FFFFFF; /* Blanco */
+    border-radius: 5px;
+    display: inline-block;
+}
+
+#submitEditProfileForm,
+#linkChangeImagePerfil {
+    display: inline-block;
+    margin-right: 10px;
+    vertical-align: middle;
+    padding: 12px 25px;
+    background-color: #4158D0; /* Azul */
+    color: #FFFFFF; /* Blanco */
+    border-radius: 5px;
+    text-decoration: none;
+    text-align: center;
+}
+
+#butonsEditProfile {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+#butonsEditProfile button,
+#butonsEditProfile a {
+    display: inline-block;
+    padding: 12px 25px;
+    background-color: #4158D0; /* Azul */
+    color: #FFFFFF; /* Blanco */
+    border-radius: 5px;
+    text-decoration: none;
+    vertical-align: middle;
+    text-align: center;
 }
