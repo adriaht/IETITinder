@@ -25,3 +25,307 @@
 #warningAlert {
     background-color: blue;
 }
+
+
+/* BASE ---------------------------------------------------------------------------------------------- */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@400;500;600&family=Poppins:wght@600;700&display=swap');
+
+* {
+
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+    
+}
+
+body {
+
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #ff6b6b, #cc2faa, #7873f5);
+    background-size: 200% 200%;
+
+}
+
+.container {
+
+    width: 100%;
+    max-width: 460px;
+
+}
+
+.card {
+
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+
+    height: 840px;
+    max-height: 840px;
+
+}
+
+/* BASE FINAL --------------------------------------------------------------------- */
+
+
+/* LOGIN */
+
+/* LOGIN FINAL */
+
+/* BASE OF INSIDE APLICATION */
+
+/* HEADER  > NO CHANGE*/
+
+header {
+    padding: 1.1rem;
+    height: 10%;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header p {
+    font-size: 1.2rem;
+    font-weight: bold;
+    font-family: 'Poppins', sans-serif;
+}
+
+.logo {
+
+    color: #FF6B6B;
+    font-size: 1.5rem;
+    font-weight: bold;
+    animation: pulse 2s infinite;
+    font-family: 'Poppins', sans-serif;
+
+}
+
+/* END OF HEADER*/
+
+/* CONTENT */
+
+main {
+
+height: 82%;
+position: relative;
+
+}
+
+/* DYNAMIC CONTENT */
+
+/* DISCOVER */
+main.discover {
+    padding: 0.2rem;
+}
+
+main.discover img {
+    width: 100%;
+    height: 92%;
+    object-fit: cover;
+    object-position: center;
+}
+
+main.discover div.buttons {
+    position: absolute;
+    top: 85%;
+    left: 50%; /* Move the element to the center based on its left edge */
+    transform: translateX(-50%); /* Offset the element by half of its width */
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+}
+
+main.discover div.buttons button {
+
+    width: 90px; /* Adjust size as needed */
+    height: 90px; /* Make sure width and height are equal */
+    border-radius: 50%; /* Makes it a perfect circle */
+
+    color: white;
+    font-weight: bold;
+    font-size: 1.25rem; /* Adjust font size */
+
+    cursor: pointer; /* Pointer cursor on hover */
+    display: flex; /* Center text inside */
+    align-items: center; /* Center text vertically */
+    justify-content: center; /* Center text horizontally */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional: add shadow */
+    transition: background-color 0.3s ease; /* Optional: smooth hover effect */
+}
+
+main.discover div.buttons .no {
+    border: 8px solid darkred; 
+    background-color: red; /* Button color */
+}
+
+main.discover div.buttons .si {
+    border: 8px solid darkgreen;
+    background-color: green; /* Button color */
+}
+
+/* END OF DISCOVER */
+
+/* MESSAGES */
+main.messages {
+padding: 1.1rem;
+padding-top: 0;
+padding-bottom: 0;
+}
+
+/* WITHOUT*/
+main.messages #container-without-messages {
+margin-bottom: 5px;
+height: 210px;
+}
+
+main.messages #container-without-messages h2 {
+margin-bottom: 5px;
+}
+
+main.messages #container-without-messages #container-without-messages-content {
+display: flex;
+gap: 15px;
+padding-top: 5px;
+padding-bottom: 10px;
+overflow-x: auto;
+}
+
+main.messages #container-without-messages #container-without-messages-content div.without-message-content {
+padding: 5px;
+text-align: center;
+}
+
+main.messages #container-without-messages #container-without-messages-content div.without-message-content img {
+width: 80px;
+height: 110px;
+object-fit: cover;
+object-position: center;
+
+}
+
+main.messages #container-without-messages #container-without-messages-content div.without-message-content p {
+text-align: center;
+}
+
+/* WITH*/
+
+main.messages #container-with-messages {
+height: 420px;
+}
+
+main.messages #container-with-messages  {
+margin-top: 15px;
+}
+
+main.messages #container-with-messages h2 {
+margin-bottom: 10px;
+}
+
+
+/* SI HAY MENSAJES */
+main.messages #container-with-messages #container-with-messages-content {
+height: 420px; /* Si se toca, se rompe ya que pillará toda la altura disponible */
+overflow-y: auto;
+display: flex;
+flex-direction: column;
+gap: 20px;
+}   
+
+main.messages #container-with-messages #container-with-messages-content div.with-message-content {
+display: flex;
+align-items: center;
+gap: 20px;
+}
+
+main.messages #container-with-messages #container-with-messages-content div.with-message-content img {
+width: 110px;
+height: 110px;
+object-fit: cover;
+object-position: top;
+}
+
+main.messages #container-with-messages #container-with-messages-content div.with-message-content div.user-info-with-message-content {
+display: flex;
+flex-direction: column;
+gap: 10px;
+}
+
+main.messages #container-with-messages #container-with-messages-content div.with-message-content div.user-info-with-message-content p:first-child {
+font-weight: bold;
+font-size: 1.2rem;
+}
+
+/* Si no hay match */
+
+main.messages #container-without-messages div.no-matches-without-messages {
+margin-top: 40px;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;  
+font-size: 1.2rem;
+}
+
+main.messages #container-with-messages div.no-matches-with-messages {
+margin-top: 80px;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;  
+font-size: 1.2rem;
+}
+
+
+/*SCROLLBAR */
+
+/* width */
+::-webkit-scrollbar {
+width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+background: #f1f1f1; 
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+background: #888; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+background: #555; 
+}
+
+/* END OF DYNAMIC CONTENT */
+
+/* NAV > NO CHANGE*/
+nav {
+
+    padding: 1.1rem;
+    height: 8%;
+}
+
+nav ul {
+
+    list-style-type: none;
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.2rem;
+    font-weight: bold;
+
+}
+
+nav ul li a {
+
+    color: black;
+    text-decoration: none;
+} 
+
+/* END OF NAV */
