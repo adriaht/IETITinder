@@ -204,16 +204,17 @@ VALUES
 
 INSERT INTO interactions (`from`, `to`, `state`) VALUES (1, 4, "like");
 INSERT INTO interactions (`from`, `to`, `state`) VALUES (4, 1, "like");
-INSERT INTO interactions (`from`, `to`, `state`) VALUES (10, 1, "like");
 INSERT INTO interactions (`from`, `to`, `state`) VALUES (1, 14, "dislike");
 INSERT INTO interactions (`from`, `to`, `state`) VALUES (1, 14, "like");
 INSERT INTO interactions (`from`, `to`, `state`) VALUES (14, 1, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (19, 1, "dislike");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (19, 1, "dislike");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (19, 1, "dislike");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (19, 1, "dislike");
 INSERT INTO interactions (`from`, `to`, `state`) VALUES (1, 19, "like");
-INSERT INTO interactions (`from`, `to`, `state`) VALUES (19, 1, "dislike");
-INSERT INTO interactions (`from`, `to`, `state`) VALUES (19, 1, "dislike");
-INSERT INTO interactions (`from`, `to`, `state`) VALUES (19, 1, "dislike");
-INSERT INTO interactions (`from`, `to`, `state`) VALUES (19, 1, "dislike");
 INSERT INTO interactions (`from`, `to`, `state`) VALUES (19, 1, "like");
+
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (10, 1, "like");
 INSERT INTO interactions (`from`, `to`, `state`) VALUES (24, 1, "like");
 
 INSERT INTO matches (participant1, participant2) VALUES (1, 4);
