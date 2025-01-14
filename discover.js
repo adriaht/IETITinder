@@ -2,24 +2,16 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // Gets array of fetched users
     const fetchedUsers = await fetchUsers();
-    
-    insertLog("ESTO ES UN LOG DESDE CLIENTE discover.js", "INFO");
 
+    
     // If there is any user to discover
     if (fetchedUsers && fetchedUsers.length > 0) {
 
-        console.log(fetchedUsers);
         renderUserCard(fetchedUsers, 0);
-
-        // LOG
 
     } else {
 
-        // LOG
-        console.log("No users left")
         renderNoUsersLeft();
-
-
 
     }
 
@@ -257,6 +249,8 @@ function renderUserCard(users, index) {
     container.appendChild(image);
     container.appendChild(buttonsContainer);
 
+    insertLog(`Rendered user ${user.info.user_ID} card`, "INFO");
+
 }
 
 function clickedNoButton(user, users, index){
@@ -264,8 +258,6 @@ function clickedNoButton(user, users, index){
     insertLog(`Clicked NO on user ${user.info.user_ID}`, "INFO");
 
     insertInteraction(user.info.user_ID, 'dislike');
-   
-    renderUserCard(users, index + 1);
 
 }
 
@@ -311,7 +303,8 @@ function showMatchOptionBox(user, users, index) {
     optionBox.style.padding = '20px';
     optionBox.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.5)';
     optionBox.style.textAlign = 'center';
-
+    optionBox.style.backdropFilter = "blur(10px);";
+    
     const matchTitle = document.createElement('h3');
     matchTitle.textContent = "Has fet Match!";
 
@@ -359,8 +352,20 @@ function showMatchOptionBox(user, users, index) {
 
         renderUserCard(users, index + 1);
         optionBox.remove();
-        
+
     });
+
+    // PRUEBAS
+    // Create the backdrop div
+    const backdropDiv = document.createElement('div');
+    backdropDiv.style.position = 'absolute';
+    backdropDiv.style.inset = '0';
+    backdropDiv.style.backdropFilter = 'blur(8px)';
+    backdropDiv.style.zIndex = '1';
+    // Append the backdrop div to the container
+    container.appendChild(backdropDiv);
+    // Ensure the optionBox is above the backdrop
+    optionBox.style.zIndex = '2';
 
     optionButtonBox.appendChild(goToMessageButton);
     optionButtonBox.appendChild(keepDiscoveringButton);
@@ -369,4 +374,5 @@ function showMatchOptionBox(user, users, index) {
     container.appendChild(optionBox);
     
 }
+
 

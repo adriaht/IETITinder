@@ -9,7 +9,7 @@ if (!isset($_SESSION['user'])) {
     exit;
 }
 
-logOperation("Session started in messages.php for user ".$_SESSION['user'], $input["type"]);
+logOperation("Session started in messages.php for user ".$_SESSION['user'], "INFO");
 
 // Store loggedUser Object
 $loggedUser = searchUserInDatabase("*", "users", $_SESSION['user']);
@@ -29,7 +29,8 @@ function logOperation($message, $type = "INFO") {
 
     // Message formatting
     $timeStamp = date('Y-m-d H:i:s');
-    $logMessage = "[$timeStamp] [$type] [USER_ID = ".$loggedUser["user_ID"]."] $message\n";
+
+    $logMessage = "[$timeStamp] [$type] [USER_ID = ".$_SESSION['user']."] $message\n";
 
     // Write log message in logFile
     file_put_contents($logFile, $logMessage, FILE_APPEND);
