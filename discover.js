@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // Gets array of fetched users
     const fetchedUsers = await fetchUsers();
-
+    console.log(fetchedUsers);
     
     // If there is any user to discover
     if (fetchedUsers && fetchedUsers.length > 0) {
@@ -33,6 +33,7 @@ async function fetchUsers() {
         }
         
     } catch (error) {
+        console.log(error);
         return [];
     }
 }
@@ -256,6 +257,7 @@ function clickedNoButton(user, users, index){
 
     insertInteraction(user.info.user_ID, 'dislike');
 
+    renderUserCard(users, index + 1);
 }
 
 async function clickedYesButton(user, users, index) {
@@ -269,6 +271,7 @@ async function clickedYesButton(user, users, index) {
     if (isMatch) {
 
         insertMatch(user.info.user_ID);
+
         showMatchOptionBox(user, users, index)
 
     } else {
