@@ -148,92 +148,93 @@
         padding-bottom: 0;
     }
 
-    main.messages div.container-without-messages {
+/* WITHOUT*/
+    main.messages #container-without-messages {
         margin-bottom: 5px;
         height: 210px;
     }
 
-
-    /* WITHOUT*/
-    main.messages div.container-without-messages h2 {
+    main.messages #container-without-messages h2 {
         margin-bottom: 5px;
     }
 
-    main.messages div.container-without-messages #container-without-messages-content {
+    main.messages #container-without-messages #container-without-messages-content {
         display: flex;
         gap: 15px;
         padding-top: 5px;
         padding-bottom: 10px;
-        overflow-x: scroll;
+        overflow-x: auto;
     }
 
-    main.messages div.container-without-messages #container-without-messages-content div.without-message-content {
+    main.messages #container-without-messages #container-without-messages-content div.without-message-content {
         padding: 5px;
+        text-align: center;
     }
 
-    main.messages div.container-without-messages #container-without-messages-content div.without-message-content img {
+    main.messages #container-without-messages #container-without-messages-content div.without-message-content img {
         width: 80px;
         height: 110px;
         object-fit: cover;
         object-position: center;
+
     }
 
-    main.messages div.container-without-messages #container-without-messages-content div.without-message-content p {
+    main.messages #container-without-messages #container-without-messages-content div.without-message-content p {
         text-align: center;
     }
 
     /* WITH*/
 
-    main.messages div.container-with-messages {
+    main.messages #container-with-messages {
         height: 420px;
     }
 
-    main.messages div.container-with-messages  {
+    main.messages #container-with-messages  {
         margin-top: 15px;
     }
   
-    main.messages div.container-with-messages h2 {
+    main.messages #container-with-messages h2 {
         margin-bottom: 10px;
     }
 
 
     /* SI HAY MENSAJES */
-    main.messages div.container-with-messages #container-with-messages-content {
+    main.messages #container-with-messages #container-with-messages-content {
         height: 420px; /* Si se toca, se rompe ya que pillará toda la altura disponible */
-        overflow-y: scroll;
+        overflow-y: auto;
         display: flex;
         flex-direction: column;
         gap: 20px;
     }   
 
-    main.messages div.container-with-messages #container-with-messages-content div.with-message-content {
+    main.messages #container-with-messages #container-with-messages-content div.with-message-content {
         display: flex;
         align-items: center;
         gap: 20px;
     }
 
-    main.messages div.container-with-messages #container-with-messages-content div.with-message-content img {
+    main.messages #container-with-messages #container-with-messages-content div.with-message-content img {
         width: 110px;
         height: 110px;
         object-fit: cover;
         object-position: top;
     }
 
-    main.messages div.container-with-messages #container-with-messages-content div.with-message-content div.user-info-with-message-content {
+    main.messages #container-with-messages #container-with-messages-content div.with-message-content div.user-info-with-message-content {
         display: flex;
         flex-direction: column;
         gap: 10px;
     }
 
-    main.messages div.container-with-messages #container-with-messages-content div.with-message-content div.user-info-with-message-content p:first-child {
+    main.messages #container-with-messages #container-with-messages-content div.with-message-content div.user-info-with-message-content p:first-child {
       font-weight: bold;
       font-size: 1.2rem;
     }
 
     /* Si no hay match */
     
-    main.messages div.container-without-messages div.no-matches-without-messages {
-        margin-top: 50px;
+    main.messages #container-without-messages div.no-matches-without-messages {
+        margin-top: 40px;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -241,7 +242,7 @@
         font-size: 1.2rem;
     }
 
-    main.messages div.container-with-messages div.no-matches-with-messages {
+    main.messages #container-with-messages div.no-matches-with-messages {
         margin-top: 80px;
         display: flex;
         flex-direction: column;

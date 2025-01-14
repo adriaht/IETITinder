@@ -324,7 +324,7 @@ function showMatchOptionBox(user, users, index) {
     goToMessageButton.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
 
     goToMessageButton.addEventListener('click', () => {
-        window.location.href = 'messages.php';
+        window.location.href = `messages.php?action=go_to_conversation&user=${user.info.alias}`;
     });
 
     const keepDiscoveringButton = document.createElement('button');
