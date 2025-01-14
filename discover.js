@@ -29,12 +29,10 @@ async function fetchUsers() {
         if (users.success){
             return users.message;
         } else {
-            console.log(users.message);
             return [];
         }
         
     } catch (error) {
-        console.error("Error al cargar usuaris:", error);
         return [];
     }
 }
@@ -109,7 +107,6 @@ async function checkMatch(interactedUserID){
 
         // Segun resultado, pone mensaje de error o no
         if (result.success) { 
-            console.log(`Consulta correcta: ES MATCH? ${result.match}`);
             return result.match;
         } else {
             console.log(result.message);
