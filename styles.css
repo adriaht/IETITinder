@@ -1,33 +1,12 @@
-body#edit-profile-body {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    justify-content: center;
-    background: linear-gradient(135deg, #FF6B6B, #FFCC70, #4158D0); /* Naranja, Amarillo, Azul */
-    background-size: 200% 200%;
-}
 
-header#edit-profile-header {
-    position: fixed; /* Fija el encabezado */
-    top: 0;
-    left: 50%; /* Centra el encabezado horizontalmente */
-    transform: translateX(-50%); /* Ajusta la posición para centrar */
-    width: 100%;
-    max-width: 460px; /* Limite de ancho */
-    background-color: rgba(0, 0, 0, 0.8); /* Negro semi-transparente */
-    color: #FFFFFF; /* Blanco */
-    padding: 15px;
-    z-index: 9999;
-    text-align: center;
-}
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@400;500;600&family=Poppins:wght@600;700&display=swap');
 
-header#edit-profile-header h1 {
-    margin: 0;
-}
+
+
+/* ALERTAS --------------------------------------------------------------------------- */
 
 .alert {
-    width: 100%; /* Ancho completo del contenedor */
+    width: 96%; /* Ancho completo del contenedor */
     max-width: 460px; /* Limite de ancho */
     position: fixed;
     top: 66px; /* Justo debajo del header */
@@ -43,66 +22,530 @@ header#edit-profile-header h1 {
 }
 
 #infoAlert {
-    background-color: rgba(255, 204, 112, 0.6); /* Amarillo con transparencia */
+    background-color: rgb(255, 204, 112, 0.6); /* Amarillo con transparencia */
     color: #000000; /* Negro */
 }
 
 #errorAlert {
-    background-color: rgba(255, 107, 107, 0.6); /* Naranja con transparencia */
+    background-color:rgb(255, 107, 107, 0.6); /* Naranja con transparencia */
     color: #FFFFFF; /* Blanco */
 }
 
 #warningAlert {
-    background-color: rgba(65, 88, 208, 0.6); /* Azul con transparencia */
+    background-color: rgb(65, 88, 208, 0.6); /* Azul con transparencia */
     color: #FFFFFF; /* Blanco */
 }
 
-#edit-profile-image {
+
+/* BASE ---------------------------------------------------------------------------------------------- */
+
+* {
+
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+    
+}
+
+body {
+
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #ff6b6b, #cc2faa, #7873f5);
+    background-size: 200% 200%;
+
+}
+
+.container {
+
+    width: 100%;
+    max-width: 460px;
+
+}
+
+.card {
+
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+
+    height: 840px;
+    max-height: 840px;
+
+}
+
+/* BASE FINAL --------------------------------------------------------------------- */
+
+
+/* LOGIN */
+
+.body-login {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #ff6b6b, #cc2faa, #4158D0);
+    background-size: 200% 200%;
+    animation: gradient 15s ease infinite;
+    padding: 20px;
+}
+
+@keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+
+.body-login #login-card {
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.body-login .card-header {
+    margin-bottom: 2rem;
+}
+
+.body-login .logo-login {
+    text-align: center;
+    margin-bottom: 1rem;
+    color: #FF6B6B;
+    font-size: 2.5rem;
+    font-weight: bold;
+    animation: pulse 2s infinite;
+    font-family: 'Poppins', sans-serif;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.body-login .input-group {
+    margin-bottom: 1rem;
+}
+
+.body-login .input-group.error input {
+    border-color: #e53e3e;
+    background-color: #fff5f5;
+}
+
+.body-login .input-group.error label {
+    color: #e53e3e;
+}
+
+.body-login label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #4a5568;
+    font-size: 0.875rem;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.body-login input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    transition: all 0.2s;
+}
+
+.body-login input:focus {
+    outline: none;
+    border-color: #ff6b6b;
+    box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
+}
+
+.body-login .password-input {
+    position: relative;
+}
+
+.body-login .primary-button {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: linear-gradient(to right, #ff6b6b, #cc2faa);
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    margin-bottom: 1.5rem;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.body-login .primary-button:hover {
+    opacity: 0.9;
+}
+
+.body-login .primary-button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.body-login .links-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.body-login .secondary-link {
+    color: #4a5568;
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-family: 'Montserrat', sans-serif;
+    transition: color 0.2s;
+}
+
+.body-login .secondary-link:hover {
+    color: #ff6b6b;
+}
+
+.body-login .error-message {
+    color: #e53e3e;
+    font-size: 0.875rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    min-height: 1.25rem;
+}
+
+.body-login .footer-text {
+    text-align: center;
+    color: #718096;
+    font-size: 0.875rem;
+    margin-bottom: 2rem;
+    font-family: 'Inter', sans-serif;
+}
+
+/* LOGIN FINAL */
+
+/* BASE OF INSIDE APLICATION */
+
+/* HEADER  > NO CHANGE*/
+
+header {
+    padding: 1.1rem;
+    height: 10%;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header p {
+    font-size: 1.2rem;
+    font-weight: bold;
+    font-family: 'Poppins', sans-serif;
+}
+
+.logo {
+
+    color: #FF6B6B;
+    font-size: 1.5rem;
+    font-weight: bold;
+    animation: pulse 2s infinite;
+    font-family: 'Poppins', sans-serif;
+
+}
+
+/* END OF HEADER*/
+
+/* CONTENT */
+
+main {
+
+height: 82%;
+position: relative;
+
+}
+
+/* DYNAMIC CONTENT */
+
+/* DISCOVER */
+main.discover {
+    padding: 0.2rem;
+}
+
+main.discover img {
+    width: 100%;
+    height: 92%;
+    object-fit: cover;
+    object-position: center;
+}
+
+main.discover div.buttons {
+    position: absolute;
+    top: 85%;
+    left: 50%; /* Move the element to the center based on its left edge */
+    transform: translateX(-50%); /* Offset the element by half of its width */
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+}
+
+main.discover div.buttons button {
+
+    width: 90px; /* Adjust size as needed */
+    height: 90px; /* Make sure width and height are equal */
+    border-radius: 50%; /* Makes it a perfect circle */
+
+    color: white;
+    font-weight: bold;
+    font-size: 1.25rem; /* Adjust font size */
+
+    cursor: pointer; /* Pointer cursor on hover */
+    display: flex; /* Center text inside */
+    align-items: center; /* Center text vertically */
+    justify-content: center; /* Center text horizontally */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional: add shadow */
+    transition: background-color 0.3s ease; /* Optional: smooth hover effect */
+}
+
+main.discover div.buttons .no {
+    border: 8px solid darkred; 
+    background-color: red; /* Button color */
+}
+
+main.discover div.buttons .si {
+    border: 8px solid darkgreen;
+    background-color: green; /* Button color */
+}
+
+/* END OF DISCOVER */
+
+/*  START PROFILE EDITION*/
+
+body#edit-profile-body {
+   background-color: white;
+}
+
+main.profile #edit-profile-image {
     border-radius: 50%;
 }
 
-#map {
+main.profile #map {
     height: 33%;
     width: 460px;
 }
 
-#linkChangeImagePerfil {
-    text-decoration: none;
-    padding: 10px;
-    background-color: #4158D0; /* Azul */
-    color: #FFFFFF; /* Blanco */
-    border-radius: 5px;
-    display: inline-block;
+main.profile #linkChangeImagePerfil {
+    text-decoration: none;  /* Elimina el subrayado */
+    color: inherit;  /* Elimina el color azul y usa el color por defecto del texto */
+
 }
 
-#submitEditProfileForm,
-#linkChangeImagePerfil {
-    display: inline-block;
-    margin-right: 10px;
-    vertical-align: middle;
-    padding: 12px 25px;
+main.profile form label,
+main.profile form input :not(#latitud):not(#longitud) {
+    display: block;
+    margin-bottom: 5px; /* Reduce el espacio entre los elementos */
+    justify-content: center;
+}
+
+main.profile form label {
+    margin-bottom: 3px; /* Espacio entre el label y el input */
+}
+
+main.profile form input {
+    margin-bottom: 5px; /* Espacio entre un input y el siguiente elemento */
+}
+
+
+/* evitar que aparezca en pagina */
+main.profile form input#latitude,
+main.profile form input#longitude {
+    display: none;
+}
+
+
+main.profile #submitEditProfileForm {
+    display: block;
+    margin: 10px auto 25px;
+    padding: 12px 75px;
     background-color: #4158D0; /* Azul */
     color: #FFFFFF; /* Blanco */
     border-radius: 5px;
     text-decoration: none;
     text-align: center;
+
+
 }
 
-#butonsEditProfile {
+main.profile #butonsEditProfile {
+    padding: 12px 75px;
+    margin: 10px auto 25px;
+     text-align:center;
+ }
+
+
+/*  END PROFILE EDITION*/
+
+
+/* MESSAGES */
+main.messages {
+padding: 1.1rem;
+padding-top: 0;
+padding-bottom: 0;
+}
+
+/* WITHOUT*/
+main.messages #container-without-messages {
+margin-bottom: 5px;
+height: 210px;
+}
+
+main.messages #container-without-messages h2 {
+margin-bottom: 5px;
+}
+
+main.messages #container-without-messages #container-without-messages-content {
+display: flex;
+gap: 15px;
+padding-top: 5px;
+padding-bottom: 10px;
+overflow-x: auto;
+}
+
+main.messages #container-without-messages #container-without-messages-content div.without-message-content {
+padding: 5px;
+text-align: center;
+}
+
+main.messages #container-without-messages #container-without-messages-content div.without-message-content img {
+width: 80px;
+height: 110px;
+object-fit: cover;
+object-position: center;
+
+}
+
+main.messages #container-without-messages #container-without-messages-content div.without-message-content p {
+text-align: center;
+}
+
+/* WITH*/
+
+main.messages #container-with-messages {
+height: 420px;
+}
+
+main.messages #container-with-messages  {
+margin-top: 15px;
+}
+
+main.messages #container-with-messages h2 {
+margin-bottom: 10px;
+}
+
+
+/* SI HAY MENSAJES */
+main.messages #container-with-messages #container-with-messages-content {
+height: 420px; /* Si se toca, se rompe ya que pillará toda la altura disponible */
+overflow-y: auto;
+display: flex;
+flex-direction: column;
+gap: 20px;
+}   
+
+main.messages #container-with-messages #container-with-messages-content div.with-message-content {
+display: flex;
+align-items: center;
+gap: 20px;
+}
+
+main.messages #container-with-messages #container-with-messages-content div.with-message-content img {
+width: 110px;
+height: 110px;
+object-fit: cover;
+object-position: top;
+}
+
+main.messages #container-with-messages #container-with-messages-content div.with-message-content div.user-info-with-message-content {
+display: flex;
+flex-direction: column;
+gap: 10px;
+}
+
+main.messages #container-with-messages #container-with-messages-content div.with-message-content div.user-info-with-message-content p:first-child {
+font-weight: bold;
+font-size: 1.2rem;
+}
+
+/* Si no hay match */
+
+main.messages #container-without-messages div.no-matches-without-messages {
+margin-top: 40px;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;  
+font-size: 1.2rem;
+}
+
+main.messages #container-with-messages div.no-matches-with-messages {
+margin-top: 80px;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;  
+font-size: 1.2rem;
+}
+
+
+/*SCROLLBAR */
+
+/* width */
+::-webkit-scrollbar {
+width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+background: #f1f1f1; 
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+background: #888; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+background: #555; 
+}
+
+/* END OF DYNAMIC CONTENT */
+
+/* NAV > NO CHANGE*/
+nav {
+
+    padding: 1.1rem;
+    height: 8%;
+}
+
+nav ul {
+
+    list-style-type: none;
     display: flex;
-    justify-content: flex-start;
-    gap: 10px;
-    margin-top: 20px;
+    justify-content: space-between;
+    font-size: 1.2rem;
+    font-weight: bold;
+
 }
 
-#butonsEditProfile button,
-#butonsEditProfile a {
-    display: inline-block;
-    padding: 12px 25px;
-    background-color: #4158D0; /* Azul */
-    color: #FFFFFF; /* Blanco */
-    border-radius: 5px;
+nav ul li a {
+
+    color: black;
     text-decoration: none;
-    vertical-align: middle;
-    text-align: center;
-}
+} 
+
+/* END OF NAV */
+
