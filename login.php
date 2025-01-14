@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if (!$user) {
                 // LOG
-                $errors['email'] = 'Correu electrònic incorrecte';
+                $errors['email'] = 'Correu electrònic o contrasenya incorrecte';
             } else {
                 // Verificar la contraseña
                 $stmtpwd = $pdo->prepare("SELECT COUNT(*) FROM users WHERE email = :email AND password = SHA2(:password, 512)");
@@ -73,6 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     } catch (PDOException $e) {
         error_log('Database error: ' . $e->getMessage());
+        // LOG
         $errors['db'] = 'Error de connexió. Torna-ho a intentar més tard.';
     }
 }
@@ -95,21 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <p class="footer-text">Troba l'amor a l'Institut Esteve Terradas i Illa</p>
             </div>
 
-            <form method="POST" action="">
-                <div class="input-group <?php echo isset($errors['email']) ? 'error' : ''; ?>" id="emailGroup">
-                    <label for="email">Correu electrònic</label>
-                    <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($email ?? ''); ?>" required>
-                </div>
-
-                <div class="input-group <?php echo isset($errors['email']) || isset($errors['password']) ? 'error' : ''; ?>">
-                    <label for="password">Contrasenya</label>
-                    <div class="password-input">
-                        <input type="password" id="password" name="password" required>
-                        <!-- <button type="button" id="togglePassword" class="toggle-password">👁️</button> -->
-                    </div>
-                </div>
-
-                <?php if (!empty($errors)): ?>
+            <?php if (!empty($errors)): ?>
                     <div class="error-message">
                         <?php 
                         if (isset($errors['email'])) {
@@ -123,6 +110,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                 <?php endif; ?>
 
+            <form method="POST" action="">
+                <div class="input-group <?php echo isset($errors['email']) ? 'error' : ''; ?>" id="emailGroup">
+                    <label for="email">Correu electrònic</label>
+                    <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($email ?? ''); ?>" required>
+                </div>
+
+                <div class="input-group <?php echo isset($errors['email']) || isset($errors['password']) ? 'error' : ''; ?>">
+                    <label for="password">Contrasenya</label>
+                    <div class="password-input">
+                        <input type="password" id="password" name="password" required>
+                        <!-- <button type="button" id="togglePassword" class="toggle-password">👁️</button> -->
+                    </div>
+                </div>
                 <button type="submit" class="primary-button">Iniciar Sessió</button>
 
                 <div class="links-group">
