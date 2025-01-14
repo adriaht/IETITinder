@@ -29,7 +29,7 @@ function logOperation($message, $type = "INFO") {
 
     // Message formatting
     $timeStamp = date('Y-m-d H:i:s');
-    $logMessage = "[$timeStamp] [$type] $message\n";
+    $logMessage = "[$timeStamp] [$type] [USER_ID = ".$loggedUser["user_ID"]."] $message\n";
 
     // Write log message in logFile
     file_put_contents($logFile, $logMessage, FILE_APPEND);
@@ -52,10 +52,11 @@ function searchUserInDatabase($whatYouWant, $whereYouWant, $userYouWant) {
 
         if (!$data) {
 
-            // LOG
+            logOperation("No data found for user $userYouWant in function searchUserInDatabase in discover.php", "INFO");
             die("Data not found");
         }
 
+        logOperation("Found data for $userYouWant in function searchUserInDatabase in discover.php" , "INFO");
         // Cerramos conexión
         unset($stmt);
         unset($pdo);
@@ -64,8 +65,8 @@ function searchUserInDatabase($whatYouWant, $whereYouWant, $userYouWant) {
 
     } catch (PDOException $e) {
 
-        // LOG
-        die("Error en la conexión: " . $e->getMessage());
+        logOperation("Connection error in searchUserInDatabase function in discover.php: " . $e->getMessage(), "ERROR");
+        die("Connection error: " . $e->getMessage());
     }
 
     
@@ -87,8 +88,6 @@ function setUserPreferenceForQuery($userSex, $userOrientation) {
 
     } else if ($userOrientation === 'homosexual') {
 
-        // ERROR
-        // return same sex
         return $userSex;
 
     } else if ($userOrientation === 'bisexual') {
@@ -96,7 +95,9 @@ function setUserPreferenceForQuery($userSex, $userOrientation) {
         return 'home, dona, no binari';
 
     } else {
+
         return 'Orientación no válida';
+
     }
     
 }
@@ -127,6 +128,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
         $userLatitude = $loggedUser["latitude"];
         $userLongitude = $loggedUser["longitude"];
 
+        $parametersForLog = "DATA PASSED TO ALGORITHM: User $userID: [Sex target: $userSexTarget] [Orientation: $userSexualOrientation] [latitude,longitude: $userLatitude , $userLongitude]";
+        logOperation($parametersForLog, "INFO");
+        
         $sql = "SELECT user_ID, alias, birth_date, sex, sexual_orientation, last_login_date, creation_date, 
                 (6371 * acos(cos(radians(:loggedUserLatitude)) 
                             * cos(radians(latitude)) 
@@ -164,6 +168,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
                 'distance' => $row['distance']
             ];
         }
+
+        logOperation("Successfully got data of users in discover.php in GET method get_users", "INFO");
         
         if (count($users) > 0) {
             // Get keys (those keys are the users_ID)
@@ -180,19 +186,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 $users[$row['user_ID']]['photos'][] = $row['path'];
             }
+
+            logOperation("Successfully got photos of users in discover.php in GET method get_users", "INFO");
+        
+        } else {
+            
+            unset($stmt);
+            unset($pdo);
+
+            logOperation("No user matched the algorithm in discover.php in GET method get_users. Returned data to JS", "INFO");
+
+            echo json_encode(['success' => true, 'message' => array_values($users)]);
+            exit;
         }
         
         // Cleans stored space for pdo and the query used. 
         unset($stmt);
         unset($pdo);
 
-        // LOG
+        logOperation("Successfully got data of users in discover.php in GET method get_users. Returned data to JS", "INFO");
+
         // Send successful objects of users
         echo json_encode(['success' => true, 'message' => array_values($users)]);
         exit;
     } catch (PDOException $e) {
 
-        // LOG
+        logOperation("Connection error in discover.php in GET method get_users: " . $e->getMessage(), "ERROR");
         // catch error and send it to JS
         echo json_encode(['success' => false, 'message' => 'Error en la conexión getUser: ' . $e->getMessage()]);
         exit;
@@ -225,7 +244,7 @@ function insertInteraction($input, $loggedUserID){
     unset($pdo);
 
     // LOG
-    // Sends data to JS. If error, will be handled in the try / catch in the post request
+    logOperation("Interaction INSERTED successful: ".$loggedUserID." gave $interactionState to $interactedUserID", "INFO");
     echo json_encode(['success' => true, 'message' => "Interaction successful: ".$loggedUserID. " gave $interactionState to $interactedUserID"]);
     exit;
 }
@@ -250,9 +269,11 @@ function checkMatch($input, $loggedUserID){
     // Both are successful responses, but we have to register if there's match or no 
     // LOG
     if($row) {
+        logOperation("CHECK MATCH: YES between user $interactedUserID and user $loggedUserID", "INFO");
         echo json_encode(['success' => true, 'match' => true, 'message' => "MATCH: l'usuari $loggedUserID i l'usuari $interactedUserID"]);
         exit;
     } else {
+        logOperation("CHECK MATCH: NO between user $interactedUserID and user $loggedUserID", "INFO");
         echo json_encode(['success' => true, 'match' => false, 'message' => "NO MATCH: hi ha match $loggedUserID y i  $interactedUserID"]);
         exit;
     }
@@ -278,7 +299,7 @@ function insertMatch($input, $loggedUserID){
     unset($stmt);
     unset($pdo);
 
-    // LOG
+    logOperation("Match inserted between user $interactedUserID and user $loggedUserID", "INFO");
     // Sends response to 
     echo json_encode(['success' => true, 'message' => "Match creat entre usuari $interactedUserID i usuari $loggedUserID"]);
     exit;
@@ -294,12 +315,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Send error if there's no input
         if (!$input) {
+            logOperation("Invalid input for POST request in discover.php.", "ERROR");
             echo json_encode(['success' => false, 'message' => 'Dades invàlides']);
             exit;
         }
 
         // Checks if there's an endpoint defined
         if (!isset($input['endpoint'])) {
+            logOperation("Endpoint not defined for POST request in discover.php.", "ERROR");
             echo json_encode(['success' => false, 'message' => 'Endpoint no especificat.']);
             exit;
         }
@@ -323,11 +346,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 
                 break;
             default: // In case of 
+            logOperation("Endpoint not found for POST request in discover.php. Endpoint sended: ".$input["logMessage"], "ERROR");
                 echo json_encode(['success' => false, 'message' => 'Endpoint desconegut.']);
                 exit;
         }
 
     } catch (PDOException $e) {
+        logOperation("Connection error in discover.php in POST method: " . $e->getMessage(), "ERROR");
         echo json_encode(['success' => false, 'message' => 'Error en la conexió: ' . $e->getMessage()]);
         exit;
     }
