@@ -159,12 +159,15 @@ async function insertMatch(interactedUserID) {
 
 // RENDERIZATION
 function renderNoUsersLeft() {
+
     const container = document.getElementById('content');
     const endMessage = document.createElement('h2');
     endMessage.textContent = 'No hi ha perfils disponibles';
     endMessage.style.textAlign = "center";
     endMessage.style.marginTop = "45%";
     container.appendChild(endMessage);
+
+    insertLog(`Rendered no users left`, "INFO");
 }
 
 
@@ -258,6 +261,8 @@ function renderUserCard(users, index) {
 
 function clickedNoButton(user, users, index){
 
+    insertLog(`Clicked NO on user ${user.info.user_ID}`, "INFO");
+
     insertInteraction(user.info.user_ID, 'dislike');
    
     renderUserCard(users, index + 1);
@@ -265,6 +270,8 @@ function clickedNoButton(user, users, index){
 }
 
 async function clickedYesButton(user, users, index) {
+
+    insertLog(`Clicked YES on user ${user.info.user_ID}`, "INFO");
 
     insertInteraction(user.info.user_ID, 'like');
 
@@ -326,6 +333,7 @@ function showMatchOptionBox(user, users, index) {
     goToMessageButton.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
 
     goToMessageButton.addEventListener('click', () => {
+        insertLog(`Clicked GO TO CONVERSATION on user ${user.info.user_ID}`, "INFO");
         window.location.href = `messages.php?action=go_to_conversation&user=${user.info.alias}`;
     });
 
@@ -342,6 +350,8 @@ function showMatchOptionBox(user, users, index) {
 
     keepDiscoveringButton.addEventListener('click', () => {
 
+        insertLog(`Clicked KEEP DISCOVERING on user ${user.info.user_ID}`, "INFO");
+
         yesButton.disabled = false;
         noButton.disabled = false;
         yesButton.style.cursor = "pointer";
@@ -349,6 +359,7 @@ function showMatchOptionBox(user, users, index) {
 
         renderUserCard(users, index + 1);
         optionBox.remove();
+        
     });
 
     optionButtonBox.appendChild(goToMessageButton);

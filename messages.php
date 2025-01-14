@@ -29,7 +29,7 @@ function logOperation($message, $type = "INFO") {
 
     // Message formatting
     $timeStamp = date('Y-m-d H:i:s');
-    $logMessage = "[$timeStamp] [$type] $message\n";
+    $logMessage = "[$timeStamp] [$type] [USER_ID = ".$loggedUser["user_ID"]."] $message\n";
 
     // Write log message in logFile
     file_put_contents($logFile, $logMessage, FILE_APPEND);
@@ -148,7 +148,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
         unset($stmt);
         unset($pdo);
 
-        logOperation("Successfully got matches of user ".$loggedUser["user_ID"]." messages.php in GET method get_matches: " . $e->getMessage(), "INFO");
+        logOperation("Successfully got matches of user ".$loggedUser["user_ID"]." messages.php in GET method get_matches" , "INFO");
         echo json_encode(['success' => true, 'message' => array_values($matches)]);
         exit;
 
