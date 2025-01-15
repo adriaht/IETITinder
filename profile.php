@@ -296,13 +296,13 @@ $perfilDates = searchInDatabase("*", "users", $loggedUserId);
                     <div id="infoPerfil">
                         <form id="edit-profile-form" action="" method="POST" enctype="multipart/form-data">
                             <!-- Nombre -->
-                            <label for="nom">Nombre:</label>
+                            <label for="nom">Nom:</label>
                             <input type="text" id="nom" name="name" placeholder="Enter your name"
                                 value="<?php echo htmlspecialchars($perfilDates['name']); ?>" required>
                             
 
                             <!-- Apellidos -->
-                            <label for="cognoms">Apellidos:</label>
+                            <label for="cognoms">Cognoms:</label>
                             <input type="text" id="cognoms" name="surname" placeholder="Enter your last name"
                                 value="<?php echo htmlspecialchars($perfilDates['surname']); ?>" required>
                             
@@ -314,7 +314,7 @@ $perfilDates = searchInDatabase("*", "users", $loggedUserId);
                             
 
                             <!-- Fecha de nacimiento -->
-                            <label for="data_naixement">Fecha de nacimiento:</label>
+                            <label for="data_naixement">Data de naixament:</label>
                             <input type="date" id="data_naixement" name="birth_date"
                                 value="<?php echo htmlspecialchars($perfilDates['birth_date']); ?>" required>
                             
@@ -328,7 +328,7 @@ $perfilDates = searchInDatabase("*", "users", $loggedUserId);
                             
 
                             <!-- Sexo -->
-                            <label for="sexe">Sexo:</label>
+                            <label for="sexe">Sexe:</label>
                             <select id="sexe" name="sex" required>
                                 <option value="home" <?php echo $perfilDates['sex'] == 'home' ? 'selected' : ''; ?>>
                                     Masculino</option>
@@ -340,7 +340,7 @@ $perfilDates = searchInDatabase("*", "users", $loggedUserId);
                             
 
                             <!-- Orientación sexual -->
-                            <label for="orientacio">Orientación sexual:</label>
+                            <label for="orientacio">Orientació sexual:</label>
                             <select id="orientacio" name="sexual_orientation" required>
                                 <option value="heterosexual" <?php echo $perfilDates['sexual_orientation'] == 'heterosexual' ? 'selected' : ''; ?>>
                                     Heterosexual</option>
