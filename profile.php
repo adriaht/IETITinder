@@ -2,9 +2,8 @@
 <!-- INICIO DEL PHP -->
 
 <?php
+
 session_start();
-// estoy forzandon la sesion usando el id del usuario
-//  $_SESSION['user'] = 2;
 
 $loggedUserId = $_SESSION['user'];
 
@@ -133,6 +132,39 @@ $perfilDates = searchInDatabase("*", "users", $loggedUserId);
 
     // funcion para guardar los datos en la base de datos sin recargar la pagina
     document.addEventListener("DOMContentLoaded", () => {
+
+        /* SUBMIT FUNCTIONALITY ----------------------------------------------------------------------------- */ 
+        const submenuButton = document.getElementById("submenu-button");
+        const greyBackground = document.getElementById("grey-background");
+        // Toggle submenu visibility
+        submenuButton.addEventListener("click", () => {
+
+            if (submenuButton.innerText === "· · ·") {
+
+                /*
+                const card = document.getElementById("card");
+                const greyBackground = document.createElement("div");
+                greyBackground.id = "grey-background";
+                */
+
+                greyBackground.style.display = "inline";
+                
+                renderSubmenu();
+                submenuButton.innerText = "X";
+
+            } else {
+                /*
+                const greyBackground = document.getElementById("grey-background");
+                greyBackground.remove();
+                */
+                greyBackground.style.display = "none";
+                deleteSubmenu();
+                submenuButton.innerText = "· · ·";
+
+            }
+        });
+         /* SUBMIT FUNCTIONALITY END ----------------------------------------------------------------------------- */ 
+
         const form = document.querySelector("form");
 
         form.addEventListener("submit", async (event) => {
@@ -180,15 +212,45 @@ $perfilDates = searchInDatabase("*", "users", $loggedUserId);
         });
     });
 
+    /* SUBMIT FUNCTIONALITY ----------------------------------------------------------------------------- */ 
+    function renderSubmenu() {
 
+        const header = document.getElementById("header");
 
+        // Create submenu
+        const submenu = document.createElement("ul");
+        submenu.id = "submenu";
 
+        // Create list items
+        const options = [
+            { text: "Tancar sessió", href: "/logout.php" },
+            { text: "Modificar contrasenya", href: "#" },
+            { text: "Eliminar compte", href: "#" },
+        ];
+
+        options.map(option => {
+            
+            const a = document.createElement("a");
+            const li = document.createElement("li");
+            li.textContent = option.text;
+            a.href = option.href;
+            a.appendChild(li);
+            submenu.appendChild(a);
+        });
+
+        header.appendChild(submenu);
+    }
+
+    function deleteSubmenu() {
+        const submenu = document.getElementById("submenu");
+        submenu.remove();
+    }
+
+    /* SUBMIT FUNCTIONALITY END ---------------------------------------------------------------------- */ 
 
     // variables para la fincion del mapa
     let map;
     let marker;
-
-   
 
     // Inicializa el mapa cuando se carga la página
     window.onload = initMap;
@@ -206,7 +268,7 @@ $perfilDates = searchInDatabase("*", "users", $loggedUserId);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IETinder - Descobrir</title>
+    <title>IETinder - Perfil</title>
     <link rel="stylesheet" type="text/css" href="/styles.css?t=<?php echo time(); ?>" />
     <script src="profile.js"></script>
 </head>
@@ -216,9 +278,10 @@ $perfilDates = searchInDatabase("*", "users", $loggedUserId);
     <div class="container">
 
         <div class="card">
-
-            <header>
+        <div id="grey-background"></div>
+            <header id="header"> <!-- added id to header-->
                 <p class="logo">IETinder ❤️</p>
+                <button id="submenu-button" class="button-submenu">· · ·</button>
             </header>
 
             <main id="content" class="profile content">
@@ -291,7 +354,7 @@ $perfilDates = searchInDatabase("*", "users", $loggedUserId);
                         <!-- Botón de enviar -->
                         <button id="submitEditProfileForm" type="submit">Guardar</button>
                         </form>
-                        <a id="linkChangeImagePerfil" href="about:blank" target="_blank">Modificar mis fotos</a>
+                        <a id="linkChangeImagePerfil" href="#" target="_blank">Modificar mis fotos</a>
                     </div>
                 </div>
 

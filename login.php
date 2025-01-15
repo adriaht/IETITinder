@@ -2,10 +2,10 @@
 session_start();
 
 // Check if session is active. Otherwise, get to login
-// if (isset($_SESSION['user'])) {
-//     header('Location: discover.php');
-//     exit;
-// }
+ if (isset($_SESSION['user'])) {
+     header('Location: discover.php');
+    exit;
+ }
 
 
 // Initialize database
