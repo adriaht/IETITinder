@@ -211,11 +211,20 @@ function renderUserCard(users, index) {
     noButton.style.alignItems = 'center';
     noButton.style.justifyContent = 'center';
     // Difference with yes
-    noButton.style.border = '8px solid darkred';
-    noButton.style.backgroundColor = 'red';
+    noButton.style.border = '8px solid rgb(151, 151, 151)';
+    noButton.style.backgroundColor = 'rgb(165, 165, 165)';
+
     // Event
     noButton.addEventListener('click', function() {
         clickedNoButton(user, users, index);
+    });
+
+    noButton.addEventListener('mouseover', function() {
+        noButton.style.backgroundColor = 'rgb(172, 172, 172)';
+    });
+
+    noButton.addEventListener('mouseout', function() {
+        noButton.style.backgroundColor = 'rgb(165, 165, 165)';
     });
 
     // YES BUTTON
@@ -233,13 +242,21 @@ function renderUserCard(users, index) {
     yesButton.style.alignItems = 'center';
     yesButton.style.justifyContent = 'center';
     // Difference with no
-    yesButton.style.border = '8px solid darkgreen';
-    yesButton.style.backgroundColor = 'green';
+    yesButton.style.border = '8px solid #b24a4a';
+    yesButton.style.backgroundColor = '#cc5555';
     // Event
     yesButton.addEventListener('click', async () => {
 
         clickedYesButton(user, users, index)
 
+    });
+
+    yesButton.addEventListener('mouseover', function() {
+        yesButton.style.backgroundColor = '#ff6b6b';
+    });
+
+    yesButton.addEventListener('mouseout', function() {
+        yesButton.style.backgroundColor = '#cc5555';
     });
 
     buttonsContainer.appendChild(noButton);
