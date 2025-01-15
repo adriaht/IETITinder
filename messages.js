@@ -366,4 +366,10 @@ function MostrarAlertas(nameAlerta, missageAlert) {
         typeAlerta.appendChild(textAlert);
         typeAlerta.style.display = 'block';
     }
+
+    setTimeout(() => {
+        typeAlerta.style.display = "none";
+        typeAlerta.remove(); // Elimina el elemento del DOM
+    }, 3000); // 3 segundos
+    
 }
