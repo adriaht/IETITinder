@@ -345,7 +345,7 @@ function showMatchOptionBox(user, users, index) {
     goToMessageButton.style.borderRadius = '4px';
     goToMessageButton.style.cursor = 'pointer';
     goToMessageButton.style.fontSize = '16px';
-    goToMessageButton.style.backgroundColor = "#FF6B6B";
+    goToMessageButton.style.background = "linear-gradient(to right, #ff6b6b, #cc2faa)";
     goToMessageButton.style.color = "#fff";
     goToMessageButton.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
 
@@ -443,4 +443,5 @@ function MostrarAlertas(nameAlerta, missageAlert) {
         typeAlerta.appendChild(textAlert);
         typeAlerta.style.display = 'block';
     }
+    
 }
