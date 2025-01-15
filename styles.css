@@ -324,14 +324,36 @@ main.discover div.buttons .si {
 
 /*  START PROFILE EDITION*/
 
-body#edit-profile-body {
+main.profile body#edit-profile-body {
    background-color: white;
+   
 }
+
+/* estilos de los cuadrados */
+main.profile div#content-header {
+    display: flex;
+    justify-content: center; /* Centra los h3 horizontalmente */
+    gap: 10px; /* Espacio entre los cuadrados */
+}
+
+main.profile div#content-header h4 {
+    margin: 0 5px 0;
+    border: 1px solid black; /* Borde negro para cada h3 */
+    padding: 10px; /* Espaciado interno estándar */
+    text-align: center; /* Centrar texto dentro del h3 */
+    transition: padding 0.3s ease; /* Transición suave para el cambio de espaciado */
+    cursor: pointer; /* Cambia el cursor al pasar por encima */
+}
+
+main.profile div#content-header h4:hover {
+    padding: 20px; /* Incrementa el espaciado interno al interactuar */
+}
+/* sin estilos de los cuadrados */
 
 main.profile div#content-profile{
     height: 700px;
     max-height:700px;
-    overflow:scroll;
+    overflow:auto;
 }
 
 main.profile #map {
@@ -363,6 +385,9 @@ main.profile form label {
     text-align: left; /* Alinea el texto a la izquierda */
     width: 80%; /* Asegura que el label ocupe todo el espacio del contenedor */
     max-width: 460px; /* Limita el ancho del label */
+    font-size: 0.875rem;
+    font-family: 'Montserrat', sans-serif;
+    color: #4a5568;
 }
 
 main.profile form input ,
@@ -397,20 +422,27 @@ main.profile #butonsEditProfile {
  main.profile #submitEditProfileForm {
     width: 100%;
     padding: 12px 75px; /* Ajusta el tamaño del botón */
-    background-color: #4158D0; /* Azul */
-    color: #FFFFFF; /* Blanco */
-    border-radius: 5px;
-    border: none; /* Elimina el borde predeterminado */
+    background-color: #4158D0; /* Azul */ 
     text-align: center;
+    background: linear-gradient(to right, #ff6b6b, #cc2faa);
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: all 0.2s;
+    margin-bottom: 1.5rem;
+    font-family: 'Montserrat', sans-serif;
     
 }
 /* boton de cambiar imagen */
  main.profile #linkChangeImagePerfil {
     text-decoration: none;  /* Elimina el subrayado */
-    color: inherit;  /* Elimina el color azul y usa el color por defecto del texto */
     margin: 10 0 0 0;
+    font-size: 0.875rem;
+    font-family: 'Montserrat', sans-serif;
+    color: #4a5568;
 }
 
 /*  END PROFILE EDITION*/
