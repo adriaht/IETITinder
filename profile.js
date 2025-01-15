@@ -92,3 +92,15 @@ function initMap() {
     });
 
 }
+
+
+// funcion donde pasaremos el formulario 
+function validateData(formData) {
+    let errores = [];
+    formData.forEach((value, key) => {
+        if (!value.trim()) {
+            errores.push(`${key} es obligatorio.`);
+        }
+    });
+    return errores;
+}

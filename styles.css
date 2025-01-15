@@ -435,6 +435,12 @@ main.profile div#content-header h4:hover {
 }
 /* sin estilos de los cuadrados */
 
+
+main.profile div#showErrors p{
+    text-align: center;
+    color: red;
+}
+
 main.profile div#content-profile{
     height: 700px;
     max-height:700px;

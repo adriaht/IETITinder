@@ -23,34 +23,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'sexual_orientation' => $_POST['sexual_orientation'],
     ];
 
-    // Llamamos a la función para validar los datos
-    $errores = validateDatas($userData);
-
-    if (empty($errores)) {
-        // Si no hay errores, llamamos a la función para actualizar los datos
-        $result = updateUserData($userData);
-        echo $result;
-    } else {
-        // Si hay errores, mostramos los mensajes de error
-        foreach ($errores as $error) {
-       
-            showAlerts("error",$error); //no muestra exactamente que valor es el que da error, pero sin esto 
-            //no muestra la alerta de error
-     
-        }
-    }
+    $result = updateUserData($userData);
+    echo $result;
 }
 
 // Función de validación
-function validateDatas($data) {
-    $errores = [];
-    foreach ($data as $key => $value) {
-        if (is_null($value) || trim($value) === '') {
-            $errores[] = "El campo '$key' no puede estar vacío.";
-        }
-    }
-    return $errores;
-}
 
 
     
@@ -63,6 +40,7 @@ function startPDO()
     $pw = "1234";
     return new PDO("mysql:host=$hostname;dbname=$dbname", $username, $pw);
 }
+
 
 
 function searchInDatabase($whatYouWant, $whereYouWant, $userYouWant)
@@ -162,7 +140,21 @@ $perfilDates = searchInDatabase("*", "users", $loggedUserId);
 
             // Crear un objeto FormData para capturar los datos del formulario
             const formData = new FormData(form);
+      
+            // Validar los datos antes de enviarlos
+            const areErrors = validateData(formData);
+        
+        if (areErrors.length > 0) {
+            // Si hay errores, mostrar los mensajes
+            const errorDiv = document.getElementById("showErrors");
+            errorDiv.innerHTML = ''; // Limpiar errores anteriores
+            areErrors.forEach(error => {
+                const pElement = document.createElement("p");
+                pElement.textContent = error;
+                errorDiv.appendChild(pElement);
+            });
 
+        }else{
             try {
                 // Enviar los datos al servidor mediante fetch
                 // con un post para guardar los datos en la base de datos
@@ -184,8 +176,11 @@ $perfilDates = searchInDatabase("*", "users", $loggedUserId);
                 // errores de red, mostrando el error
                 showAlerts("error", "Ocurrió un error inesperado: " + error + ".");
             }
+        }
         });
     });
+
+
 
 
 
@@ -242,18 +237,23 @@ $perfilDates = searchInDatabase("*", "users", $loggedUserId);
             <main id="content" class="profile content">
 
                 <div id="content-profile">
+
+                <div id="showErrors">
+
+
+                </div>
                    
                     <div id="infoPerfil">
                         <form id="edit-profile-form" action="" method="POST" enctype="multipart/form-data">
                             <!-- Nombre -->
-                            <label for="nom">Nombre:</label>
-                            <input type="text" id="nom" name="name" placeholder="Enter your name"
+                            <label for="nom">Nom:</label>
+                            <input type="text" id="nom" name="nom" placeholder="Introduiu el vostre nom"
                                 value="<?php echo htmlspecialchars($perfilDates['name']); ?>" required>
                             
 
                             <!-- Apellidos -->
-                            <label for="cognoms">Apellidos:</label>
-                            <input type="text" id="cognoms" name="surname" placeholder="Enter your last name"
+                            <label for="cognoms">Cognoms:</label>
+                            <input type="text" id="cognoms" name="Cognoms" placeholder="Introduiu el vostre Cognom"
                                 value="<?php echo htmlspecialchars($perfilDates['surname']); ?>" required>
                             
 
