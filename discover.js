@@ -271,6 +271,8 @@ function renderUserCard(users, index) {
 function clickedNoButton(user, users, index){
 
     insertLog(`Clicked NO on user ${user.info.user_ID}`, "INFO");
+    MostrarAlertas("info", "Has clickat NO")
+
 
     insertInteraction(user.info.user_ID, 'dislike');
 
@@ -280,6 +282,8 @@ function clickedNoButton(user, users, index){
 async function clickedYesButton(user, users, index) {
 
     insertLog(`Clicked YES on user ${user.info.user_ID}`, "INFO");
+
+    MostrarAlertas("info", "Has clickat YES")
 
     insertInteraction(user.info.user_ID, 'like');
 
@@ -393,3 +397,47 @@ function showMatchOptionBox(user, users, index) {
 }
 
 
+// Función para mostrar alertas, le has de pasar el nombre de la alerta deseada
+//  y el mensaje que quieres transmitir y le adjudicaremos una id para darle estilos en el css
+function MostrarAlertas(nameAlerta, missageAlert) {
+
+    // variables para crear el elemento div y introducirlo en el dom en forma de alerta
+    let typeAlerta;
+    let elementI;
+
+    if (nameAlerta === "info") {
+        typeAlerta = document.createElement('div');
+        typeAlerta.id = 'infoAlert';
+        typeAlerta.classList.add('alert');
+        document.body.appendChild(typeAlerta);
+        elementI = document.createElement('i');
+        typeAlerta.appendChild(elementI);
+        const textAlert = document.createTextNode(missageAlert);
+        typeAlerta.appendChild(textAlert);
+        typeAlerta.style.display = 'block';
+    }
+
+    if (nameAlerta === "error") {
+        typeAlerta = document.createElement('div');
+        typeAlerta.id = 'errorAlert';
+        typeAlerta.classList.add('alert');
+        document.body.appendChild(typeAlerta);
+        elementI = document.createElement('i');
+        typeAlerta.appendChild(elementI);
+        const textAlert = document.createTextNode(missageAlert);
+        typeAlerta.appendChild(textAlert);
+        typeAlerta.style.display = 'block';
+    }
+
+    if (nameAlerta === "warning") {
+        typeAlerta = document.createElement('div');
+        typeAlerta.id = 'warningAlert';
+        typeAlerta.classList.add('alert');
+        document.body.appendChild(typeAlerta);
+        elementI = document.createElement('i');
+        typeAlerta.appendChild(elementI);
+        const textAlert = document.createTextNode(missageAlert);
+        typeAlerta.appendChild(textAlert);
+        typeAlerta.style.display = 'block';
+    }
+}
