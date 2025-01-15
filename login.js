@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     insertLog("Changed the visibility of the password", "INFO");
 
-    // Visibilidad de la contraseña
+    // Password visibility toggle
     //togglePassword.addEventListener('click', () => {
     //    const type = passwordInput.type === 'password' ? 'text' : 'password';
     //   passwordInput.type = type;
@@ -12,8 +12,9 @@ document.addEventListener('DOMContentLoaded', () => {
     //});
 });
 
-// LAMAR FUNCION
+
 // insertLog(Rendered no users left, "INFO");
+// JS that makes AJAX call to insert user interaction in logs
 async function insertLog(logMessage, type) {
 
     try {
