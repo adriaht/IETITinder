@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     }
 
+
 });
 
 // GET method: get users that match user (calling get_users endpoint)
@@ -152,9 +153,8 @@ function renderNoUsersLeft() {
 
     const container = document.getElementById('content');
     const endMessage = document.createElement('h2');
+    endMessage.id = "end-message";
     endMessage.textContent = 'No hi ha perfils disponibles';
-    endMessage.style.textAlign = "center";
-    endMessage.style.marginTop = "45%";
     container.appendChild(endMessage);
 
     insertLog(`Rendered no users left`, "INFO");
@@ -181,71 +181,26 @@ function renderUserCard(users, index) {
     const image = document.createElement('img');
     image.src = user.photos[0];
     image.alt =`photo_of_${user.info.alias}`;
-    image.style.width = "100%";
-    image.style.height = "92%";
-    image.style.objectFit = "cover";
-    image.style.objectPosition = "center";
 
     // BUTTON DIV
     const buttonsContainer = document.createElement('div');
-    buttonsContainer.style.position = "absolute";
-    buttonsContainer.style.top = "85%";
-    buttonsContainer.style.left = "50%";
-    buttonsContainer.style.transform = "translateX(-50%)";
-    buttonsContainer.style.display = "flex";
-    buttonsContainer.style.justifyContent = "center";
-    buttonsContainer.style.gap = "40px";
+    buttonsContainer.id = "buttons-container";
 
     // NO BUTTON
     const noButton = document.createElement('button');
     noButton.textContent = 'NOP';
     noButton.id = "no-button";
-    noButton.style.width = '90px';
-    noButton.style.height = '90px';
-    noButton.style.borderRadius = '50%';
-    noButton.style.color = 'white';
-    noButton.style.fontWeight = 'bold';
-    noButton.style.fontSize = '1.25rem';
-    noButton.style.cursor = 'pointer';
-    noButton.style.display = 'flex';
-    noButton.style.alignItems = 'center';
-    noButton.style.justifyContent = 'center';
-    // Difference with yes
-    noButton.style.border = '8px solid rgb(151, 151, 151)';
-    noButton.style.backgroundColor = 'rgb(165, 165, 165)';
 
     // Event
     noButton.addEventListener('click', function() {
         clickedNoButton(user, users, index);
     });
 
-    // Hover
-    noButton.addEventListener('mouseover', function() {
-        noButton.style.backgroundColor = 'rgb(172, 172, 172)';
-    });
-
-    noButton.addEventListener('mouseout', function() {
-        noButton.style.backgroundColor = 'rgb(165, 165, 165)';
-    });
-
     // YES BUTTON
     const yesButton = document.createElement('button');
     yesButton.textContent = 'YES';
     yesButton.id = "yes-button";
-    yesButton.style.width = '90px';
-    yesButton.style.height = '90px';
-    yesButton.style.borderRadius = '50%';
-    yesButton.style.color = 'white';
-    yesButton.style.fontWeight = 'bold';
-    yesButton.style.fontSize = '1.25rem';
-    yesButton.style.cursor = 'pointer';
-    yesButton.style.display = 'flex';
-    yesButton.style.alignItems = 'center';
-    yesButton.style.justifyContent = 'center';
-    // Difference with no
-    yesButton.style.border = '8px solid #b24a4a';
-    yesButton.style.backgroundColor = '#cc5555';
-    
+
     // Event
     yesButton.addEventListener('click', async () => {
 
@@ -274,8 +229,8 @@ function renderUserCard(users, index) {
 function clickedNoButton(user, users, index){
 
     insertLog(`Clicked NO on user ${user.info.user_ID}`, "INFO");
-    MostrarAlertas("info", "Has clickat NO")
 
+    MostrarAlertas("info", "Has clickat NO")
 
     insertInteraction(user.info.user_ID, 'dislike');
 
@@ -318,57 +273,34 @@ function showMatchOptionBox(user, users, index) {
     noButton.style.cursor = "default";
     
     const optionBox = document.createElement('div');
-    optionBox.style.position = 'absolute';
-    optionBox.style.top = '45%';
-    optionBox.style.left = '50%';
-    optionBox.style.transform = 'translate(-50%, -50%)';
-    optionBox.style.backgroundColor = 'white';
-    optionBox.style.borderRadius = '8px';
-    optionBox.style.padding = '20px';
-    optionBox.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.5)';
-    optionBox.style.textAlign = 'center';
-    optionBox.style.backdropFilter = "blur(10px);";
+    optionBox.id = "option-box";
     
     const matchTitle = document.createElement('h3');
     matchTitle.textContent = "Has fet Match!";
 
     const optionButtonBox = document.createElement('div');
-    optionButtonBox.style.display = 'flex';
-    optionButtonBox.style.gap = '10px';
-    optionButtonBox.style.marginTop = '15px';
-    optionButtonBox.style.flexDirection = 'column';
+    optionButtonBox.id = "buttons-box";
 
     const goToMessageButton = document.createElement('button');
     goToMessageButton.textContent = 'Anar a la conversa';
-    goToMessageButton.style.padding = '10px 20px';
-    goToMessageButton.style.border = 'none';
-    goToMessageButton.style.borderRadius = '4px';
-    goToMessageButton.style.cursor = 'pointer';
-    goToMessageButton.style.fontSize = '16px';
-    goToMessageButton.style.background = "linear-gradient(to right, #ff6b6b, #cc2faa)";
-    goToMessageButton.style.color = "#fff";
-    goToMessageButton.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
+    goToMessageButton.id = "go-to-conversation";
 
     goToMessageButton.addEventListener('click', () => {
+
         insertLog(`Clicked GO TO CONVERSATION on user ${user.info.user_ID}`, "INFO");
         window.location.href = `messages.php?action=go_to_conversation&user=${user.info.alias}`;
+   
     });
 
     const keepDiscoveringButton = document.createElement('button');
     keepDiscoveringButton.textContent = 'Seguir descobrint';
-    keepDiscoveringButton.style.padding = '10px 20px';
-    keepDiscoveringButton.style.border = 'none';
-    keepDiscoveringButton.style.borderRadius = '4px';
-    keepDiscoveringButton.style.cursor = 'pointer';
-    keepDiscoveringButton.style.fontSize = '16px';
-    keepDiscoveringButton.style.backgroundColor = "#e0e0e0";
-    keepDiscoveringButton.style.color = "#333";
-    keepDiscoveringButton.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
+    keepDiscoveringButton.id = "continue-discovering";
 
     keepDiscoveringButton.addEventListener('click', () => {
 
         insertLog(`Clicked KEEP DISCOVERING on user ${user.info.user_ID}`, "INFO");
 
+        /* RESET BUTTONS */ 
         yesButton.disabled = false;
         noButton.disabled = false;
         yesButton.style.cursor = "pointer";
@@ -382,14 +314,10 @@ function showMatchOptionBox(user, users, index) {
     // PRUEBAS
     // Create the backdrop div
     const backdropDiv = document.createElement('div');
-    backdropDiv.style.position = 'absolute';
-    backdropDiv.style.inset = '0';
-    backdropDiv.style.backdropFilter = 'blur(8px)';
-    backdropDiv.style.zIndex = '1';
+    backdropDiv.id = "backdrop-div";
+
     // Append the backdrop div to the container
     container.appendChild(backdropDiv);
-    // Ensure the optionBox is above the backdrop
-    optionBox.style.zIndex = '2';
 
     optionButtonBox.appendChild(goToMessageButton);
     optionButtonBox.appendChild(keepDiscoveringButton);
