@@ -20,24 +20,24 @@
     z-index: 1000;
     text-align: center;
     color: #000000; /* Negro */
-    background-color: rgba(0, 0, 0, 0.2); /* Negro semi-transparente */
+    background-color: rgb(0, 0, 0); /* Negro semi-transparente */
 
 }
 
 #infoAlert {
-    background-color: rgb(255, 204, 112,  0.6); /* Amarillo con transparencia */
+    background-color: rgb(255, 204, 112); /* Amarillo con transparencia */
     color: #000000; /* Negro */
-    background-color: rgb(255, 204, 112,  0.6); /* Amarillo con transparencia */
+    background-color: rgb(255, 204, 112); /* Amarillo con transparencia */
     color: #000000; /* Negro */
 }
 
 #errorAlert {
-    background-color:rgb(255, 107, 107, 0.6); /* Naranja con transparencia */
+    background-color:rgb(255, 107, 107); /* Naranja con transparencia */
     color: #FFFFFF; /* Negro */
 }
 
 #warningAlert {
-    background-color: rgb(65, 88, 208, 0.6); /* Azul con transparencia */
+    background-color: rgb(65, 88, 208); /* Azul con transparencia */
     color: #FFFFFF; /* Negro */
 
 }
