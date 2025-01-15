@@ -11,35 +11,31 @@
     width: 96%; /* Ancho completo del contenedor */
     max-width: 460px; /* Limite de ancho */
     position: absolute;
-    top: 200px; /* Justo debajo del header */
+    top: 650px; /* Justo debajo del header */
     left: 50%;
     transform: translateX(-50%); /* Centra la alerta horizontalmente */
     padding: 10px;
     border-radius: 5px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Negro*/
     z-index: 1000;
     text-align: center;
     color: #000000; /* Negro */
-    background-color: rgb(0, 0, 0); /* Negro semi-transparente */
+    background-color: rgba(0, 0, 0, 0.1); /* Negro semi-transparente */
 
 }
 
 #infoAlert {
-    background-color: rgb(255, 204, 112); /* Amarillo con transparencia */
-    color: #000000; /* Negro */
-    background-color: rgb(255, 204, 112); /* Amarillo con transparencia */
+    background-color: rgb(255, 204, 112,  1); /* Amarillo con transparencia */
     color: #000000; /* Negro */
 }
 
 #errorAlert {
-    background-color:rgb(255, 107, 107); /* Naranja con transparencia */
+    background-color:rgb(255, 107, 107, 1); /* Naranja con transparencia */
     color: #FFFFFF; /* Negro */
 }
 
 #warningAlert {
-    background-color: rgb(65, 88, 208); /* Azul con transparencia */
+    background-color: rgb(65, 88, 208, 1); /* Azul con transparencia */
     color: #FFFFFF; /* Negro */
-
 }
 
 /* BASE ---------------------------------------------------------------------------------------------- */
