@@ -142,6 +142,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
 
         if ($userSex === "no binari" || $userSexualOrientation === "bisexual") {
 
+            logOperation("LOGGED TO BISEXUAL OR NO BINARI", "INFO: ALGORITHM");
+            
             $sql = "SELECT user_ID, name, alias, birth_date, sex, sexual_orientation, last_login_date, creation_date, 
             (6371 * acos(cos(radians(:loggedUserLatitude)) 
                         * cos(radians(latitude)) 
@@ -151,13 +153,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
             ) AS distance
             FROM users
             WHERE user_ID != :loggedUserId 
-            AND sex = 'home' OR sex = 'dona' OR sex = 'no binari'
             AND user_ID NOT IN (SELECT `to` FROM interactions WHERE `from` = :loggedUserId AND state = 'like')
             AND user_ID NOT IN (SELECT `to` FROM interactions WHERE `from` = :loggedUserId AND state = 'dislike' AND interaction_date >= NOW() - INTERVAL 3 HOUR)
             ORDER BY last_login_date DESC, creation_date, distance ASC";
 
-            //   AND sexual_orientation IN (:loggedUserSexualOrientation, 'bisexual')	
         } else {
+
+            logOperation("LOGGED TO HOME OR DONA", "INFO: ALGORITHM");
 
             $sql = "SELECT user_ID, name, alias, birth_date, sex, sexual_orientation, last_login_date, creation_date, 
             (6371 * acos(cos(radians(:loggedUserLatitude)) 
@@ -182,6 +184,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
         $stmt->bindParam(':loggedUserId', $userID);
 
         if ($userSex != "no binari" && $userSexualOrientation != "bisexual") {
+            logOperation("LOGGED TO HOME OR DONA: used parameters", "INFO: ALGORITHM");
             $stmt->bindParam(':loggedUserSexTarget', $userSexTarget);
             $stmt->bindParam(':loggedUserSexualOrientation', $userSexualOrientation);
         }
@@ -203,7 +206,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
                 'last_login_date' => $row['last_login_date'],
                 'distance' => $row['distance']
             ];
+
+            logOperation("LOADED USER: ".$row['sex']. " AND ".$row['sexual_orientation'], "INFO: ALGORITHM");
         }
+
+        logOperation("GOT DATA OF ".count($users)." USERS IN THIS QUERY", "INFO");
 
         logOperation("Successfully got data of users in discover.php in GET method get_users", "INFO");
         
