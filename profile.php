@@ -37,7 +37,7 @@ function startPDO()
     $hostname = "localhost";
     $dbname = "IETinder";
     $username = "admin";
-    $pw = "1234";
+    $pw = "admin123";
     return new PDO("mysql:host=$hostname;dbname=$dbname", $username, $pw);
 }
 
