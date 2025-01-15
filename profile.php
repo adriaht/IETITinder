@@ -3,6 +3,7 @@
 
 <?php
 session_start();
+
 // estoy forzandon la sesion usando el id del usuario
 $_SESSION['user'] = 2;
 
@@ -133,6 +134,9 @@ $perfilDates = searchInDatabase("*", "users", $loggedUserId);
 
     // funcion para guardar los datos en la base de datos sin recargar la pagina
     document.addEventListener("DOMContentLoaded", () => {
+
+
+
         const form = document.querySelector("form");
 
         form.addEventListener("submit", async (event) => {
@@ -158,7 +162,7 @@ $perfilDates = searchInDatabase("*", "users", $loggedUserId);
             try {
                 // Enviar los datos al servidor mediante fetch
                 // con un post para guardar los datos en la base de datos
-                const response = await fetch("", {
+                const response = await fetch("profile.php", {
                     method: "POST",
                     body: formData,
                 });
@@ -180,33 +184,13 @@ $perfilDates = searchInDatabase("*", "users", $loggedUserId);
         });
     });
 
-
-
-
-
     // variables para la fincion del mapa
     let map;
     let marker;
 
-   
-
     // Inicializa el mapa cuando se carga la página
     window.onload = initMap;
 
-    async function fetchLoggedUser() {
-        try {
-            const response = await fetch("dashboard.php?action=get_user");
-            if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
-            const users = await response.json();
-            if (users.success) {
-                console.log("Usuario cargado:", users.message);
-            } else {
-                console.error("Error desde el servidor:", users.message);
-            }
-        } catch (error) {
-            console.error("Error al cargar usuarios:", error);
-        }
-    }
 </script>
 <!-- FIN DEL JS -->
 
