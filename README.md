@@ -25,6 +25,6 @@ IETinder es una plataforma de citas en línea inspirada en Tinder, diseñada par
 ## Creadores
 
 - [William Sargisson](https://github.com/WilliamSCastro)
-- [Adrian Hernandez](https://github.com/adriaht)
+- [Adrian Hernández](https://github.com/adriaht)
 - [Unai Muñoz](https://github.com/UnaiMunoz)
 
