@@ -230,7 +230,7 @@ function clickedNoButton(user, users, index){
 
     insertLog(`Clicked NO on user ${user.info.user_ID}`, "INFO");
 
-    MostrarAlertas("info", "Has clickat NO")
+    MostrarAlertas("info", "Has clickat NOP")
 
     insertInteraction(user.info.user_ID, 'dislike');
 
