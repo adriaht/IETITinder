@@ -96,10 +96,31 @@ function initMap() {
 
 // funcion donde pasaremos el formulario 
 function validateData(formData) {
+
+    // variables de traduccion, ya que el formulario es en ingles y la base de datos tambien
+    // me da algunos problemas al cambiar de ingles a catalan, con esto hacemos que el mensaje de error
+    // sea en catalan
+    const fieldTranslations = {
+        user_ID: "Identificador d'usuari",
+        email: "Correu electrònic",
+        password: "Contrasenya",
+        name: "Nom",
+        surname: "Cognom",
+        alias: "Àlies",
+        birth_date: "Data de naixement",
+        latitude: "Latitud",
+        longitude: "Longitud",
+        sex: "Sexe",
+        sexual_orientation: "Orientació sexual",
+        creation_date: "Data de creació",
+        last_login_date: "Data de l'última connexió"
+    };
+
     let errores = [];
     formData.forEach((value, key) => {
         if (!value.trim()) {
-            errores.push(`${key} es obligatorio.`);
+            const fieldName = fieldTranslations[key] || key; // Traduir el camp si existeix al mapa
+            errores.push(`${fieldName} és obligatori.`);
         }
     });
     return errores;
