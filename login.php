@@ -23,10 +23,35 @@ function startPDO() {
         ]);
         return $pdo;
     } catch (PDOException $e) {
-        // LOG
-        error_log("Error de conexión a la BDD: " . $e->getMessage());
+        logOperation("Database error conection in login.php" , "ERROR");
         return null;
     }
+}
+
+// Funcion para crear y añadir informacion en el log
+function logOperation($message, $type = "INFO") {
+
+    // Get log directory path
+    $logDir = __DIR__ . '/logs';
+
+    // Create directory if it doesn't exist
+    if (!file_exists($logDir)) {
+        mkdir($logDir, 0755);
+    }
+
+    // Get log file name (formato YYYY-MM-DD.txt)
+    $logFile = $logDir . '/' . date('Y-m-d') . '.txt';
+
+    // Message formatting
+    $timeStamp = date('Y-m-d H:i:s');
+
+
+    $logMessage = "[$timeStamp] [$type] [LOGIN] $message\n";
+
+
+
+    // Write log message in logFile
+    file_put_contents($logFile, $logMessage, FILE_APPEND);
 }
 
 $errors = [];
@@ -39,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $pdo = startPDO();
         
         if (!$pdo) {
-            // LOG 
+            logOperation("Error conection in login.php" , "ERROR");
             $errors['db'] = 'Error de connexió. Torna-ho a intentar més tard.';
         } else {
             // Verificar si el usuario existe
@@ -50,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $user = $stmt->fetch();
 
             if (!$user) {
-                // LOG
+                logOperation("Email or password incorrect in login.php" , "ERROR");
                 $errors['email'] = 'Correu electrònic o contrasenya incorrecte';
             } else {
                 // Verificar la contraseña
@@ -62,25 +87,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $passwordCorrecta = $stmtpwd->fetchColumn();
 
                 if (!$passwordCorrecta) {
-                    // LOG
+                    logOperation("Password incorrect in login.php" , "ERROR");
                     $errors['password'] = 'Contrasenya incorrecta';
                 } else {
-                    // LOG
+                    logOperation("Login successful in login.php" , "INFO");
                     $updateStmt = $pdo->prepare("UPDATE users SET last_login_date = CURRENT_TIMESTAMP WHERE user_ID = :id");
                     $updateStmt->bindParam(':id', $user['user_ID']);
                     $updateStmt->execute();
                     
                     $_SESSION['user'] = $user['user_ID'];
                     
-                    //LOG
+                    logOperation("User " . $user['user_ID'] . " logged in", "INFO");
                     header('Location: discover.php');
                     exit;
                 }
             }
         }
     } catch (PDOException $e) {
-        error_log('Database error: ' . $e->getMessage());
-        // LOG
+        logOperation("Database error in login.php", "ERROR");
         $errors['db'] = 'Error de connexió. Torna-ho a intentar més tard.';
     }
 }

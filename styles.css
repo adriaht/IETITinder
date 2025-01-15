@@ -69,12 +69,13 @@ body {
 .card {
 
     background: white;
-    border-radius: 20px;
+    /*border-radius: 20px;*/
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 
     height: 840px;
     max-height: 840px;
 
+    position: relative;
 }
 
 /* BASE FINAL --------------------------------------------------------------------- */
@@ -233,7 +234,7 @@ body {
 /* HEADER  > NO CHANGE*/
 
 header {
-    padding: 1.1rem;
+
     height: 84px;
 
     display: flex;
@@ -248,12 +249,20 @@ header p {
 }
 
 .logo {
-
+    padding: 20px;
+    padding-left: 1.1rem;
     color: #FF6B6B;
     font-size: 1.5rem;
     font-weight: bold;
     animation: pulse 2s infinite;
     font-family: 'Poppins', sans-serif;
+
+}
+
+/* IN MESSAGES */
+.find {
+   
+    padding-right: 1.1rem;
 
 }
 
@@ -276,13 +285,16 @@ main.discover {
 }
 
 main.discover img {
+
     width: 100%;
     height: 92%;
     object-fit: cover;
     object-position: center;
+
 }
 
-main.discover div.buttons {
+main.discover #buttons-container {
+
     position: absolute;
     top: 85%;
     left: 50%; /* Move the element to the center based on its left edge */
@@ -290,9 +302,10 @@ main.discover div.buttons {
     display: flex;
     justify-content: center;
     gap: 40px;
+
 }
 
-main.discover div.buttons button {
+main.discover div#buttons-container button {
 
     width: 90px; /* Adjust size as needed */
     height: 90px; /* Make sure width and height are equal */
@@ -310,15 +323,87 @@ main.discover div.buttons button {
     transition: background-color 0.3s ease; /* Optional: smooth hover effect */
 }
 
-main.discover div.buttons .no {
-    border: 8px solid darkred; 
-    background-color: red; /* Button color */
+main.discover div#buttons-container #no-button {
+    border: 8px solid rgb(151, 151, 151); 
+    background-color: rgb(165, 165, 165); /* Button color */
 }
 
-main.discover div.buttons .si {
-    border: 8px solid darkgreen;
-    background-color: green; /* Button color */
+main.discover div#buttons-container #no-button:hover {
+    background-color: rgb(172, 172, 172); /* Button color */
 }
+
+main.discover div#buttons-container #yes-button {
+    border: 8px solid #b24a4a;
+    background-color: #cc5555; /* Button color */
+}
+
+main.discover div#buttons-container #yes-button:hover {
+    background-color: #ff6b6b; /* Button color */
+}
+
+#end-message {
+    text-align: center;
+    margin-top: 45%;
+}
+
+#option-box {
+
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    backdrop-filter: blur(10px);
+    z-index: 2;
+
+}
+
+#option-box #buttons-box {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    flex-direction: column;
+}
+
+
+#go-to-conversation {
+
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    background: linear-gradient(to right, #ff6b6b, #cc2faa);
+    color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+}
+#continue-discovering {
+
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    background: #e0e0e0;
+    color: black;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+}
+
+#backdrop-div {
+    position: absolute;
+    inset: 0;
+    backdrop-filter: blur(8px);
+    z-index: 1;
+}
+
+
+
 
 /* END OF DISCOVER */
 
