@@ -246,14 +246,14 @@ $perfilDates = searchInDatabase("*", "users", $loggedUserId);
                     <div id="infoPerfil">
                         <form id="edit-profile-form" action="" method="POST" enctype="multipart/form-data">
                             <!-- Nombre -->
-                            <label for="nom">Nom:</label>
-                            <input type="text" id="nom" name="nom" placeholder="Introduiu el vostre nom"
+                            <label for="nom">Nombre:</label>
+                            <input type="text" id="nom" name="name" placeholder="Enter your name"
                                 value="<?php echo htmlspecialchars($perfilDates['name']); ?>" required>
                             
 
                             <!-- Apellidos -->
-                            <label for="cognoms">Cognoms:</label>
-                            <input type="text" id="cognoms" name="Cognoms" placeholder="Introduiu el vostre Cognom"
+                            <label for="cognoms">Apellidos:</label>
+                            <input type="text" id="cognoms" name="surname" placeholder="Enter your last name"
                                 value="<?php echo htmlspecialchars($perfilDates['surname']); ?>" required>
                             
 
