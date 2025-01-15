@@ -188,6 +188,11 @@ $perfilDates = searchInDatabase("*", "users", $loggedUserId);
 
         }else{
             try {
+             
+                const errorDiv = document.getElementById("showErrors");
+                errorDiv.innerHTML = '';
+            
+
                 // Enviar los datos al servidor mediante fetch
                 // con un post para guardar los datos en la base de datos
                 const response = await fetch("profile.php", {
