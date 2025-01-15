@@ -241,6 +241,8 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    position: relative;
 }
 
 header p {
@@ -250,8 +252,7 @@ header p {
 }
 
 .logo {
-    padding: 20px;
-    padding-left: 1.1rem;
+    padding: 24px;
     color: #FF6B6B;
     font-size: 1.5rem;
     font-weight: bold;
@@ -266,6 +267,78 @@ header p {
     padding-right: 1.1rem;
 
 }
+
+/* AÑADIR A STYLES CSS*/
+#grey-background {
+
+    z-index: 10;
+
+    display: none;
+    position: absolute;
+
+    /*border-radius: 20px;*/
+    background-color: rgba(80, 80, 80, 0.6);
+    width: 460px;
+    height: 840px;
+
+}
+/* AÑADIR A STYLES CSS*/
+
+/* NUEVO DEL BOTÓN*/
+#submenu-button {
+   
+    /* Remove styles */
+    background: none;
+	border: none;
+	font: inherit;
+
+    z-index: 12;
+
+    text-align: center;
+
+    width: 100px;
+    height: 84px;
+    font-size: 1.2rem;
+    background-color: white;
+
+    /*border-top-right-radius: 20px;*/
+
+}
+
+/* Submenu styling */
+
+#submenu {
+
+    position: absolute;
+    z-index: 11;
+
+    height: auto;
+    width: 300px;
+    top: 84px;
+    left: 160px;
+
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    background-color: white;
+}
+
+#submenu li {
+    padding: 20px 0px;
+}
+
+#submenu li:hover {
+    background-color: #e0e0e0;
+}
+
+#submenu a {
+    text-decoration: none;
+    font-size: 1rem;
+    color: black;
+    font-weight: bold;
+}
+
 
 /* END OF HEADER*/
 
