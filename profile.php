@@ -9,7 +9,7 @@ $loggedUserId = $_SESSION['user'];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Capturamos los datos enviados
     $userData = [
-        'user_ID' => $_SESSION['user_ID'], // Asegúrate de tener el ID del usuario en sesión
+        'user_ID' => $_SESSION['user'], // Asegúrate de tener el ID del usuario en sesión
         'name' => $_POST['name'],
         'surname' => $_POST['surname'],
         'alias' => $_POST['alias'],
@@ -20,12 +20,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'sexual_orientation' => $_POST['sexual_orientation'],
     ];
 
-    // Llamamos a la función para actualizar los datos
-    $result = updateUserData($userData);
+    // Llamamos a la función para validar los datos
+    $errores = validarDatos($userData);
 
-    // Mostramos el resultado
-    echo $result;
+    if (empty($errores)) {
+        // Si no hay errores, llamamos a la función para actualizar los datos
+        $result = updateUserData($userData);
+        echo $result;
+    } else {
+        // Si hay errores, mostramos los mensajes de error
+        foreach ($errores as $error) {
+        
+            showAlerts("error",$error);
+           
+        }
+    }
 }
+
+// Función de validación
+function validarDatos($data) {
+    $errores = [];
+    foreach ($data as $key => $value) {
+        if (is_null($value) || trim($value) === '') {
+            $errores[] = "El campo '$key' no puede estar vacío.";
+        }
+    }
+    return $errores;
+}
+
+
+    
 
 function startPDO()
 {
@@ -147,14 +171,14 @@ $perfilDates = searchInDatabase("*", "users", $loggedUserId);
                 if (response.ok) {
                     // Muestra la alerta personalizada 
                     // cuando guarda los datos
-                    MostrarAlertas("info", "Datos guardados");
+                    showAlerts("info", "Datos guardados");
 
                 } else {
-                    MostrarAlertas("error", "Error al enviar los datos."); // errore en la peticion del servidor
+                    showAlerts("error", "Error al enviar los datos."); // errore en la peticion del servidor
                 }
             } catch (error) {
                 // errores de red, mostrando el error
-                MostrarAlertas("error", "Ocurrió un error inesperado: " + error + ".");
+                showAlerts("error", "Ocurrió un error inesperado: " + error + ".");
             }
         });
     });

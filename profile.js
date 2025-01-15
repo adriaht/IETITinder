@@ -1,6 +1,6 @@
 // Función para mostrar alertas, le has de pasar el nombre de la alerta deseada
 //  y el mensaje que quieres transmitir y le adjudicaremos una id para darle estilos en el css
-function MostrarAlertas(nameAlerta, missageAlert) {
+function showAlerts(nameAlerta, missageAlert) {
 
     // variables para crear el elemento div y introducirlo en el dom en forma de alerta
     let typeAlerta;

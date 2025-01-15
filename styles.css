@@ -328,19 +328,27 @@ body#edit-profile-body {
    background-color: white;
 }
 
-main.profile #edit-profile-image {
-    border-radius: 50%;
+main.profile div#content-profile{
+    height: 700px;
+    max-height:700px;
+    overflow:scroll;
 }
 
 main.profile #map {
-    height: 33%;
-    width: 460px;
+    height: 23%;
+    width: 360px;
+    margin: 10 auto 30px;
 }
 
-main.profile #linkChangeImagePerfil {
-    text-decoration: none;  /* Elimina el subrayado */
-    color: inherit;  /* Elimina el color azul y usa el color por defecto del texto */
 
+main.profile form {
+    display: flex; /* Activar el modelo de Flexbox */
+    flex-direction: column; /* Alinear los elementos en columna */
+    align-items: center; /* Centrar horizontalmente */
+    justify-content: center; /* Centrar verticalmente */
+    height: 500px; /* Asegurar que el formulario ocupe toda la altura del contenedor */ 
+    width: 100%; /* Asegurar que el formulario ocupe todo el ancho del contenedor */
+    margin: 0 auto 0; /* Asegurar el centrado automático en caso de ser necesario */
 }
 
 main.profile form label,
@@ -352,9 +360,15 @@ main.profile form input :not(#latitud):not(#longitud) {
 
 main.profile form label {
     margin-bottom: 3px; /* Espacio entre el label y el input */
+    text-align: left; /* Alinea el texto a la izquierda */
+    width: 80%; /* Asegura que el label ocupe todo el espacio del contenedor */
+    max-width: 460px; /* Limita el ancho del label */
 }
 
-main.profile form input {
+main.profile form input ,
+main.profile form select{
+    width: 80%; /* Asegura que el input ocupe todo el espacio del contenedor */
+    max-width: 460px;
     margin-bottom: 5px; /* Espacio entre un input y el siguiente elemento */
 }
 
@@ -366,25 +380,38 @@ main.profile form input#longitude {
 }
 
 
-main.profile #submitEditProfileForm {
-    display: block;
-    margin: 10px auto 25px;
-    padding: 12px 75px;
+
+
+/* div de los dos botones */
+main.profile #butonsEditProfile {
+    display:flex;
+    padding: 0 45px;
+    flex-direction: column;
+    align-items: flex-start; /* Alinea los botones a la izquierda */
+    gap: 10px; /* Espaciado entre los botones */
+    width: 100%;
+    align-items: flex-start; 
+ }
+
+ /* boton de guardar */
+ main.profile #submitEditProfileForm {
+    width: 100%;
+    padding: 12px 75px; /* Ajusta el tamaño del botón */
     background-color: #4158D0; /* Azul */
     color: #FFFFFF; /* Blanco */
     border-radius: 5px;
-    text-decoration: none;
+    border: none; /* Elimina el borde predeterminado */
     text-align: center;
-
-
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    
 }
-
-main.profile #butonsEditProfile {
-    padding: 12px 75px;
-    margin: 10px auto 25px;
-     text-align:center;
- }
-
+/* boton de cambiar imagen */
+ main.profile #linkChangeImagePerfil {
+    text-decoration: none;  /* Elimina el subrayado */
+    color: inherit;  /* Elimina el color azul y usa el color por defecto del texto */
+    margin: 10 0 0 0;
+}
 
 /*  END PROFILE EDITION*/
 
