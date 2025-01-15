@@ -3,7 +3,7 @@
 // Init sessión
 session_start();
 
-$_SESSION['user'] = 3;
+// $_SESSION['user'] = 7;
 
 // Check if session is active. Otherwise, get to login
 if (!isset($_SESSION['user'])) {
@@ -153,6 +153,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
             WHERE user_ID != :loggedUserId 
             AND sex = 'home' OR sex = 'dona' OR sex = 'no binari'
             AND user_ID NOT IN (SELECT `to` FROM interactions WHERE `from` = :loggedUserId AND state = 'like')
+            AND user_ID NOT IN (SELECT `to` FROM interactions WHERE `from` = :loggedUserId AND state = 'dislike' AND interaction_date >= NOW() - INTERVAL 3 HOUR)
             ORDER BY last_login_date DESC, creation_date, distance ASC";
 
             //   AND sexual_orientation IN (:loggedUserSexualOrientation, 'bisexual')	
@@ -170,6 +171,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
             AND sex IN (:loggedUserSexTarget)	
             AND sexual_orientation IN (:loggedUserSexualOrientation, 'bisexual')		
             AND user_ID NOT IN (SELECT `to` FROM interactions WHERE `from` = :loggedUserId AND state = 'like')
+            AND user_ID NOT IN (SELECT `to` FROM interactions WHERE `from` = :loggedUserId AND state = 'dislike' AND interaction_date >= NOW() - INTERVAL 3 HOUR)
             ORDER BY last_login_date DESC, creation_date, distance ASC";
 
         }
