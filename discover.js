@@ -219,6 +219,7 @@ function renderUserCard(users, index) {
         clickedNoButton(user, users, index);
     });
 
+    // Hover
     noButton.addEventListener('mouseover', function() {
         noButton.style.backgroundColor = 'rgb(172, 172, 172)';
     });
@@ -244,6 +245,7 @@ function renderUserCard(users, index) {
     // Difference with no
     yesButton.style.border = '8px solid #b24a4a';
     yesButton.style.backgroundColor = '#cc5555';
+    
     // Event
     yesButton.addEventListener('click', async () => {
 
@@ -251,6 +253,7 @@ function renderUserCard(users, index) {
 
     });
 
+    // Hover
     yesButton.addEventListener('mouseover', function() {
         yesButton.style.backgroundColor = '#ff6b6b';
     });

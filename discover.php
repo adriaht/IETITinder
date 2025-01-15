@@ -2,7 +2,9 @@
 
 // Init sessión
 session_start();
-$_SESSION['user'] = 1;
+
+# $_SESSION['user'] = 1;
+
 // Check if session is active. Otherwise, get to login
 if (!isset($_SESSION['user'])) {
     header('Location: login.php');
