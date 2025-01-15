@@ -241,11 +241,6 @@ $perfilDates = searchInDatabase("*", "users", $loggedUserId);
 
             <main id="content" class="profile content">
 
-                <div id="content-header">
-                    <h4>Veure</h4>
-                    <h4>Editar</h4>
-                </div>
-
                 <div id="content-profile">
                    
                     <div id="infoPerfil">
