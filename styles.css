@@ -234,7 +234,7 @@ body {
 
 header {
     padding: 1.1rem;
-    height: 10%;
+    height: 84px;
 
     display: flex;
     justify-content: space-between;
@@ -263,7 +263,7 @@ header p {
 
 main {
 
-height: 82%;
+height: 688px;
 position: relative;
 
 }
@@ -555,7 +555,7 @@ background: #555;
 nav {
 
     padding: 1.1rem;
-    height: 8%;
+    height: 68px;
 }
 
 nav ul {

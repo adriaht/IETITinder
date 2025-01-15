@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // Gets array of fetched users
     const fetchedUsers = await fetchUsers();
-
+    console.log(fetchedUsers);
     
     // If there is any user to discover
     if (fetchedUsers && fetchedUsers.length > 0) {
@@ -33,6 +33,7 @@ async function fetchUsers() {
         }
         
     } catch (error) {
+        console.log(error);
         return [];
     }
 }
@@ -210,11 +211,21 @@ function renderUserCard(users, index) {
     noButton.style.alignItems = 'center';
     noButton.style.justifyContent = 'center';
     // Difference with yes
-    noButton.style.border = '8px solid darkred';
-    noButton.style.backgroundColor = 'red';
+    noButton.style.border = '8px solid rgb(151, 151, 151)';
+    noButton.style.backgroundColor = 'rgb(165, 165, 165)';
+
     // Event
     noButton.addEventListener('click', function() {
         clickedNoButton(user, users, index);
+    });
+
+    // Hover
+    noButton.addEventListener('mouseover', function() {
+        noButton.style.backgroundColor = 'rgb(172, 172, 172)';
+    });
+
+    noButton.addEventListener('mouseout', function() {
+        noButton.style.backgroundColor = 'rgb(165, 165, 165)';
     });
 
     // YES BUTTON
@@ -232,13 +243,23 @@ function renderUserCard(users, index) {
     yesButton.style.alignItems = 'center';
     yesButton.style.justifyContent = 'center';
     // Difference with no
-    yesButton.style.border = '8px solid darkgreen';
-    yesButton.style.backgroundColor = 'green';
+    yesButton.style.border = '8px solid #b24a4a';
+    yesButton.style.backgroundColor = '#cc5555';
+    
     // Event
     yesButton.addEventListener('click', async () => {
 
         clickedYesButton(user, users, index)
 
+    });
+
+    // Hover
+    yesButton.addEventListener('mouseover', function() {
+        yesButton.style.backgroundColor = '#ff6b6b';
+    });
+
+    yesButton.addEventListener('mouseout', function() {
+        yesButton.style.backgroundColor = '#cc5555';
     });
 
     buttonsContainer.appendChild(noButton);
@@ -253,14 +274,19 @@ function renderUserCard(users, index) {
 function clickedNoButton(user, users, index){
 
     insertLog(`Clicked NO on user ${user.info.user_ID}`, "INFO");
+    MostrarAlertas("info", "Has clickat NO")
+
 
     insertInteraction(user.info.user_ID, 'dislike');
 
+    renderUserCard(users, index + 1);
 }
 
 async function clickedYesButton(user, users, index) {
 
     insertLog(`Clicked YES on user ${user.info.user_ID}`, "INFO");
+
+    MostrarAlertas("info", "Has clickat YES")
 
     insertInteraction(user.info.user_ID, 'like');
 
@@ -269,6 +295,7 @@ async function clickedYesButton(user, users, index) {
     if (isMatch) {
 
         insertMatch(user.info.user_ID);
+
         showMatchOptionBox(user, users, index)
 
     } else {
@@ -318,7 +345,7 @@ function showMatchOptionBox(user, users, index) {
     goToMessageButton.style.borderRadius = '4px';
     goToMessageButton.style.cursor = 'pointer';
     goToMessageButton.style.fontSize = '16px';
-    goToMessageButton.style.backgroundColor = "#FF6B6B";
+    goToMessageButton.style.background = "linear-gradient(to right, #ff6b6b, #cc2faa)";
     goToMessageButton.style.color = "#fff";
     goToMessageButton.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
 
@@ -373,3 +400,48 @@ function showMatchOptionBox(user, users, index) {
 }
 
 
+// Función para mostrar alertas, le has de pasar el nombre de la alerta deseada
+//  y el mensaje que quieres transmitir y le adjudicaremos una id para darle estilos en el css
+function MostrarAlertas(nameAlerta, missageAlert) {
+
+    // variables para crear el elemento div y introducirlo en el dom en forma de alerta
+    let typeAlerta;
+    let elementI;
+
+    if (nameAlerta === "info") {
+        typeAlerta = document.createElement('div');
+        typeAlerta.id = 'infoAlert';
+        typeAlerta.classList.add('alert');
+        document.body.appendChild(typeAlerta);
+        elementI = document.createElement('i');
+        typeAlerta.appendChild(elementI);
+        const textAlert = document.createTextNode(missageAlert);
+        typeAlerta.appendChild(textAlert);
+        typeAlerta.style.display = 'block';
+    }
+
+    if (nameAlerta === "error") {
+        typeAlerta = document.createElement('div');
+        typeAlerta.id = 'errorAlert';
+        typeAlerta.classList.add('alert');
+        document.body.appendChild(typeAlerta);
+        elementI = document.createElement('i');
+        typeAlerta.appendChild(elementI);
+        const textAlert = document.createTextNode(missageAlert);
+        typeAlerta.appendChild(textAlert);
+        typeAlerta.style.display = 'block';
+    }
+
+    if (nameAlerta === "warning") {
+        typeAlerta = document.createElement('div');
+        typeAlerta.id = 'warningAlert';
+        typeAlerta.classList.add('alert');
+        document.body.appendChild(typeAlerta);
+        elementI = document.createElement('i');
+        typeAlerta.appendChild(elementI);
+        const textAlert = document.createTextNode(missageAlert);
+        typeAlerta.appendChild(textAlert);
+        typeAlerta.style.display = 'block';
+    }
+    
+}

@@ -3,6 +3,8 @@
 // Init sessión
 session_start();
 
+// $_SESSION['user'] = 7;
+
 // Check if session is active. Otherwise, get to login
 if (!isset($_SESSION['user'])) {
     header('Location: login.php');
@@ -87,7 +89,7 @@ function setUserPreferenceForQuery($userSex, $userOrientation) {
         } else if ($userSex === 'dona') {
             return 'home';
         } else if ($userSex === 'no binari') {
-            return 'home, dona';
+            return "'home', 'dona'";
         }
 
     } else if ($userOrientation === 'homosexual') {
@@ -96,7 +98,7 @@ function setUserPreferenceForQuery($userSex, $userOrientation) {
 
     } else if ($userOrientation === 'bisexual') {
 
-        return 'home, dona, no binari';
+        return "'home', 'dona', 'no binari'";
 
     } else {
 
@@ -127,34 +129,63 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
 
         // Se calcular las perferencias y se añaden a la consulta SQL para obtener usuarios
         $userID = $loggedUser["user_ID"];
+        $userSex = $loggedUser["sex"];
         $userSexTarget = setUserPreferenceForQuery($loggedUser["sex"], $loggedUser["sexual_orientation"]);
         $userSexualOrientation = $loggedUser["sexual_orientation"];
         $userLatitude = $loggedUser["latitude"];
         $userLongitude = $loggedUser["longitude"];
 
-        $parametersForLog = "DATA PASSED TO ALGORITHM: User $userID: [Sex target: $userSexTarget] [Orientation: $userSexualOrientation] [latitude,longitude: $userLatitude , $userLongitude]";
-        logOperation($parametersForLog, "INFO");
+        $parametersForLog = "DATA PASSED TO ALGORITHM: User $userID: [User sex: $userSex] [Orientation: $userSexualOrientation] [Sex target: $userSexTarget] [latitude,longitude: $userLatitude , $userLongitude]";
+        logOperation($parametersForLog, "INFO: ALGORITHM");
         
-        $sql = "SELECT user_ID, alias, birth_date, sex, sexual_orientation, last_login_date, creation_date, 
-                (6371 * acos(cos(radians(:loggedUserLatitude)) 
-                            * cos(radians(latitude)) 
-                            * cos(radians(longitude) - radians(:loggedUserLongitude)) 
-                            + sin(radians(:loggedUserLatitude)) 
-                            * sin(radians(latitude)))
-                ) AS distance
-                FROM users
-                WHERE user_ID != :loggedUserId 
-                AND sex IN (:loggedUserSexTarget)	
-                AND sexual_orientation IN (:loggedUserSexualOrientation, 'bisexual')		
-                AND user_ID NOT IN (SELECT `to` FROM interactions WHERE `from` = :loggedUserId AND state = 'like')
-                ORDER BY last_login_date DESC, creation_date, distance ASC";
+        $sql = "";
+
+        if ($userSex === "no binari" || $userSexualOrientation === "bisexual") {
+
+            $sql = "SELECT user_ID, name, alias, birth_date, sex, sexual_orientation, last_login_date, creation_date, 
+            (6371 * acos(cos(radians(:loggedUserLatitude)) 
+                        * cos(radians(latitude)) 
+                        * cos(radians(longitude) - radians(:loggedUserLongitude)) 
+                        + sin(radians(:loggedUserLatitude)) 
+                        * sin(radians(latitude)))
+            ) AS distance
+            FROM users
+            WHERE user_ID != :loggedUserId 
+            AND sex = 'home' OR sex = 'dona' OR sex = 'no binari'
+            AND user_ID NOT IN (SELECT `to` FROM interactions WHERE `from` = :loggedUserId AND state = 'like')
+            AND user_ID NOT IN (SELECT `to` FROM interactions WHERE `from` = :loggedUserId AND state = 'dislike' AND interaction_date >= NOW() - INTERVAL 3 HOUR)
+            ORDER BY last_login_date DESC, creation_date, distance ASC";
+
+            //   AND sexual_orientation IN (:loggedUserSexualOrientation, 'bisexual')	
+        } else {
+
+            $sql = "SELECT user_ID, name, alias, birth_date, sex, sexual_orientation, last_login_date, creation_date, 
+            (6371 * acos(cos(radians(:loggedUserLatitude)) 
+                        * cos(radians(latitude)) 
+                        * cos(radians(longitude) - radians(:loggedUserLongitude)) 
+                        + sin(radians(:loggedUserLatitude)) 
+                        * sin(radians(latitude)))
+            ) AS distance
+            FROM users
+            WHERE user_ID != :loggedUserId 
+            AND sex IN (:loggedUserSexTarget)	
+            AND sexual_orientation IN (:loggedUserSexualOrientation, 'bisexual')		
+            AND user_ID NOT IN (SELECT `to` FROM interactions WHERE `from` = :loggedUserId AND state = 'like')
+            AND user_ID NOT IN (SELECT `to` FROM interactions WHERE `from` = :loggedUserId AND state = 'dislike' AND interaction_date >= NOW() - INTERVAL 3 HOUR)
+            ORDER BY last_login_date DESC, creation_date, distance ASC";
+
+        }
 
         // Algorithm query
 
         $stmt = $pdo->prepare($sql);
         $stmt->bindParam(':loggedUserId', $userID);
-        $stmt->bindParam(':loggedUserSexTarget', $userSexTarget);
-        $stmt->bindParam(':loggedUserSexualOrientation', $userSexualOrientation);
+
+        if ($userSex != "no binari" && $userSexualOrientation != "bisexual") {
+            $stmt->bindParam(':loggedUserSexTarget', $userSexTarget);
+            $stmt->bindParam(':loggedUserSexualOrientation', $userSexualOrientation);
+        }
+
         $stmt->bindParam(':loggedUserLatitude', $userLatitude);
         $stmt->bindParam(':loggedUserLongitude', $userLongitude);
         $stmt->execute();
@@ -165,6 +196,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $users[$row['user_ID']]['info'] = [
                 'user_ID' => $row['user_ID'],
+                'name' => $row['name'],
                 'alias' => $row['alias'],
                 'sex' => $row['sex'],
                 'sexual_orientation' => $row['sexual_orientation'],

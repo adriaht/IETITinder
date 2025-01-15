@@ -216,6 +216,7 @@ INSERT INTO interactions (`from`, `to`, `state`) VALUES (19, 1, "like");
 
 INSERT INTO interactions (`from`, `to`, `state`) VALUES (10, 1, "like");
 INSERT INTO interactions (`from`, `to`, `state`) VALUES (24, 1, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (8, 1, "like");
 
 INSERT INTO matches (participant1, participant2) VALUES (1, 4);
 INSERT INTO matches (participant1, participant2) VALUES (1, 14);
