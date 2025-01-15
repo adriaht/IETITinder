@@ -1,34 +1,40 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@400;500;600&family=Poppins:wght@600;700&display=swap');
 
+/*ALERTAS --------------------------------------------------------------------------- */
 
 .alert {
-    width: 250px; /* Ancho suficiente para texto */
-    height: auto; /* Permitir altura dinámica */
-    position: fixed;
-    right: 20px; /* Esquina superior derecha */
-    top: 20px; /* Primer alerta desde arriba */
-    margin-bottom: 10px; /* Separación entre alertas apiladas */
-    padding: 10px; /* Espaciado interno */
-    border-radius: 5px; /* Bordes redondeados */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra */
-    z-index: 1000; /* Prioridad sobre otros elementos */
-    text-align: center; /* Centrar el texto */
-    color: black;
+
+    width: 96%; /* Ancho completo del contenedor */
+    max-width: 460px; /* Limite de ancho */
+    position: absolute;
+    top: 200px; /* Justo debajo del header */
+    left: 50%;
+    transform: translateX(-50%); /* Centra la alerta horizontalmente */
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Negro*/
+    z-index: 1000;
+    text-align: center;
+    color: #000000; /* Negro */
+    background-color: rgba(0, 0, 0, 0.2); /* Negro semi-transparente */
+
 }
 
 #infoAlert {
-    background-color: yellow;
-     /* Contraste para texto */
+    background-color: rgb(255, 204, 112,  0.6); /* Amarillo con transparencia */
+    color: #000000; /* Negro */
 }
 
 #errorAlert {
-    background-color: red;
+    background-color:rgb(255, 107, 107, 0.6); /* Naranja con transparencia */
+    color: #FFFFFF; /* Negro */
 }
 
 #warningAlert {
-    background-color: blue;
-}
+    background-color: rgb(65, 88, 208, 0.6); /* Azul con transparencia */
+    color: #FFFFFF; /* Negro */
 
+}
 
 /* BASE ---------------------------------------------------------------------------------------------- */
 
