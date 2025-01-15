@@ -8,7 +8,7 @@ session_start();
 // }
 
 
-// Función para iniciar la conexión a la base de datos
+// Initialize database
 function startPDO() {
     $hostname = "localhost";
     $dbname = "IETinder";
@@ -28,7 +28,7 @@ function startPDO() {
     }
 }
 
-// Funcion para crear y añadir informacion en el log
+// Create log and update it
 function logOperation($message, $type = "INFO") {
 
     // Get log directory path
@@ -56,6 +56,8 @@ function logOperation($message, $type = "INFO") {
 
 $errors = [];
 
+
+// Managment of POST requests (login)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'] ?? '';
     $password = $_POST['password'] ?? '';
@@ -67,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             logOperation("Error conection in login.php" , "ERROR");
             $errors['db'] = 'Error de connexió. Torna-ho a intentar més tard.';
         } else {
-            // Verificar si el usuario existe
+            // Verify email
             $stmt = $pdo->prepare("SELECT user_ID, password FROM users WHERE email = :email");
             $stmt->bindParam(':email', $email);
             $stmt->execute();
@@ -78,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 logOperation("Email or password incorrect in login.php" , "ERROR");
                 $errors['email'] = 'Correu electrònic o contrasenya incorrecte';
             } else {
-                // Verificar la contraseña
+                // Verify password
                 $stmtpwd = $pdo->prepare("SELECT COUNT(*) FROM users WHERE email = :email AND password = SHA2(:password, 512)");
                 $stmtpwd->bindParam(':email', $email);
                 $stmtpwd->bindParam(':password', $password);
