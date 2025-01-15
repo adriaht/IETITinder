@@ -61,12 +61,13 @@ body {
 .card {
 
     background: white;
-    border-radius: 20px;
+    /*border-radius: 20px;*/
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 
     height: 840px;
     max-height: 840px;
 
+    position: relative;
 }
 
 /* BASE FINAL --------------------------------------------------------------------- */
@@ -225,7 +226,7 @@ body {
 /* HEADER  > NO CHANGE*/
 
 header {
-    padding: 1.1rem;
+
     height: 84px;
 
     display: flex;
@@ -240,12 +241,20 @@ header p {
 }
 
 .logo {
-
+    padding: 20px;
+    padding-left: 1.1rem;
     color: #FF6B6B;
     font-size: 1.5rem;
     font-weight: bold;
     animation: pulse 2s infinite;
     font-family: 'Poppins', sans-serif;
+
+}
+
+/* IN MESSAGES */
+.find {
+   
+    padding-right: 1.1rem;
 
 }
 
