@@ -1,6 +1,10 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@400;500;600&family=Poppins:wght@600;700&display=swap');
 
 /*ALERTAS --------------------------------------------------------------------------- */
+
+
+/* ALERTAS --------------------------------------------------------------------------- */
 
 .alert {
 
@@ -21,6 +25,8 @@
 }
 
 #infoAlert {
+    background-color: rgb(255, 204, 112,  0.6); /* Amarillo con transparencia */
+    color: #000000; /* Negro */
     background-color: rgb(255, 204, 112,  0.6); /* Amarillo con transparencia */
     color: #000000; /* Negro */
 }
@@ -406,6 +412,132 @@ main.discover div#buttons-container #yes-button:hover {
 
 /* END OF DISCOVER */
 
+/*  START PROFILE EDITION*/
+
+main.profile body#edit-profile-body {
+   background-color: white;
+   
+}
+
+/* estilos de los cuadrados */
+main.profile div#content-header {
+    display: flex;
+    justify-content: center; /* Centra los h3 horizontalmente */
+    gap: 10px; /* Espacio entre los cuadrados */
+}
+
+main.profile div#content-header h4 {
+    margin: 0 5px 0;
+    border: 1px solid black; /* Borde negro para cada h3 */
+    padding: 10px; /* Espaciado interno estándar */
+    text-align: center; /* Centrar texto dentro del h3 */
+    transition: padding 0.3s ease; /* Transición suave para el cambio de espaciado */
+    cursor: pointer; /* Cambia el cursor al pasar por encima */
+}
+
+main.profile div#content-header h4:hover {
+    padding: 20px; /* Incrementa el espaciado interno al interactuar */
+}
+/* sin estilos de los cuadrados */
+
+main.profile div#content-profile{
+    height: 700px;
+    max-height:700px;
+    overflow:auto;
+}
+
+main.profile #map {
+    height: 23%;
+    width: 360px;
+    margin: 10 auto 30px;
+}
+
+
+main.profile form {
+    display: flex; /* Activar el modelo de Flexbox */
+    flex-direction: column; /* Alinear los elementos en columna */
+    align-items: center; /* Centrar horizontalmente */
+    justify-content: center; /* Centrar verticalmente */
+    height: 500px; /* Asegurar que el formulario ocupe toda la altura del contenedor */ 
+    width: 100%; /* Asegurar que el formulario ocupe todo el ancho del contenedor */
+    margin: 0 auto 0; /* Asegurar el centrado automático en caso de ser necesario */
+}
+
+main.profile form label,
+main.profile form input :not(#latitud):not(#longitud) {
+    display: block;
+    margin-bottom: 5px; /* Reduce el espacio entre los elementos */
+    justify-content: center;
+}
+
+main.profile form label {
+    margin-bottom: 3px; /* Espacio entre el label y el input */
+    text-align: left; /* Alinea el texto a la izquierda */
+    width: 80%; /* Asegura que el label ocupe todo el espacio del contenedor */
+    max-width: 460px; /* Limita el ancho del label */
+    font-size: 0.875rem;
+    font-family: 'Montserrat', sans-serif;
+    color: #4a5568;
+}
+
+main.profile form input ,
+main.profile form select{
+    width: 80%; /* Asegura que el input ocupe todo el espacio del contenedor */
+    max-width: 460px;
+    margin-bottom: 5px; /* Espacio entre un input y el siguiente elemento */
+}
+
+
+/* evitar que aparezca en pagina */
+main.profile form input#latitude,
+main.profile form input#longitude {
+    display: none;
+}
+
+
+
+
+/* div de los dos botones */
+main.profile #butonsEditProfile {
+    display:flex;
+    padding: 0 45px;
+    flex-direction: column;
+    align-items: flex-start; /* Alinea los botones a la izquierda */
+    gap: 10px; /* Espaciado entre los botones */
+    width: 100%;
+    align-items: flex-start; 
+ }
+
+ /* boton de guardar */
+ main.profile #submitEditProfileForm {
+    width: 100%;
+    padding: 12px 75px; /* Ajusta el tamaño del botón */
+    background-color: #4158D0; /* Azul */ 
+    text-align: center;
+    background: linear-gradient(to right, #ff6b6b, #cc2faa);
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 1.5rem;
+    font-family: 'Montserrat', sans-serif;
+    
+}
+/* boton de cambiar imagen */
+ main.profile #linkChangeImagePerfil {
+    text-decoration: none;  /* Elimina el subrayado */
+    margin: 10 0 0 0;
+    font-size: 0.875rem;
+    font-family: 'Montserrat', sans-serif;
+    color: #4a5568;
+}
+
+/*  END PROFILE EDITION*/
+
+
 /* MESSAGES */
 main.messages {
 padding: 1.1rem;
@@ -565,3 +697,4 @@ nav ul li a {
 } 
 
 /* END OF NAV */
+
