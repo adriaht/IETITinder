@@ -16,13 +16,12 @@ function startPDO() {
         ]);
         return $pdo;
     } catch (PDOException $e) {
-        // LOG
-        error_log("Error de conexión a la BDD: " . $e->getMessage());
+        logOperation("Database error conection in login.php" , "ERROR");
         return null;
     }
 }
 
-// PONER EN EL PHP
+// Funcion para crear y añadir informacion en el log
 function logOperation($message, $type = "INFO") {
 
     // Get log directory path
@@ -40,7 +39,7 @@ function logOperation($message, $type = "INFO") {
     $timeStamp = date('Y-m-d H:i:s');
 
 
-    $logMessage = "[$timeStamp] [$type] [USER_ID = ".$_SESSION['user']."] $message\n";
+    $logMessage = "[$timeStamp] [$type] [LOGIN] $message\n";
 
 
 
@@ -98,7 +97,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
     } catch (PDOException $e) {
-        error_log('Database error: ' . $e->getMessage());
         logOperation("Database error in login.php", "ERROR");
         $errors['db'] = 'Error de connexió. Torna-ho a intentar més tard.';
     }
