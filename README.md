@@ -2,6 +2,8 @@
 
 IETinder és una plataforma de cites en línia inspirada en Tinder, dissenyada per connectar persones amb interessos similars i facilitar noves connexions, ja sigui per a una amistat o alguna cosa més.
 
+Per a més informació de l'algorisme o el disseny [Wiki de IETinder](https://github.com/adriaht/IETITinder/wiki)
+
 ## Tecnologies Utilitzades
 - ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white) **HTML**
 - ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white) **CSS**
