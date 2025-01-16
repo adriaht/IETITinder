@@ -1,8 +1,14 @@
-<html>
-<head>
-  <title> Ubuntu rocks! </title>
-</head>
-<body>
-  <p> I'm running this website on an Ubuntu Server server!
-</body>
-</html>
+<?php
+// Init sessión
+session_start();
+
+// Check if session is active. Otherwise, get to login
+if (!isset($_SESSION['user'])) {
+    header('Location: login.php');
+    exit;
+} else {
+    header("Location: discover.php");
+    exit;
+}
+
+?>
