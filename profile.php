@@ -188,6 +188,11 @@ $perfilDates = searchInDatabase("*", "users", $loggedUserId);
 
         }else{
             try {
+             
+                const errorDiv = document.getElementById("showErrors");
+                errorDiv.innerHTML = '';
+            
+
                 // Enviar los datos al servidor mediante fetch
                 // con un post para guardar los datos en la base de datos
                 const response = await fetch("profile.php", {
@@ -296,27 +301,27 @@ $perfilDates = searchInDatabase("*", "users", $loggedUserId);
                     <div id="infoPerfil">
                         <form id="edit-profile-form" action="" method="POST" enctype="multipart/form-data">
                             <!-- Nombre -->
-                            <label for="nom">Nombre:</label>
+                            <label for="nom">Nom:</label>
                             <input type="text" id="nom" name="name" placeholder="Enter your name"
-                                value="<?php echo htmlspecialchars($perfilDates['name']); ?>" required>
+                                value="<?php echo htmlspecialchars($perfilDates['name']); ?>" >
                             
 
                             <!-- Apellidos -->
-                            <label for="cognoms">Apellidos:</label>
+                            <label for="cognoms">Cognoms:</label>
                             <input type="text" id="cognoms" name="surname" placeholder="Enter your last name"
-                                value="<?php echo htmlspecialchars($perfilDates['surname']); ?>" required>
+                                value="<?php echo htmlspecialchars($perfilDates['surname']); ?>" >
                             
 
                             <!-- Alias -->
                             <label for="alias">Alias:</label>
                             <input type="text" id="alias" name="alias" placeholder="Enter your alias"
-                                value="<?php echo htmlspecialchars($perfilDates['alias']); ?>" required>
+                                value="<?php echo htmlspecialchars($perfilDates['alias']); ?>" >
                             
 
                             <!-- Fecha de nacimiento -->
-                            <label for="data_naixement">Fecha de nacimiento:</label>
+                            <label for="data_naixement">Data de naixament:</label>
                             <input type="date" id="data_naixement" name="birth_date"
-                                value="<?php echo htmlspecialchars($perfilDates['birth_date']); ?>" required>
+                                value="<?php echo htmlspecialchars($perfilDates['birth_date']); ?>" >
                             
 
                             <!-- Ubicación -->
@@ -328,8 +333,8 @@ $perfilDates = searchInDatabase("*", "users", $loggedUserId);
                             
 
                             <!-- Sexo -->
-                            <label for="sexe">Sexo:</label>
-                            <select id="sexe" name="sex" required>
+                            <label for="sexe">Sexe:</label>
+                            <select id="sexe" name="sex" >
                                 <option value="home" <?php echo $perfilDates['sex'] == 'home' ? 'selected' : ''; ?>>
                                     Masculino</option>
                                 <option value="dona" <?php echo $perfilDates['sex'] == 'dona' ? 'selected' : ''; ?>>
@@ -340,8 +345,8 @@ $perfilDates = searchInDatabase("*", "users", $loggedUserId);
                             
 
                             <!-- Orientación sexual -->
-                            <label for="orientacio">Orientación sexual:</label>
-                            <select id="orientacio" name="sexual_orientation" required>
+                            <label for="orientacio">Orientació sexual:</label>
+                            <select id="orientacio" name="sexual_orientation" >
                                 <option value="heterosexual" <?php echo $perfilDates['sexual_orientation'] == 'heterosexual' ? 'selected' : ''; ?>>
                                     Heterosexual</option>
                                 <option value="homosexual" <?php echo $perfilDates['sexual_orientation'] == 'homosexual' ? 'selected' : ''; ?>>Homosexual</option>
