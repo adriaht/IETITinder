@@ -336,10 +336,10 @@ $perfilDates = searchInDatabase("*", "users", $loggedUserId);
                             <label for="sexe">Sexe:</label>
                             <select id="sexe" name="sex" >
                                 <option value="home" <?php echo $perfilDates['sex'] == 'home' ? 'selected' : ''; ?>>
-                                    Masculino</option>
+                                    Masculí</option>
                                 <option value="dona" <?php echo $perfilDates['sex'] == 'dona' ? 'selected' : ''; ?>>
-                                    Femenino</option>
-                                <option value="no binari" <?php echo $perfilDates['sex'] == 'no binari' ? 'selected' : ''; ?>>No Binario
+                                    Femení</option>
+                                <option value="no binari" <?php echo $perfilDates['sex'] == 'no binari' ? 'selected' : ''; ?>>No Binari
                                 </option>
                             </select>
                             
