@@ -1,3 +1,7 @@
+CREATE USER 'adminTinder'@'localhost' IDENTIFIED BY 'admin123';
+GRANT ALL PRIVILEGES ON *.* TO 'adminTinder'@'localhost' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
+
 DROP DATABASE IF EXISTS IETinder;
 CREATE DATABASE IETinder;
 
@@ -16,7 +20,10 @@ CREATE TABLE users (
     sex ENUM('home', 'dona', 'no binari') NOT NULL,  
     sexual_orientation ENUM('heterosexual', 'homosexual', 'bisexual') NOT NULL, 
     creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
-    last_login_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP 
+    last_login_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    distance_user_preference INT DEFAULT 200, 
+    min_age_user_preference INT DEFAULT 18, 
+    max_age_user_preference INT DEFAULT 50
 );
 
 -- Creación de la tabla de fotos
