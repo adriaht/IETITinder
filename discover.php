@@ -3,6 +3,8 @@
 // Init sessión
 session_start();
 
+include("functions.php"); /* Loads search from users + logs + startPDO */ 
+
 // $_SESSION['user'] = 7;
 
 // Check if session is active. Otherwise, get to login
@@ -16,67 +18,6 @@ $loggedUser = searchUserInDatabase("*", "users", $_SESSION['user']);
 
 logOperation("Session started in discover.php for user ".$_SESSION['user'], "INFO");
 
-function logOperation($message, $type = "INFO") {
-
-    // Get log directory path
-    $logDir = __DIR__ . '/logs';
-
-    // Create directory if it doesn't exist
-    if (!file_exists($logDir)) {
-        mkdir($logDir, 0755);
-    }
-
-    // Get log file name (formato YYYY-MM-DD.txt)
-    $logFile = $logDir . '/' . date('Y-m-d') . '.txt';
-
-    // Message formatting
-    $timeStamp = date('Y-m-d H:i:s');
-
-
-    $logMessage = "[$timeStamp] [$type] [USER_ID = ".$_SESSION['user']."] $message\n";
-
-   
-
-    // Write log message in logFile
-    file_put_contents($logFile, $logMessage, FILE_APPEND);
-}
-
-function searchUserInDatabase($whatYouWant, $whereYouWant, $userYouWant) {
-
-    try {
-
-        $pdo = startPDO();
-
-        // Create and return a new PDO instance
-
-        $sql = "SELECT $whatYouWant FROM $whereYouWant WHERE user_ID = :loggedUserId";
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindParam(':loggedUserId', $userYouWant);
-        $stmt->execute();
-
-        $data = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if (!$data) {
-
-            logOperation("No data found for user $userYouWant in function searchUserInDatabase in discover.php", "INFO");
-            die("Data not found");
-        }
-
-        logOperation("Found data for $userYouWant in function searchUserInDatabase in discover.php" , "INFO");
-        // Cerramos conexión
-        unset($stmt);
-        unset($pdo);
-
-        return $data;
-
-    } catch (PDOException $e) {
-
-        logOperation("Connection error in searchUserInDatabase function in discover.php: " . $e->getMessage(), "ERROR");
-        die("Connection error: " . $e->getMessage());
-    }
-
-    
-}
 
 // FUNCTION TO ESTABLISH USER preference. Ex: if heterosexual, then return opposite sex.
 // Used in query to get users based on the loggedUser gender sex (sex IN (home, dona...) )
@@ -108,15 +49,6 @@ function setUserPreferenceForQuery($userSex, $userOrientation) {
     
 }
 
-// initialize pdo
-function startPDO(){
-    $hostname = "localhost";
-    $dbname = "IETinder";
-    $username = "admin";
-    $pw = "admin123";
-    return new PDO("mysql:host=$hostname;dbname=$dbname", $username, $pw);
-}
-
 // GET REQUESTS
 // THIS ENDPOINT will return valid users for loggedUser to discover
 // Called by fetchUsers() in JS
@@ -144,7 +76,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
 
             logOperation("LOGGED TO BISEXUAL OR NO BINARI", "INFO: ALGORITHM");
             
-            $sql = "SELECT user_ID, name, alias, birth_date, sex, sexual_orientation, last_login_date, creation_date, 
+            $sql = "SELECT user_ID, name, alias, 
+            TIMESTAMPDIFF(YEAR, birth_date, CURDATE()) AS age, 
+            sex, sexual_orientation, last_login_date, creation_date, 
             (6371 * acos(cos(radians(:loggedUserLatitude)) 
                         * cos(radians(latitude)) 
                         * cos(radians(longitude) - radians(:loggedUserLongitude)) 
@@ -161,7 +95,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
 
             logOperation("LOGGED TO HOME OR DONA", "INFO: ALGORITHM");
 
-            $sql = "SELECT user_ID, name, alias, birth_date, sex, sexual_orientation, last_login_date, creation_date, 
+            $sql = "SELECT user_ID, name, alias, 
+            TIMESTAMPDIFF(YEAR, birth_date, CURDATE()) AS age, 
+            sex, sexual_orientation, last_login_date, creation_date, 
             (6371 * acos(cos(radians(:loggedUserLatitude)) 
                         * cos(radians(latitude)) 
                         * cos(radians(longitude) - radians(:loggedUserLongitude)) 
@@ -200,6 +136,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
             $users[$row['user_ID']]['info'] = [
                 'user_ID' => $row['user_ID'],
                 'name' => $row['name'],
+                'age' => $row['age'],
                 'alias' => $row['alias'],
                 'sex' => $row['sex'],
                 'sexual_orientation' => $row['sexual_orientation'],
