@@ -1,11 +1,7 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@400;500;600&family=Poppins:wght@600;700&display=swap');
 
-/*ALERTAS --------------------------------------------------------------------------- */
-
-
-/* ALERTAS --------------------------------------------------------------------------- */
-
+/* MARK: ALERTS */
 .alert {
 
     width: 96%; /* Ancho completo del contenedor */
@@ -39,6 +35,7 @@
 }
 
 /* BASE ---------------------------------------------------------------------------------------------- */
+/* MARK: DEFAULT CARD */
 
 * {
 
@@ -79,9 +76,10 @@ body {
     position: relative;
 }
 
+
 /* BASE FINAL --------------------------------------------------------------------- */
 
-
+/* MARK: LOGIN */
 /* LOGIN */
 
 .body-login {
@@ -228,11 +226,10 @@ body {
     font-family: 'Inter', sans-serif;
 }
 
-/* LOGIN FINAL */
+/* MARK: INSIDE APP */
 
-/* BASE OF INSIDE APLICATION */
 
-/* HEADER  > NO CHANGE*/
+/* MARK: HEADER */
 
 header {
 
@@ -268,7 +265,7 @@ header p {
 
 }
 
-/* AÑADIR A STYLES CSS*/
+/* FOR BLUR USED IN PROFILE WHEN CLICKING SUBMENU*/
 #grey-background {
 
     z-index: 10;
@@ -282,9 +279,9 @@ header p {
     height: 840px;
 
 }
-/* AÑADIR A STYLES CSS*/
 
-/* NUEVO DEL BOTÓN*/
+
+/* SUBMENU IN PROFILE */
 #submenu-button {
    
     /* Remove styles */
@@ -340,9 +337,9 @@ header p {
 }
 
 
-/* END OF HEADER*/
+/* END OF HEADER */
 
-/* CONTENT */
+/* MARK: MAIN */
 
 main {
 
@@ -351,9 +348,9 @@ position: relative;
 
 }
 
-/* DYNAMIC CONTENT */
+/* MARK: DYNAMIC CONTENT */
 
-/* DISCOVER */
+/* MARK: DISCOVER */
 main.discover {
     padding: 0.2rem;
 }
@@ -476,11 +473,9 @@ main.discover div#buttons-container #yes-button:hover {
     z-index: 1;
 }
 
-
-
-
 /* END OF DISCOVER */
 
+/* MARK: PROFILE */
 /*  START PROFILE EDITION*/
 
 main.profile body#edit-profile-body {
@@ -613,118 +608,117 @@ main.profile #butonsEditProfile {
 /*  END PROFILE EDITION*/
 
 
-/* MESSAGES */
+/* MARK: MESSAGES */
 main.messages {
-padding: 1.1rem;
-padding-top: 0;
-padding-bottom: 0;
+    padding: 1.1rem;
+    padding-top: 0;
+    padding-bottom: 0;
 }
 
 /* WITHOUT*/
 main.messages #container-without-messages {
-margin-bottom: 5px;
-height: 210px;
+    margin-bottom: 5px;
+    height: 210px;
 }
 
 main.messages #container-without-messages h2 {
-margin-bottom: 5px;
+    margin-bottom: 5px;
 }
 
 main.messages #container-without-messages #container-without-messages-content {
-display: flex;
-gap: 15px;
-padding-top: 5px;
-padding-bottom: 10px;
-overflow-x: auto;
+    display: flex;
+    gap: 15px;
+    padding-top: 5px;
+    padding-bottom: 10px;
+    overflow-x: auto;
 }
 
 main.messages #container-without-messages #container-without-messages-content div.without-message-content {
-padding: 5px;
-text-align: center;
+    padding: 5px;
+    text-align: center;
 }
 
 main.messages #container-without-messages #container-without-messages-content div.without-message-content img {
-width: 80px;
-height: 110px;
-object-fit: cover;
-object-position: center;
+    width: 80px;
+    height: 110px;
+    object-fit: cover;
+    object-position: center;
 
 }
 
 main.messages #container-without-messages #container-without-messages-content div.without-message-content p {
-text-align: center;
+    text-align: center;
 }
 
 /* WITH*/
 
 main.messages #container-with-messages {
-height: 420px;
+    height: 420px;
 }
 
 main.messages #container-with-messages  {
-margin-top: 15px;
+    margin-top: 15px;
 }
 
 main.messages #container-with-messages h2 {
-margin-bottom: 10px;
+    margin-bottom: 10px;
 }
 
 
 /* SI HAY MENSAJES */
 main.messages #container-with-messages #container-with-messages-content {
-height: 420px; /* Si se toca, se rompe ya que pillará toda la altura disponible */
-overflow-y: auto;
-display: flex;
-flex-direction: column;
-gap: 20px;
+    height: 420px; /* Si se toca, se rompe ya que pillará toda la altura disponible */
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }   
 
 main.messages #container-with-messages #container-with-messages-content div.with-message-content {
-display: flex;
-align-items: center;
-gap: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
 }
 
 main.messages #container-with-messages #container-with-messages-content div.with-message-content img {
-width: 110px;
-height: 110px;
-object-fit: cover;
-object-position: top;
+    width: 110px;
+    height: 110px;
+    object-fit: cover;
+    object-position: top;
 }
 
 main.messages #container-with-messages #container-with-messages-content div.with-message-content div.user-info-with-message-content {
-display: flex;
-flex-direction: column;
-gap: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 main.messages #container-with-messages #container-with-messages-content div.with-message-content div.user-info-with-message-content p:first-child {
-font-weight: bold;
-font-size: 1.2rem;
+    font-weight: bold;
+    font-size: 1.2rem;
 }
 
 /* Si no hay match */
 
 main.messages #container-without-messages div.no-matches-without-messages {
-margin-top: 40px;
-display: flex;
-flex-direction: column;
-justify-content: center;
-align-items: center;  
-font-size: 1.2rem;
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;  
+    font-size: 1.2rem;
 }
 
 main.messages #container-with-messages div.no-matches-with-messages {
-margin-top: 80px;
-display: flex;
-flex-direction: column;
-justify-content: center;
-align-items: center;  
-font-size: 1.2rem;
+    margin-top: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;  
+    font-size: 1.2rem;
 }
 
-
-/*SCROLLBAR */
+/* MARK: SCROLLBAR */
 
 /* width */
 ::-webkit-scrollbar {
@@ -748,7 +742,8 @@ background: #555;
 
 /* END OF DYNAMIC CONTENT */
 
-/* NAV > NO CHANGE*/
+/* MARK: NAV */
+
 nav {
 
     padding: 1.1rem;

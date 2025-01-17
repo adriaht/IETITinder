@@ -182,6 +182,10 @@ function renderUserCard(users, index) {
     image.src = user.photos[0];
     image.alt =`photo_of_${user.info.alias}`;
 
+    /* IMAGE CARROUSELL*/ 
+
+    
+
     // BUTTON DIV
     const buttonsContainer = document.createElement('div');
     buttonsContainer.id = "buttons-container";
