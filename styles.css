@@ -7,7 +7,7 @@
     width: 96%; /* Ancho completo del contenedor */
     max-width: 460px; /* Limite de ancho */
     position: absolute;
-    top: 650px; /* Justo debajo del header */
+    top: 180px; /* Justo debajo del header */
     left: 50%;
     transform: translateX(-50%); /* Centra la alerta horizontalmente */
     padding: 10px;
