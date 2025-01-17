@@ -184,8 +184,27 @@ function renderUserCard(users, index) {
 
     /* IMAGE CARROUSELL*/ 
 
-    
+    console.log(`CANTIDAD DE IMÁGENES = ${user.photos.length}`) 
 
+    if (user.photos.length > 1) {
+
+        const carrouselContainer = document.createElement('div');
+        carrouselContainer.id = "carrousel-container";
+
+
+    }
+
+    /*CONTAINER OF INFO -> search*/
+    const infoContainer = document.createElement('div');
+    infoContainer.id = "info-container";
+    const nameText = document.createElement('h2');
+    nameText.innerText = user.info.name;
+    const ageText = document.createElement('h3');
+    ageText.innerText = user.info.age;
+    infoContainer.appendChild(nameText);
+    infoContainer.appendChild(ageText);
+
+    
     // BUTTON DIV
     const buttonsContainer = document.createElement('div');
     buttonsContainer.id = "buttons-container";
@@ -224,6 +243,8 @@ function renderUserCard(users, index) {
     buttonsContainer.appendChild(noButton);
     buttonsContainer.appendChild(yesButton);
     container.appendChild(image);
+    container.appendChild(carrouselContainer);
+    container.appendChild(infoContainer);
     container.appendChild(buttonsContainer);
 
     insertLog(`Rendered user ${user.info.user_ID} card`, "INFO");

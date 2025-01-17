@@ -355,6 +355,10 @@ main.discover {
     padding: 0.2rem;
 }
 
+/* MARK: INTEGRATION */
+/* Integrate in profile, or else where images with carrousell */
+/* its parent content must be position: relative */
+
 main.discover img {
 
     width: 100%;
@@ -362,6 +366,29 @@ main.discover img {
     object-fit: cover;
     object-position: center;
 
+}
+
+main.discover #info-container {
+
+    position: absolute;
+    top: 74%;
+    left: 50%; /* Move the element to the center based on its left edge */
+    transform: translateX(-50%); /* Offset the element by half of its width */
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    color: white;
+
+    font-size: 1.25rem;
+
+    backdrop-filter: blur(10px);
+    padding: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5); /* Optional: add shadow */
+    border-radius: 5px;
+
+    font-family: "Poppins";
 }
 
 main.discover #buttons-container {
