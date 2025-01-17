@@ -186,11 +186,39 @@ function renderUserCard(users, index) {
 
     console.log(`CANTIDAD DE IMÁGENES = ${user.photos.length}`) 
 
+    let carrouselContainer = "";
+
     if (user.photos.length > 1) {
 
-        const carrouselContainer = document.createElement('div');
+        carrouselContainer = document.createElement('div');
         carrouselContainer.id = "carrousel-container";
 
+        let currentIndex = 0;
+        const dots = [];
+
+        user.photos.map((photo, i) => {
+            const dot = document.createElement('span');
+            dot.classList.add('dot');
+            dots.push(dot);
+            if (i === 0) dot.classList.add('active');
+            carrouselContainer.appendChild(dot);
+        })
+
+        carrouselContainer.addEventListener("click", function() {
+
+            currentIndex += 1;
+
+            if (currentIndex >= user.photos.length) {
+                currentIndex = 0;
+            }
+            
+            image.src = user.photos[currentIndex];
+
+            dots.map(dot => dot.classList.remove('active'));
+
+            dots[currentIndex].classList.add('active');
+
+        })
 
     }
 
@@ -243,7 +271,11 @@ function renderUserCard(users, index) {
     buttonsContainer.appendChild(noButton);
     buttonsContainer.appendChild(yesButton);
     container.appendChild(image);
-    container.appendChild(carrouselContainer);
+
+    if(carrouselContainer) {
+        container.appendChild(carrouselContainer);
+    }
+  
     container.appendChild(infoContainer);
     container.appendChild(buttonsContainer);
 
