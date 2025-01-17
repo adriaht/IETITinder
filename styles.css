@@ -351,6 +351,84 @@ position: relative;
 /* MARK: DYNAMIC CONTENT */
 
 /* MARK: DISCOVER */
+
+/* HEADER BUTTON CONFIG */
+
+/* FOR BLUR USED IN PROFILE WHEN CLICKING SUBMENU*/
+body.discover #grey-background {
+
+    z-index: 10;
+
+    display: none;
+    position: absolute;
+
+    /*border-radius: 20px;*/
+    background-color: rgba(80, 80, 80, 0.6);
+    width: 460px;
+    height: 840px;
+
+}
+
+
+/* SUBMENU IN PROFILE */
+body.discover #submenu-button {
+   
+    /* Remove styles */
+    background: none;
+	border: none;
+	font: inherit;
+
+    z-index: 12;
+
+    text-align: center;
+
+    width: 100px;
+    height: 84px;
+    font-size: 1.2rem;
+    background-color: white;
+
+    /*border-top-right-radius: 20px;*/
+
+}
+
+/* Submenu styling */
+
+body.discover #submenu {
+
+    position: absolute;
+    z-index: 11;
+
+    height: auto;
+    width: 360px;
+    top: 120px;
+    left: 50%; /* Move the element to the center based on its left edge */
+    transform: translateX(-50%); /* Offset the element by half of its width */
+
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    background-color: white;
+}
+
+body.discover #submenu li {
+    padding: 20px 0px;
+}
+
+body.discover #submenu li:hover {
+    background-color: #e0e0e0;
+}
+
+body.discover #submenu a {
+    text-decoration: none;
+    font-size: 1rem;
+    color: black;
+    font-weight: bold;
+}
+
+
+/* DISCOVER MAIN CONTENT*/
+
 main.discover {
     padding: 0.2rem;
 }

@@ -15,8 +15,85 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     }
 
+    /* SUBMENU BUTTON FUNCTIONALITY */ 
+    const submenuButton = document.getElementById("submenu-button");
+    const greyBackground = document.getElementById("grey-background");
+    // Toggle submenu visibility
+    submenuButton.addEventListener("click", () => {
+
+        if (submenuButton.innerText === "· · ·") {
+
+            greyBackground.style.display = "inline";
+            renderPreferencesSubmenu();
+            submenuButton.innerText = "X";
+
+        } else {
+
+            greyBackground.style.display = "none";
+            deletePreferencesSubmenu();
+            submenuButton.innerText = "· · ·";
+
+        }
+    });
+    /* END SUBMIT FUNCTIONALITY ----------------------------------------------------------------------------- */ 
 
 });
+
+/* SUBMIT FUNCTIONALITY ----------------------------------------------------------------------------- */ 
+function renderPreferencesSubmenu() {
+
+    const header = document.getElementById("header");
+
+    // Create submenu
+    const submenu = document.createElement("ul");
+    submenu.id = "submenu";
+
+    // Create list items
+    const options = [
+        { text: "Tancar sessió", href: "/logout.php" },
+        { text: "Modificar contrasenya", href: "#" },
+        { text: "Eliminar compte", href: "#" },
+    ];
+
+    options.map(option => {
+        
+        const a = document.createElement("a");
+        const li = document.createElement("li");
+        li.textContent = option.text;
+        a.href = option.href;
+        a.appendChild(li);
+        submenu.appendChild(a);
+    });
+
+    header.appendChild(submenu);
+}
+
+function deletePreferencesSubmenu() {
+    const submenu = document.getElementById("submenu");
+    submenu.remove();
+}
+/* END SUBMIT FUNCTIONALITY ----------------------------------------------------------------------------- */ 
+
+// GET method: get users that match user (calling get_users endpoint)
+async function fetchLoggedUserPreferences() {
+
+    try {
+
+        const response = await fetch("discover.php?action=get_logged_user");
+        const users = await response.json();
+
+        // IF SUCCESS = returns array of users data | ELSE = returns empty array
+        if (users.success){
+            return users.message;
+        } else {
+            return;
+        }
+        
+    } catch (error) {
+        console.log(error);
+        return;
+    }
+}
 
 // GET method: get users that match user (calling get_users endpoint)
 async function fetchUsers() {
@@ -159,7 +236,6 @@ function renderNoUsersLeft() {
 
     insertLog(`Rendered no users left`, "INFO");
 }
-
 
 function renderUserCard(users, index) {
 
@@ -393,7 +469,6 @@ function showMatchOptionBox(user, users, index) {
     container.appendChild(optionBox);
     
 }
-
 
 // Función para mostrar alertas, le has de pasar el nombre de la alerta deseada
 //  y el mensaje que quieres transmitir y le adjudicaremos una id para darle estilos en el css

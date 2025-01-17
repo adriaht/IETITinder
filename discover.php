@@ -349,14 +349,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" type="text/css" href="/styles.css?t=<?php echo time();?>" />
     <script src="discover.js"></script>
 </head>
-<body class="body">
+<body class="discover">
 
     <div class="container">
 
         <div class="card">
-
-            <header>
+        <div id="grey-background"></div>
+        
+            <header id="header">
                 <p class="logo">IETinder ❤️</p>
+                <button id="submenu-button" class="button-submenu">· · ·</button>
             </header>
 
             <main id="content" class="discover content">
