@@ -4,6 +4,7 @@
 <?php
 
 session_start();
+include("functions.php"); /* Loads search from users (not te same as searchInDatabase) + logs + startPDO */ 
 
 $loggedUserId = $_SESSION['user'];
 
@@ -27,20 +28,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Función de validación
-
-
-    
-
-function startPDO()
-{
-    $hostname = "localhost";
-    $dbname = "IETinder";
-    $username = "admin";
-    $pw = "admin123";
-    return new PDO("mysql:host=$hostname;dbname=$dbname", $username, $pw);
-}
-
-
 
 function searchInDatabase($whatYouWant, $whereYouWant, $userYouWant)
 {
