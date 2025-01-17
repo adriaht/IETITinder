@@ -37,6 +37,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
     /* END SUBMIT FUNCTIONALITY ----------------------------------------------------------------------------- */ 
 
+
 });
 
 /* SUBMIT FUNCTIONALITY ----------------------------------------------------------------------------- */ 
@@ -45,33 +46,70 @@ function renderPreferencesSubmenu() {
     const header = document.getElementById("header");
 
     // Create submenu
-    const submenu = document.createElement("ul");
+    const submenu = document.createElement("form");
     submenu.id = "submenu";
+
 
     // Create list items
     const options = [
-        { text: "Tancar sessió", href: "/logout.php" },
-        { text: "Modificar contrasenya", href: "#" },
-        { text: "Eliminar compte", href: "#" },
+        { text: "Distància ", for:"distance", value: 5},
+        { text: "Edat mínima ", for:"min_age", value: 10},
+        { text: "Edat máxima ", for:"max_age", value: 20 },
     ];
 
     options.map(option => {
+
+        const divField = document.createElement("div");
+        divField.classList.add("fields");
+
+        const labelField = document.createElement("label");
+        labelField.setAttribute("for", option.for);
+        labelField.innerText = option.text;
         
-        const a = document.createElement("a");
-        const li = document.createElement("li");
-        li.textContent = option.text;
-        a.href = option.href;
-        a.appendChild(li);
-        submenu.appendChild(a);
+        const inputField = document.createElement("input");
+        inputField.type = "number";
+        inputField.id = option.for;
+        inputField.name = option.for;
+        inputField.value = option.value;
+
+        divField.appendChild(labelField);
+        divField.appendChild(inputField);
+
+        if (option.for === "distance") {
+            const labelField = document.createElement("label");
+            labelField.innerText = " km";
+            divField.appendChild(labelField);
+        }
+
+        submenu.appendChild(divField);
+        
+
     });
 
+    const divField = document.createElement("div");
+    divField.classList.add("send");
+
+    const submitButton = document.createElement("input");
+    submitButton.type = "submit";
+
+    divField.appendChild(submitButton);
+    submenu.appendChild(divField);
     header.appendChild(submenu);
+
+    submenu.addEventListener("submit", handleSubmittedPreference)
 }
 
 function deletePreferencesSubmenu() {
     const submenu = document.getElementById("submenu");
     submenu.remove();
 }
+
+function handleSubmittedPreference(e){
+    e.preventDefault();
+    alert("SE ENVIÓ EL FORMULARIO")
+    console.log(document.forms); 
+}
+
 /* END SUBMIT FUNCTIONALITY ----------------------------------------------------------------------------- */ 
 
 // GET method: get users that match user (calling get_users endpoint)
