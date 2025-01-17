@@ -371,18 +371,18 @@ main.discover img {
 main.discover #carrousel-container {
 
     position: absolute;
-    top: 65%;
+    top: 460px;
     left: 50%; /* Move the element to the center based on its left edge */
     transform: translateX(-50%); /* Offset the element by half of its width */
     
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 15px;
+    gap: 10px;
     color: white;
 
     backdrop-filter: blur(10px);
-    padding: 15px;
+    padding: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5); /* Optional: add shadow */
     border-radius: 5px;
 
@@ -394,8 +394,8 @@ main.discover #carrousel-container {
 
 main.discover #carrousel-container span.dot {
 
-    height: 12px;
-    width: 12px;
+    height: 10px;
+    width: 10px;
     margin: 0 5px;
     background-color: gray;
     border-radius: 50%;
@@ -405,7 +405,7 @@ main.discover #carrousel-container span.dot {
 }
 
 main.discover #carrousel-container span.dot.active {
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional: add shadow */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Optional: add shadow */
     background-color: white;
 }
 
