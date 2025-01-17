@@ -160,7 +160,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <div class="links-group">
                     <a href="#" class="secondary-link">¿Has oblidat la contrasenya?</a>
-                    <a href="#" class="secondary-link">Crea una compte nova</a>
+                    <a href="register.php" class="secondary-link">Crea una compte nova</a>
                 </div>
             </form>
 
