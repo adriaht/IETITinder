@@ -173,7 +173,10 @@ function renderUserCard(users, index) {
         return;
     }
 
-    // Get user from userIndex
+
+    // MARK: INTEGRATION
+
+    // Get user from userIndex (not needed for profile and messages)
     const user = users[index];
 
     // IMAGE 
@@ -182,11 +185,9 @@ function renderUserCard(users, index) {
     image.src = user.photos[0];
     image.alt =`photo_of_${user.info.alias}`;
 
-    /* IMAGE CARROUSELL*/ 
+    /* IMAGE CARROUSELL*/
 
-    console.log(`CANTIDAD DE IMÁGENES = ${user.photos.length}`) 
-
-    let carrouselContainer = "";
+    let carrouselContainer = null;
 
     if (user.photos.length > 1) {
 
@@ -196,7 +197,7 @@ function renderUserCard(users, index) {
         let currentIndex = 0;
         const dots = [];
 
-        user.photos.map((photo, i) => {
+        user.photos.map((photo , i) => {
             const dot = document.createElement('span');
             dot.classList.add('dot');
             dots.push(dot);
@@ -204,23 +205,27 @@ function renderUserCard(users, index) {
             carrouselContainer.appendChild(dot);
         })
 
-        carrouselContainer.addEventListener("click", function() {
+        console.log(dots);
 
+        carrouselContainer.addEventListener("click", handleCarouselClick) 
+
+        function handleCarouselClick() {
+          
             currentIndex += 1;
 
             if (currentIndex >= user.photos.length) {
                 currentIndex = 0;
             }
-            
+    
             image.src = user.photos[currentIndex];
-
+    
             dots.map(dot => dot.classList.remove('active'));
-
             dots[currentIndex].classList.add('active');
-
-        })
+        }
 
     }
+
+    
 
     /*CONTAINER OF INFO -> search*/
     const infoContainer = document.createElement('div');
@@ -232,6 +237,7 @@ function renderUserCard(users, index) {
     infoContainer.appendChild(nameText);
     infoContainer.appendChild(ageText);
 
+    // MARK: END INTEGRATION
     
     // BUTTON DIV
     const buttonsContainer = document.createElement('div');
@@ -270,6 +276,8 @@ function renderUserCard(users, index) {
 
     buttonsContainer.appendChild(noButton);
     buttonsContainer.appendChild(yesButton);
+
+    /* MARK: INTEGRATION */
     container.appendChild(image);
 
     if(carrouselContainer) {
@@ -277,6 +285,8 @@ function renderUserCard(users, index) {
     }
   
     container.appendChild(infoContainer);
+    /* MARK: END INTEGRATION */
+
     container.appendChild(buttonsContainer);
 
     insertLog(`Rendered user ${user.info.user_ID} card`, "INFO");
