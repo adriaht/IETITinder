@@ -81,13 +81,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
         if ($userSex === "no binari" || $userSexualOrientation === "bisexual") {
             
             $sql = "SELECT user_ID, name, alias, TIMESTAMPDIFF(YEAR, birth_date, CURDATE()) AS age, 
+            (((SELECT COUNT(`from`)  FROM interactions WHERE `from` = user_ID) * 0.6) + 
+            ((SELECT COUNT(`from`)  FROM interactions WHERE `to` = user_ID AND `state` = 'like') * 0.15) +
+            ((((SELECT COUNT(`from`)  FROM interactions WHERE `to` = user_ID AND `state` = 'like') / (SELECT COUNT(`from`)  FROM interactions WHERE `to` = user_ID)) * 75) * 0.25)) as ponderation,
             sex, sexual_orientation, last_login_date, creation_date, 
-            (6371 * acos(cos(radians(:loggedUserLatitude)) 
-                        * cos(radians(latitude)) 
-                        * cos(radians(longitude) - radians(:loggedUserLongitude)) 
-                        + sin(radians(:loggedUserLatitude)) 
-                        * sin(radians(latitude)))
-            ) AS distance
+            (6371 * acos(cos(radians(40.7128)) * cos(radians(latitude)) * cos(radians(longitude) - radians(-74.006)) + sin(radians(40.7128)) * sin(radians(latitude)))) AS distance
             FROM users
             WHERE user_ID != :loggedUserId 
             AND TIMESTAMPDIFF(YEAR, birth_date, CURDATE()) BETWEEN :loggedUserMinAge AND :loggedUserMaxAge
@@ -99,32 +97,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
             ) <= :loggedUserDistance
             AND user_ID NOT IN (SELECT `to` FROM interactions WHERE `from` = :loggedUserId AND state = 'like')
             AND user_ID NOT IN (SELECT `to` FROM interactions WHERE `from` = :loggedUserId AND state = 'dislike' AND interaction_date >= NOW() - INTERVAL 3 HOUR)
-            ORDER BY last_login_date DESC, creation_date, distance ASC";
+            ORDER BY ponderation DESC, last_login_date DESC, creation_date, distance ASC";
 
         } else {
 
             $sql = "SELECT user_ID, name, alias, TIMESTAMPDIFF(YEAR, birth_date, CURDATE()) AS age, 
+            (((SELECT COUNT(`from`)  FROM interactions WHERE `from` = user_ID) * 0.6) + 
+            ((SELECT COUNT(`from`)  FROM interactions WHERE `to` = user_ID AND `state` = 'like') * 0.15) +
+            ((((SELECT COUNT(`from`)  FROM interactions WHERE `to` = user_ID AND `state` = 'like') / (SELECT COUNT(`from`)  FROM interactions WHERE `to` = user_ID)) * 75) * 0.25)) as ponderation,
             sex, sexual_orientation, last_login_date, creation_date, 
-            (6371 * acos(cos(radians(:loggedUserLatitude)) 
-                        * cos(radians(latitude)) 
-                        * cos(radians(longitude) - radians(:loggedUserLongitude)) 
-                        + sin(radians(:loggedUserLatitude)) 
-                        * sin(radians(latitude)))
-            ) AS distance
+            (6371 * acos(cos(radians(40.7128)) * cos(radians(latitude)) * cos(radians(longitude) - radians(-74.006)) + sin(radians(40.7128)) * sin(radians(latitude)))) AS distance
             FROM users
             WHERE user_ID != :loggedUserId 
             AND sex IN (:loggedUserSexTarget)	
             AND sexual_orientation IN (:loggedUserSexualOrientation, 'bisexual')
             AND TIMESTAMPDIFF(YEAR, birth_date, CURDATE()) BETWEEN :loggedUserMinAge AND :loggedUserMaxAge
-            AND (6371 * acos(cos(radians(:loggedUserLatitude)) 
-                        * cos(radians(latitude)) 
-                        * cos(radians(longitude) - radians(:loggedUserLongitude)) 
-                        + sin(radians(:loggedUserLatitude)) 
-                        * sin(radians(latitude)))
-            ) <= :loggedUserDistance
+            AND (6371 * acos(cos(radians(:loggedUserLatitude)) * cos(radians(latitude)) * cos(radians(longitude) - radians(:loggedUserLongitude)) + sin(radians(:loggedUserLatitude)) * sin(radians(latitude)))) <= :loggedUserDistance
             AND user_ID NOT IN (SELECT `to` FROM interactions WHERE `from` = :loggedUserId AND state = 'like')
             AND user_ID NOT IN (SELECT `to` FROM interactions WHERE `from` = :loggedUserId AND state = 'dislike' AND interaction_date >= NOW() - INTERVAL 3 HOUR)
-            ORDER BY last_login_date DESC, creation_date, distance ASC";
+            ORDER BY ponderation DESC, last_login_date DESC, creation_date, distance ASC";
         }
 
         logOperation("[DISCOVER.PHP] Sent query to get users: $sql" , "INFO");
