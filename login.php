@@ -119,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IETinder</title>
     <link rel="stylesheet" type="text/css" href="/styles.css?t=<?php echo time();?>" />
-    <script src="index.js"></script>
+
 </head>
 <body class="body-login">
     <div class="container">
@@ -166,6 +166,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         </div>
     </div>
-    <script src="index.js"></script>
+
 </body>
 </html>

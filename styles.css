@@ -80,9 +80,10 @@ body {
 /* BASE FINAL --------------------------------------------------------------------- */
 
 /* MARK: LOGIN */
-/* LOGIN */
+/* LOGIN Y REGISTER*/
 
-.body-login {
+.body-login,
+.body-register {
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -99,6 +100,19 @@ body {
     100% { background-position: 0% 50%; }
 }
 
+.body-register #register-card{
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+ 
+}
+
+.body-register form  {
+    height: 500px;
+    max-height: 500px;
+    overflow: auto;
+}
 
 .body-login #login-card {
     padding: 2rem;
@@ -107,11 +121,13 @@ body {
     flex-direction: column;
 }
 
-.body-login .card-header {
+.body-login .card-header,
+.body-register .card-header {
     margin-bottom: 2rem;
 }
 
-.body-login .logo-login {
+.body-login .logo-login,
+.body-register .logo-register {
     text-align: center;
     margin-bottom: 1rem;
     color: #FF6B6B;
@@ -140,7 +156,9 @@ body {
     color: #e53e3e;
 }
 
-.body-login label {
+.body-login label,
+.body-register label
+ {
     display: block;
     margin-bottom: 0.5rem;
     color: #4a5568;
@@ -148,7 +166,8 @@ body {
     font-family: 'Montserrat', sans-serif;
 }
 
-.body-login input {
+.body-login input,
+.body-register input {
     width: 100%;
     padding: 0.75rem 1rem;
     border: 1px solid #e2e8f0;
@@ -167,7 +186,8 @@ body {
     position: relative;
 }
 
-.body-login .primary-button {
+.body-login .primary-button,
+.body-register .primary-button {
     width: 100%;
     padding: 0.75rem 1rem;
     background: linear-gradient(to right, #ff6b6b, #cc2faa);
@@ -183,22 +203,26 @@ body {
     font-family: 'Montserrat', sans-serif;
 }
 
-.body-login .primary-button:hover {
+.body-login .primary-button:hover,
+.body-register .primary-button:hover {
     opacity: 0.9;
 }
 
-.body-login .primary-button:disabled {
+.body-login .primary-button:disabled,
+.body-register .primary-button:disabled {
     opacity: 0.7;
     cursor: not-allowed;
 }
 
-.body-login .links-group {
+.body-login .links-group,
+.body-register .links-group {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
 }
 
-.body-login .secondary-link {
+.body-login .secondary-link,
+.body-register .secondary-link {
     color: #4a5568;
     text-decoration: none;
     font-size: 0.875rem;
@@ -206,7 +230,8 @@ body {
     transition: color 0.2s;
 }
 
-.body-login .secondary-link:hover {
+.body-login .secondary-link:hover,
+.body-register .secondary-link:hover {
     color: #ff6b6b;
 }
 
@@ -218,7 +243,8 @@ body {
     min-height: 1.25rem;
 }
 
-.body-login .footer-text {
+.body-login .footer-text,
+.body-register .footer-text {
     text-align: center;
     color: #718096;
     font-size: 0.875rem;
