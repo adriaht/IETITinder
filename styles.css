@@ -477,8 +477,13 @@ body.discover #submenu div.send input {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+body.discover #submenu div.send input.disabled {
 
-
+    cursor: default;
+    font-size: 1rem;
+    background: #e0e0e0;
+    color: #fff;
+}
 
 /* DISCOVER MAIN CONTENT*/
 

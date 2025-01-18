@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
         // Initialize BBDD
         $pdo = startPDO();
 
-        // Se calcular las perferencias y se añaden a la consulta SQL para obtener usuarios
+        // Gets user parameteres and filter based on this data
         $userID = $loggedUser["user_ID"];
         $userSex = $loggedUser["sex"];
         $userSexTarget = setUserPreferenceForQuery($loggedUser["sex"], $loggedUser["sexual_orientation"]);
@@ -67,15 +67,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
         $userLatitude = $loggedUser["latitude"];
         $userLongitude = $loggedUser["longitude"];
 
-        $parametersForLog = "[DISCOVER.PHP] DATA PASSED TO ALGORITHM: User $userID: [User sex: $userSex] [Orientation: $userSexualOrientation] [Sex target: $userSexTarget] [latitude,longitude: $userLatitude , $userLongitude]";
-        logOperation($parametersForLog, "INFO");
+        // Preferences
+        $userMaxDistancePreference = $loggedUser["distance_user_preference"];;
+        $userMinAgePreference = $loggedUser["min_age_user_preference"];
+        $userMaxAgePreference  = $loggedUser["max_age_user_preference"];
+
+        $parametersForLog = "[DISCOVER.PHP] DATA PASSED TO ALGORITHM: User $userID | User sex: $userSex | Orientation: $userSexualOrientation | Sex target: $userSexTarget | 
+        latitude,longitude: $userLatitude , $userLongitude | MAX DISTANCE = $userMaxDistancePreference| MIN AGE = $userMinAgePreference |  MAX AGE =  $userMaxAgePreference |";
+        logOperation($parametersForLog);
         
         $sql = "";
 
         if ($userSex === "no binari" || $userSexualOrientation === "bisexual") {
             
-            $sql = "SELECT user_ID, name, alias, 
-            TIMESTAMPDIFF(YEAR, birth_date, CURDATE()) AS age, 
+            $sql = "SELECT user_ID, name, alias, TIMESTAMPDIFF(YEAR, birth_date, CURDATE()) AS age, 
             sex, sexual_orientation, last_login_date, creation_date, 
             (6371 * acos(cos(radians(:loggedUserLatitude)) 
                         * cos(radians(latitude)) 
@@ -85,14 +90,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
             ) AS distance
             FROM users
             WHERE user_ID != :loggedUserId 
+            AND TIMESTAMPDIFF(YEAR, birth_date, CURDATE()) BETWEEN :loggedUserMinAge AND :loggedUserMaxAge
+            AND (6371 * acos(cos(radians(:loggedUserLatitude)) 
+                        * cos(radians(latitude)) 
+                        * cos(radians(longitude) - radians(:loggedUserLongitude)) 
+                        + sin(radians(:loggedUserLatitude)) 
+                        * sin(radians(latitude)))
+            ) <= :loggedUserDistance
             AND user_ID NOT IN (SELECT `to` FROM interactions WHERE `from` = :loggedUserId AND state = 'like')
             AND user_ID NOT IN (SELECT `to` FROM interactions WHERE `from` = :loggedUserId AND state = 'dislike' AND interaction_date >= NOW() - INTERVAL 3 HOUR)
             ORDER BY last_login_date DESC, creation_date, distance ASC";
 
         } else {
 
-            $sql = "SELECT user_ID, name, alias, 
-            TIMESTAMPDIFF(YEAR, birth_date, CURDATE()) AS age, 
+            $sql = "SELECT user_ID, name, alias, TIMESTAMPDIFF(YEAR, birth_date, CURDATE()) AS age, 
             sex, sexual_orientation, last_login_date, creation_date, 
             (6371 * acos(cos(radians(:loggedUserLatitude)) 
                         * cos(radians(latitude)) 
@@ -103,12 +114,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
             FROM users
             WHERE user_ID != :loggedUserId 
             AND sex IN (:loggedUserSexTarget)	
-            AND sexual_orientation IN (:loggedUserSexualOrientation, 'bisexual')		
+            AND sexual_orientation IN (:loggedUserSexualOrientation, 'bisexual')
+            AND TIMESTAMPDIFF(YEAR, birth_date, CURDATE()) BETWEEN :loggedUserMinAge AND :loggedUserMaxAge
+            AND (6371 * acos(cos(radians(:loggedUserLatitude)) 
+                        * cos(radians(latitude)) 
+                        * cos(radians(longitude) - radians(:loggedUserLongitude)) 
+                        + sin(radians(:loggedUserLatitude)) 
+                        * sin(radians(latitude)))
+            ) <= :loggedUserDistance
             AND user_ID NOT IN (SELECT `to` FROM interactions WHERE `from` = :loggedUserId AND state = 'like')
             AND user_ID NOT IN (SELECT `to` FROM interactions WHERE `from` = :loggedUserId AND state = 'dislike' AND interaction_date >= NOW() - INTERVAL 3 HOUR)
             ORDER BY last_login_date DESC, creation_date, distance ASC";
-            
-
         }
 
         logOperation("[DISCOVER.PHP] Sent query to get users: $sql" , "INFO");
@@ -126,6 +142,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
 
         $stmt->bindParam(':loggedUserLatitude', $userLatitude);
         $stmt->bindParam(':loggedUserLongitude', $userLongitude);
+        $stmt->bindParam(':loggedUserDistance', $userMaxDistancePreference);
+        $stmt->bindParam(':loggedUserMinAge', $userMinAgePreference);
+        $stmt->bindParam(':loggedUserMaxAge', $userMaxAgePreference);
         $stmt->execute();
 
         // Load user info from the query
@@ -145,9 +164,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
 
         }
 
-        logOperation("[DISCOVER.PHP] GOT DATA OF ".count($users)." USERS IN THIS QUERY", "INFO");
+        logOperation("[DISCOVER.PHP] Got data of ".count($users)." user in query get_users");
 
-        logOperation("[DISCOVER.PHP] Successfully got data of users in GET method get_users", "INFO");
+        logOperation("[DISCOVER.PHP] Successfully got data of users in GET method get_users");
         
         if (count($users) > 0) {
             // Get keys (those keys are the users_ID)

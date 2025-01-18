@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // Gets array of fetched users
     fetchedUsers = await fetchUsers();
+    console.log("INITIAL USER FETCH");
     console.log(fetchedUsers);
     
     // If there is any user to discover
@@ -25,7 +26,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         if (submenuButton.innerText === "· · ·") {
             
+            // Gets user preference data to show in fields
             const userPreference = await fetchLoggedUserPreferences();
+            console.log("INITIAL PREFERENCE DATA")
             console.log(userPreference);
 
             if (userPreference){
@@ -39,9 +42,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         } else {
 
-            greyBackground.style.display = "none";
             deletePreferencesSubmenu();
-            submenuButton.innerText = "· · ·";
 
         }
     });
@@ -50,7 +51,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 });
 
-/* SUBMIT FUNCTIONALITY ----------------------------------------------------------------------------- */ 
+/* MARK: SUBMIT PREFERENCE FUNCTIONALITY ----------------------------------------------------------------------------- */ 
+// Only creates submenu. Grey background and button arehandled in DOMcontentLoaded 
 async function renderPreferencesSubmenu(distance, minAge, maxAge) {
 
     const header = document.getElementById("header");
@@ -124,20 +126,22 @@ async function renderPreferencesSubmenu(distance, minAge, maxAge) {
     submenu.addEventListener("submit", handleSubmittedPreference)
 }
 
+// Deletes submenu of preference, restores button to " . . . " and hides grey background 
 function deletePreferencesSubmenu() {
+    const submenuButton = document.getElementById("submenu-button");
+    submenuButton.innerText = "· · ·";
+
+    const greyBackground = document.getElementById("grey-background");
+    greyBackground.style.display = "none";
+
     const submenu = document.getElementById("submenu");
     submenu.remove();
 }
 
-function showErrorsInSubmittedPreference(message){
-    const errorDiv = document.getElementById("error-field");
-    const divErrorParagraphField = document.createElement("p");
-    divErrorParagraphField.innerText = message;
-    errorDiv.appendChild(divErrorParagraphField);
-}
-
+// Gets form, checks for errors and show errors or send POST request to update user preferences in BBDD
 function handleSubmittedPreference(e){
 
+    // Stops submit to check data
     e.preventDefault();
 
     const errorDiv = document.getElementById("error-field");
@@ -148,8 +152,10 @@ function handleSubmittedPreference(e){
     const minAge = userPreferenceFormElements[1].value;
     const maxAge = userPreferenceFormElements[2].value;
 
-    console.log(`DISTANCIA ${distance} - MIN EDAD ${minAge} - MAX EDAD ${maxAge} `)
+    const submitButton = userPreferenceFormElements[3];
+    submitButton.classList.add("disabled");
 
+    // Change if min/max parameters change
     const rangEdat = [18, 60]
 
     const errors = [];
@@ -173,12 +179,22 @@ function handleSubmittedPreference(e){
 
     } else {
 
-        showErrorsInSubmittedPreference( errors.join("\n"));
+        submitButton.classList.remove("disabled");
+        showErrorsInSubmittedPreference(errors.join("\n"));
 
     }
 
 }
 
+// Gets div or error inside preference submenu
+function showErrorsInSubmittedPreference(message){
+    const errorDiv = document.getElementById("error-field");
+    const divErrorParagraphField = document.createElement("p");
+    divErrorParagraphField.innerText = message;
+    errorDiv.appendChild(divErrorParagraphField);
+}
+
+// AJAX request to update user preferences --> Data recibed handled inside this request
 async function updateUserPreferences(distance, minAge, maxAge) {
 
     try {
@@ -189,40 +205,50 @@ async function updateUserPreferences(distance, minAge, maxAge) {
             body: JSON.stringify({endpoint: "updateUserPreferences", distance, minAge, maxAge})
         });
 
-        // resultado de JSON a objeto Javascript. PHP devuelve {success: error, message: "abc"}
+        //
         const result = await response.json();
 
-        // Segun resultado, pone mensaje de error o no
+        // Success but PHP might got wrong input data (change between client-server)
         if (result.success) { 
 
+            // Success and data sent is valid (respects all parameters and limits of age and distance)
             if (result.updated){
-
-                alert("UPDATED: " + result.message)
 
                 // Info to user
                 MostrarAlertas("info", "Preferències guardades correctament")
 
-                // Closes submenu
-                deletePreferencesSubmenu()
-
                 // Fetches user data based on new filters and updates card
                 fetchedUsers = await fetchUsers();
+                console.log("FETCHED USERS AFTER PREFERENCE CHANGE");
+                console.log(fetchedUsers);
 
-                // If there is any user to discover, show card
-                if (fetchedUsers && fetchedUsers.length > 0) {
+                setTimeout(() => {
 
-                    renderUserCard(fetchedUsers, 0);
+                    // Closes submenu
+                    deletePreferencesSubmenu()
 
-                } else { // show no users let
+                     // If there is any user to discover, show card
+                    if (fetchedUsers && fetchedUsers.length > 0) {
 
-                    renderNoUsersLeft();
+                        renderUserCard(fetchedUsers, 0);
 
-                }
+                    } else { // show no users let
+
+                        renderNoUsersLeft();
+
+                    }
                
-                
+                  }, 3000);
+
+               
+            // Success in request but data sent is invalid (don't respect parameters)
             } else {
 
-               showErrorsInSubmittedPreference(result.message);
+                // restores button functionality in case php detects invalid data sent (don't respect parameters)
+                const submitButton = document.forms[0].elements[3];
+                submitButton.classList.remove("disabled");
+
+                showErrorsInSubmittedPreference(result.message);
 
             }
 
@@ -240,7 +266,7 @@ async function updateUserPreferences(distance, minAge, maxAge) {
 
 }
 
-/* END SUBMIT FUNCTIONALITY ----------------------------------------------------------------------------- */ 
+/* END SUBMIT PREFERENCE FUNCTIONALITY ----------------------------------------------------------------------------- */ 
 
 // GET method: get users that match user (calling get_users endpoint)
 async function fetchLoggedUserPreferences() {
@@ -284,9 +310,9 @@ async function fetchUsers() {
     }
 }
 
-// JS that makes AJAX call to insert user interaction in BBDD
+// POST: makes AJAX call to insert LOGS in /logs
 async function insertLog(logMessage, type) {
-
+    logMessage = "[DISCOVER.JS] " + logMessage; 
     try {
         
         const response = await fetch('discover.php', { 
@@ -394,11 +420,11 @@ async function insertMatch(interactedUserID) {
 }
 
 
-
-// RENDERIZATION
+// MARK: MAIN RENDERIZATION
 function renderNoUsersLeft() {
 
     const container = document.getElementById('content');
+    container.innerHTML = "";
     const endMessage = document.createElement('h2');
     endMessage.id = "end-message";
     endMessage.textContent = 'No hi ha perfils disponibles';
@@ -420,7 +446,7 @@ function renderUserCard(users, index) {
     }
 
 
-    // MARK: INTEGRATION
+    // MARK: CARROUSEL INTEGRATION
 
     // Get user from userIndex (not needed for profile and messages)
     const user = users[index];
@@ -483,7 +509,7 @@ function renderUserCard(users, index) {
     infoContainer.appendChild(nameText);
     infoContainer.appendChild(ageText);
 
-    // MARK: END INTEGRATION
+    // MARK: END PHOTO INTEGRATION
     
     // BUTTON DIV
     const buttonsContainer = document.createElement('div');
@@ -640,8 +666,7 @@ function showMatchOptionBox(user, users, index) {
     
 }
 
-// Función para mostrar alertas, le has de pasar el nombre de la alerta deseada
-//  y el mensaje que quieres transmitir y le adjudicaremos una id para darle estilos en el css
+// NOTIFICATIONS
 function MostrarAlertas(nameAlerta, missageAlert) {
 
     // variables para crear el elemento div y introducirlo en el dom en forma de alerta
