@@ -16,7 +16,7 @@ if (!isset($_SESSION['user'])) {
 // Store loggedUser Object
 $loggedUser = searchUserInDatabase("*", "users", $_SESSION['user']);
 
-logOperation("Session started in discover.php for user ".$_SESSION['user'], "INFO");
+logOperation("[DISCOVER.PHP] Session started");
 
 
 // FUNCTION TO ESTABLISH USER preference. Ex: if heterosexual, then return opposite sex.
@@ -67,14 +67,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
         $userLatitude = $loggedUser["latitude"];
         $userLongitude = $loggedUser["longitude"];
 
-        $parametersForLog = "DATA PASSED TO ALGORITHM: User $userID: [User sex: $userSex] [Orientation: $userSexualOrientation] [Sex target: $userSexTarget] [latitude,longitude: $userLatitude , $userLongitude]";
-        logOperation($parametersForLog, "INFO: ALGORITHM");
+        $parametersForLog = "[DISCOVER.PHP] DATA PASSED TO ALGORITHM: User $userID: [User sex: $userSex] [Orientation: $userSexualOrientation] [Sex target: $userSexTarget] [latitude,longitude: $userLatitude , $userLongitude]";
+        logOperation($parametersForLog, "INFO");
         
         $sql = "";
 
         if ($userSex === "no binari" || $userSexualOrientation === "bisexual") {
-
-            logOperation("LOGGED TO BISEXUAL OR NO BINARI", "INFO: ALGORITHM");
             
             $sql = "SELECT user_ID, name, alias, 
             TIMESTAMPDIFF(YEAR, birth_date, CURDATE()) AS age, 
@@ -93,8 +91,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
 
         } else {
 
-            logOperation("LOGGED TO HOME OR DONA", "INFO: ALGORITHM");
-
             $sql = "SELECT user_ID, name, alias, 
             TIMESTAMPDIFF(YEAR, birth_date, CURDATE()) AS age, 
             sex, sexual_orientation, last_login_date, creation_date, 
@@ -111,8 +107,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
             AND user_ID NOT IN (SELECT `to` FROM interactions WHERE `from` = :loggedUserId AND state = 'like')
             AND user_ID NOT IN (SELECT `to` FROM interactions WHERE `from` = :loggedUserId AND state = 'dislike' AND interaction_date >= NOW() - INTERVAL 3 HOUR)
             ORDER BY last_login_date DESC, creation_date, distance ASC";
+            
 
         }
+
+        logOperation("[DISCOVER.PHP] Sent query to get users: $sql" , "INFO");
 
         // Algorithm query
 
@@ -120,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
         $stmt->bindParam(':loggedUserId', $userID);
 
         if ($userSex != "no binari" && $userSexualOrientation != "bisexual") {
-            logOperation("LOGGED TO HOME OR DONA: used parameters", "INFO: ALGORITHM");
+
             $stmt->bindParam(':loggedUserSexTarget', $userSexTarget);
             $stmt->bindParam(':loggedUserSexualOrientation', $userSexualOrientation);
         }
@@ -144,12 +143,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
                 'distance' => $row['distance']
             ];
 
-            logOperation("LOADED USER: ".$row['sex']. " AND ".$row['sexual_orientation'], "INFO: ALGORITHM");
         }
 
-        logOperation("GOT DATA OF ".count($users)." USERS IN THIS QUERY", "INFO");
+        logOperation("[DISCOVER.PHP] GOT DATA OF ".count($users)." USERS IN THIS QUERY", "INFO");
 
-        logOperation("Successfully got data of users in discover.php in GET method get_users", "INFO");
+        logOperation("[DISCOVER.PHP] Successfully got data of users in GET method get_users", "INFO");
         
         if (count($users) > 0) {
             // Get keys (those keys are the users_ID)
@@ -162,19 +160,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
             $stmt = $pdo->prepare($sql);
             $stmt->execute();
 
+            logOperation("[DISCOVER.PHP] Query sent to get photos: $sql" , "INFO");
+
             // insert in user["photos"]["photo path"]
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 $users[$row['user_ID']]['photos'][] = $row['path'];
             }
 
-            logOperation("Successfully got photos of users in discover.php in GET method get_users", "INFO");
+            logOperation("[DISCOVER.PHP] Successfully got photos of users in GET method get_users", "INFO");
         
         } else {
             
             unset($stmt);
             unset($pdo);
 
-            logOperation("No user matched the algorithm in discover.php in GET method get_users. Returned data to JS", "INFO");
+            logOperation("[DISCOVER.PHP] No user matched the algorithm in GET method get_users. Returned data to JS", "INFO");
 
             echo json_encode(['success' => true, 'message' => array_values($users)]);
             exit;
@@ -184,16 +184,63 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
         unset($stmt);
         unset($pdo);
 
-        logOperation("Successfully got data of users in discover.php in GET method get_users. Returned data to JS", "INFO");
+        logOperation("[DISCOVER.PHP] Successfully got data of users in GET method get_users. Returned data to JS", "INFO");
 
         // Send successful objects of users
         echo json_encode(['success' => true, 'message' => array_values($users)]);
         exit;
     } catch (PDOException $e) {
 
-        logOperation("Connection error in discover.php in GET method get_users: " . $e->getMessage(), "ERROR");
+       logOperation("[DISCOVER.PHP] Connection error in GET method get_users: " . $e->getMessage(), "ERROR");
         // catch error and send it to JS
         echo json_encode(['success' => false, 'message' => 'Error en la conexión getUser: ' . $e->getMessage()]);
+        exit;
+    }
+  
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['action'] === 'get_logged_user_preferences') {
+
+    try {
+
+        // Initialize BBDD
+        $pdo = startPDO();
+
+        // Se calcular las perferencias y se añaden a la consulta SQL para obtener usuarios
+        $userID = $loggedUser["user_ID"];
+
+        logOperation("[DISCOVER.PHP] Started to get user preferences");
+      
+        $sql = "SELECT user_ID, distance_user_preference, min_age_user_preference, max_age_user_preference
+        FROM users
+        WHERE user_ID = :loggedUserId";
+        
+        logOperation("[DISCOVER.PHP] Sent query to get user preferences: $sql");
+
+        // Algorithm query
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':loggedUserId', $userID);
+        $stmt->execute();
+        
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // Cleans stored space for pdo and the query used. 
+        unset($stmt);
+        unset($pdo);
+
+        logOperation("[DISCOVER.PHP] Successfully got data of user preference in GET method get_logged_user_preferences. Returned data to JS");
+
+        // Send successful objects of users
+        echo json_encode(['success' => true, 'message' => $user]);
+        exit;
+
+    } catch (PDOException $e) {
+
+        logOperation("[DISCOVER.PHP] Connection error in discover.php in GET method get_logged_user_preferences: " . $e->getMessage(), "ERROR");
+
+        // catch error and send it to JS
+        echo json_encode(['success' => false, 'message' => 'Error en la conexión get_logged_user_preferences: ' . $e->getMessage()]);
         exit;
     }
   
@@ -285,24 +332,86 @@ function insertMatch($input, $loggedUserID){
     exit;
 }
 
+function updateUserPreferences($input, $loggedUserID) {
+
+    // Get inputs of distance, min_age, and max_age
+    $distance = $input['distance'];
+    $min_age = $input['minAge'];
+    $max_age = $input['maxAge'];
+
+    logOperation("[DISCOVER.PHP] User preference validation: inputs are distance($distance), min_age($min_age), max_age($max_age).");
+
+    $age_range = [18, 60];
+    $errors = [];
+
+    // CHECKS
+    // Distance between valid parameters
+    if ($distance < 0 || $distance > 200) {
+        $errors[] = "La distància ha d'estar entre 0 i 200 km.";
+    }
+
+    // Age between valid parameters
+    if ($min_age < $age_range[0] || $min_age > $age_range[1] || $max_age < $age_range[0] || $max_age > $age_range[1]) {
+       $errors[] = "La edat ha d'estar entre el rang de 18 i 60 anys.";
+    }
+     // Min age can't be greater than max age
+    if ($min_age > $max_age) {
+        $errors[] = "La edat mínima no pot ser superior a la màxima.";
+    }
+
+    // If errors, return them to JS
+    if(count($errors) > 0) {
+        logOperation("[DISCOVER.PHP] Validation for user preferences failed. Inputs don't meet distance( 0 - 200) or age ranges (".$age_range[0]." - ".$age_range[0].")");
+        echo json_encode(['success' => true, "updated" => false, 'message' => implode("\n", $errors)]);
+        exit;
+    }
+
+    // ELSE DATA IS GOOD --> starts update
+     // Starts PDO
+     $pdo = startPDO();
+    
+     // Update user preference
+
+     $sql = "UPDATE users SET distance_user_preference = :distance, min_age_user_preference = :min_age, max_age_user_preference = :max_age
+     WHERE user_ID = :loggedUser";
+     $stmt = $pdo->prepare($sql);
+     $stmt->bindParam(':distance', $distance);
+     $stmt->bindParam(':min_age', $min_age);
+     $stmt->bindParam(':max_age', $max_age);
+     $stmt->bindParam(':loggedUser', $loggedUserID);
+     $stmt->execute();
+     logOperation("[DISCOVER.PHP] Query sent to update user preferences: $sql");
+
+     // Cleans stored space for query and PDO
+     unset($stmt);
+     unset($pdo);
+ 
+     logOperation("[DISCOVER.PHP] Successfully updated user preferences");
+     
+     // Sends response to 
+     echo json_encode(['success' => true, "updated" => true, 'message' => "Successfully updated user preferences"]);
+     exit;
+
+}
+
 // THIS WILL GET ALL POST REQUESTS. Each call in JS will have an endpoint as key_value to handle each endpoint request
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     try {
 
-        // Gets input from the request
+        // Gets input from the request 
         $input = json_decode(file_get_contents('php://input'), true);
 
         // Send error if there's no input
         if (!$input) {
-            logOperation("Invalid input for POST request in discover.php.", "ERROR");
+            logOperation("[DISCOVER.PHP] Invalid input for POST request.", "ERROR");
             echo json_encode(['success' => false, 'message' => 'Dades invàlides']);
             exit;
         }
 
         // Checks if there's an endpoint defined
         if (!isset($input['endpoint'])) {
-            logOperation("Endpoint not defined for POST request in discover.php.", "ERROR");
+            logOperation("[DISCOVER.PHP] Endpoint not defined for POST request.", "ERROR");
             echo json_encode(['success' => false, 'message' => 'Endpoint no especificat.']);
             exit;
         }
@@ -318,21 +427,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             case "insertMatch": 
                 insertMatch($input, $loggedUser["user_ID"]);
                 break;
+            case "updateUserPreferences": 
+                updateUserPreferences($input, $loggedUser["user_ID"]);
+                break;
             case "insertLog":
                 logOperation($input["logMessage"], $input["type"]);
-
-                echo json_encode(['success' => true, 'message' => "Log inserit correctament"]);
+                echo json_encode(['success' => true, 'message' => "Log inserit correctament en Discover.php"]);
                 exit;
-                
-                break;
+
             default: // In case of 
-            logOperation("Endpoint not found for POST request in discover.php. Endpoint sended: ".$input["logMessage"], "ERROR");
+                logOperation("[DISCOVER.PHP] Endpoint not found for POST request. Endpoint sent: ".$input["logMessage"], "ERROR");
                 echo json_encode(['success' => false, 'message' => 'Endpoint desconegut.']);
                 exit;
         }
 
     } catch (PDOException $e) {
-        logOperation("Connection error in discover.php in POST method: " . $e->getMessage(), "ERROR");
+        logOperation("[DISCOVER.PHP] Connection error in POST method: " . $e->getMessage(), "ERROR");
         echo json_encode(['success' => false, 'message' => 'Error en la conexió: ' . $e->getMessage()]);
         exit;
     }

@@ -1,7 +1,9 @@
+let fetchedUsers = [];
+
 document.addEventListener("DOMContentLoaded", async () => {
 
     // Gets array of fetched users
-    const fetchedUsers = await fetchUsers();
+    fetchedUsers = await fetchUsers();
     console.log(fetchedUsers);
     
     // If there is any user to discover
@@ -19,13 +21,21 @@ document.addEventListener("DOMContentLoaded", async () => {
     const submenuButton = document.getElementById("submenu-button");
     const greyBackground = document.getElementById("grey-background");
     // Toggle submenu visibility
-    submenuButton.addEventListener("click", () => {
+    submenuButton.addEventListener("click", async () => {
 
         if (submenuButton.innerText === "· · ·") {
+            
+            const userPreference = await fetchLoggedUserPreferences();
+            console.log(userPreference);
 
-            greyBackground.style.display = "inline";
-            renderPreferencesSubmenu();
-            submenuButton.innerText = "X";
+            if (userPreference){
+                greyBackground.style.display = "inline";
+                renderPreferencesSubmenu(userPreference.distance_user_preference, userPreference.min_age_user_preference, userPreference.max_age_user_preference);
+                submenuButton.innerText = "X";
+            } else {
+                MostrarAlertas("error", "No s'han pogut carregar les preferencies de l'usuari" )
+            }
+
 
         } else {
 
@@ -41,7 +51,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 /* SUBMIT FUNCTIONALITY ----------------------------------------------------------------------------- */ 
-function renderPreferencesSubmenu() {
+async function renderPreferencesSubmenu(distance, minAge, maxAge) {
 
     const header = document.getElementById("header");
 
@@ -49,12 +59,27 @@ function renderPreferencesSubmenu() {
     const submenu = document.createElement("form");
     submenu.id = "submenu";
 
+    // Div for errors
+    const divTitle = document.createElement("div");
+    divTitle.classList.add("fields");
+    const divTitleText = document.createElement("h3");
+    divTitleText.innerText = "Preferencies de l'usuari"
+    divTitle.appendChild(divTitleText);
+    submenu.appendChild(divTitle);
+    
+
+    // Div for errors
+    const divErrorField = document.createElement("div");
+    divErrorField.id = "error-field";
+    divErrorField.classList.add("fields");
+    submenu.appendChild(divErrorField);
+
 
     // Create list items
     const options = [
-        { text: "Distància ", for:"distance", value: 5},
-        { text: "Edat mínima ", for:"min_age", value: 10},
-        { text: "Edat máxima ", for:"max_age", value: 20 },
+        { text: "Distància ", for:"distance", value: distance},
+        { text: "Edat mínima ", for:"min_age", value: minAge},
+        { text: "Edat màxima ", for:"max_age", value: maxAge},
     ];
 
     options.map(option => {
@@ -83,9 +108,9 @@ function renderPreferencesSubmenu() {
 
         submenu.appendChild(divField);
         
-
     });
 
+    // Div submit button
     const divField = document.createElement("div");
     divField.classList.add("send");
 
@@ -104,10 +129,115 @@ function deletePreferencesSubmenu() {
     submenu.remove();
 }
 
+function showErrorsInSubmittedPreference(message){
+    const errorDiv = document.getElementById("error-field");
+    const divErrorParagraphField = document.createElement("p");
+    divErrorParagraphField.innerText = message;
+    errorDiv.appendChild(divErrorParagraphField);
+}
+
 function handleSubmittedPreference(e){
+
     e.preventDefault();
-    alert("SE ENVIÓ EL FORMULARIO")
-    console.log(document.forms); 
+
+    const errorDiv = document.getElementById("error-field");
+    errorDiv.innerHTML = "";
+
+    const userPreferenceFormElements = document.forms[0].elements;
+    const distance = userPreferenceFormElements[0].value;
+    const minAge = userPreferenceFormElements[1].value;
+    const maxAge = userPreferenceFormElements[2].value;
+
+    console.log(`DISTANCIA ${distance} - MIN EDAD ${minAge} - MAX EDAD ${maxAge} `)
+
+    const rangEdat = [18, 60]
+
+    const errors = [];
+
+    if (distance < 0 || distance > 200) {
+        errors.push("La distància ha d'estar entre 0 i 200 km.");
+    }
+
+    if (minAge < rangEdat[0] || minAge > rangEdat[1] || maxAge < rangEdat[0] || maxAge > rangEdat[1]) {
+        errors.push("La edat ha d'estar entre el rang de 18 i 60 anys.");
+    }
+
+    if (minAge > maxAge) {
+        errors.push("La edat mínima no pot ser superior a la màxima.");
+    }
+
+    if (!errors.length) {
+
+        errorDiv.innerHTML = "";
+        updateUserPreferences(distance, minAge, maxAge);
+
+    } else {
+
+        showErrorsInSubmittedPreference( errors.join("\n"));
+
+    }
+
+}
+
+async function updateUserPreferences(distance, minAge, maxAge) {
+
+    try {
+
+        const response = await fetch('discover.php', { 
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({endpoint: "updateUserPreferences", distance, minAge, maxAge})
+        });
+
+        // resultado de JSON a objeto Javascript. PHP devuelve {success: error, message: "abc"}
+        const result = await response.json();
+
+        // Segun resultado, pone mensaje de error o no
+        if (result.success) { 
+
+            if (result.updated){
+
+                alert("UPDATED: " + result.message)
+
+                // Info to user
+                MostrarAlertas("info", "Preferències guardades correctament")
+
+                // Closes submenu
+                deletePreferencesSubmenu()
+
+                // Fetches user data based on new filters and updates card
+                fetchedUsers = await fetchUsers();
+
+                // If there is any user to discover, show card
+                if (fetchedUsers && fetchedUsers.length > 0) {
+
+                    renderUserCard(fetchedUsers, 0);
+
+                } else { // show no users let
+
+                    renderNoUsersLeft();
+
+                }
+               
+                
+            } else {
+
+               showErrorsInSubmittedPreference(result.message);
+
+            }
+
+        } else {
+
+            console.log('Error in updateUserPreference: ' +  result.message)
+
+        }
+
+    } catch (error) {
+
+        console.log('Error al comunicarse con el servidor en updateUserPreference: ' + error)
+
+    }
+
 }
 
 /* END SUBMIT FUNCTIONALITY ----------------------------------------------------------------------------- */ 
@@ -117,18 +247,18 @@ async function fetchLoggedUserPreferences() {
 
     try {
 
-        const response = await fetch("discover.php?action=get_logged_user");
-        const users = await response.json();
+        const response = await fetch("discover.php?action=get_logged_user_preferences");
+        const userPreference = await response.json();
 
         // IF SUCCESS = returns array of users data | ELSE = returns empty array
-        if (users.success){
-            return users.message;
+        if (userPreference.success){
+            return userPreference.message;
         } else {
             return;
         }
         
     } catch (error) {
-        console.log(error);
+        console.log(error)
         return;
     }
 }
@@ -262,6 +392,8 @@ async function insertMatch(interactedUserID) {
     }
 
 }
+
+
 
 // RENDERIZATION
 function renderNoUsersLeft() {
