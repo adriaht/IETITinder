@@ -7,7 +7,7 @@
     width: 96%; /* Ancho completo del contenedor */
     max-width: 460px; /* Limite de ancho */
     position: absolute;
-    top: 650px; /* Justo debajo del header */
+    top: 180px; /* Justo debajo del header */
     left: 50%;
     transform: translateX(-50%); /* Centra la alerta horizontalmente */
     padding: 10px;
@@ -351,9 +351,149 @@ position: relative;
 /* MARK: DYNAMIC CONTENT */
 
 /* MARK: DISCOVER */
+
+/* HEADER BUTTON CONFIG */
+
+/* FOR BLUR USED IN PROFILE WHEN CLICKING SUBMENU*/
+body.discover #grey-background {
+
+    z-index: 10;
+
+    display: none;
+    position: absolute;
+
+    /*border-radius: 20px;*/
+    background-color: rgba(80, 80, 80, 0.6);
+    width: 460px;
+    height: 840px;
+
+}
+
+
+/* SUBMENU IN PROFILE */
+body.discover #submenu-button {
+   
+    /* Remove styles */
+    background: none;
+	border: none;
+	font: inherit;
+
+    z-index: 12;
+
+    text-align: center;
+
+    width: 100px;
+    height: 84px;
+    font-size: 1.2rem;
+    background-color: white;
+
+    /*border-top-right-radius: 20px;*/
+
+}
+
+/* Submenu styling */
+
+body.discover #submenu {
+
+    position: absolute;
+    z-index: 11;
+
+    height: auto;
+    width: 380px;
+    top: 120px;
+    left: 50%; /* Move the element to the center based on its left edge */
+    transform: translateX(-50%); /* Offset the element by half of its width */
+
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    background-color: white;
+
+    font-family: 'Inter', sans-serif;
+    
+}
+
+body.discover #submenu div {
+
+    padding:20px;
+    text-align: center;
+    word-wrap: break-word
+}
+
+body.discover #submenu div:first-child {
+    border-bottom: 1px solid rgb(165, 165, 165);
+}
+
+body.discover #submenu div#error-field {
+    padding: 0px 10px;
+
+}
+
+body.discover #submenu div#error-field p {
+    padding:0;
+    padding-top: 8px;
+    color: #e53e3e;
+    font-size: 0.875rem;
+    text-align: center;
+    font-weight: 100;
+    font-family: 'Inter', sans-serif;
+}
+
+
+
+body.discover #submenu div.fields label {
+    font-weight: bold;
+    text-align: left;
+}
+
+body.discover #submenu div.fields input {
+    text-align: center;
+    width: 70px;
+    margin-left: 5px;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+}
+
+body.discover #submenu div.fields input:focus {
+    outline: none;
+    border-color: #ff6b6b;
+    box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
+}
+
+
+body.discover #submenu div.send {
+    text-align: center;
+}
+
+body.discover #submenu div.send input {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    background: linear-gradient(to right, #ff6b6b, #cc2faa);
+    color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+body.discover #submenu div.send input.disabled {
+
+    cursor: default;
+    font-size: 1rem;
+    background: #e0e0e0;
+    color: #fff;
+}
+
+/* DISCOVER MAIN CONTENT*/
+
 main.discover {
     padding: 0.2rem;
 }
+
+/* MARK: INTEGRATION */
+/* Integrate in profile, or else where images with carrousell */
+/* its parent content must be position: relative */
 
 main.discover img {
 
@@ -363,6 +503,73 @@ main.discover img {
     object-position: center;
 
 }
+
+main.discover #carrousel-container {
+
+    position: absolute;
+    top: 460px;
+    left: 50%; /* Move the element to the center based on its left edge */
+    transform: translateX(-50%); /* Offset the element by half of its width */
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    color: white;
+
+    backdrop-filter: blur(10px);
+    padding: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5); /* Optional: add shadow */
+    border-radius: 5px;
+
+    font-family: "Poppins";
+
+    text-align: center;
+    margin-top: 10px;
+}
+
+main.discover #carrousel-container span.dot {
+
+    height: 10px;
+    width: 10px;
+    margin: 0 5px;
+    background-color: gray;
+    border-radius: 50%;
+    display: inline-block;
+    cursor: pointer;
+
+}
+
+main.discover #carrousel-container span.dot.active {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Optional: add shadow */
+    background-color: white;
+}
+
+
+main.discover #info-container {
+
+    position: absolute;
+    top: 74%;
+    left: 50%; /* Move the element to the center based on its left edge */
+    transform: translateX(-50%); /* Offset the element by half of its width */
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    color: white;
+
+    font-size: 1.25rem;
+
+    backdrop-filter: blur(10px);
+    padding: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5); /* Optional: add shadow */
+    border-radius: 5px;
+
+    font-family: "Poppins";
+}
+
+/* MARK: END INTEGRATION */
 
 main.discover #buttons-container {
 
