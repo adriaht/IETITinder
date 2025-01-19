@@ -2,7 +2,7 @@
 document.addEventListener("DOMContentLoaded", async () => {
 
     const availableDiv = Array.from(document.getElementsByClassName("available"));
-    const inputs = Array.from(document.getElementsByTagName("input"));+
+    const inputs = Array.from(document.getElementsByTagName("input"));
 
     availableDiv.map(div => {
         div.addEventListener("click", () => {
@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                 let formData = new FormData();
                 formData.append("image", file);
-                formData.append("endpoint", "pollaGorda");
+                formData.append("endpoint", "imageUpload");
                 console.log(formData);
 
                 uploadPhoto(formData);
