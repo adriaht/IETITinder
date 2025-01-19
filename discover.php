@@ -101,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
 
         } else {
 
-            $sql = "SELECT user_ID, name, alias, TIMESTAMPDIFF(YEAR, birth_date, CURDATE()) AS age, 
+        $sql = "SELECT user_ID, name, alias, TIMESTAMPDIFF(YEAR, birth_date, CURDATE()) AS age, 
             (((SELECT COUNT(`from`)  FROM interactions WHERE `from` = user_ID) * 0.6) + 
             ((SELECT COUNT(`from`)  FROM interactions WHERE `to` = user_ID AND `state` = 'like') * 0.15) +
             ((((SELECT COUNT(`from`)  FROM interactions WHERE `to` = user_ID AND `state` = 'like') / (SELECT COUNT(`from`)  FROM interactions WHERE `to` = user_ID)) * 75) * 0.25)) as ponderation,
