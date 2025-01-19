@@ -1016,3 +1016,34 @@ nav ul li a {
 
 /* END OF NAV */
 
+/* ADMIN PANEL */
+
+body.admin-panel div.dashboard {
+
+    width: 98%;
+    height: 98vh;
+    background-color: white;
+    border-radius: 25px;
+
+}
+
+body.admin-panel div.dashboard {
+
+    width: 98%;
+    height: 98vh;
+    background-color: white;
+    border-radius: 25px;
+    text-align: center;
+
+}
+
+body.admin-panel div.dashboard {
+
+    width: 99vw;
+    height: 98vh;
+    background-color: white;
+    border-radius: 25px;
+    text-align: center;
+
+}
+

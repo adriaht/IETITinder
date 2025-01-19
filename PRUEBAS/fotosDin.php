@@ -152,7 +152,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <p class="logo">IETinder ❤️</p>
             </header>
 
-            <main id="content" class="discover content">
+            <main id="content" class="content">
             
 
             </main>

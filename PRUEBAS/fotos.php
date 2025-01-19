@@ -36,11 +36,11 @@
                             <button>X</button>
                         </div>
                         <div class="available">
-                            <form id="uploadForm" action="upload.php" method="post" enctype="multipart/form-data">
-                                <input type="file" name="fileToUpload" id="fileToUpload" style="position: absolute; top: 0; left: 0; bottom: 0; right: 0; width: 100%; height:100%;">
-                            </form>
+                            <input type="file" name="fileToUpload" style="opacity: 0.0; position: absolute; top: 0; left: 0; bottom: 0; right: 0; width: 100%; height:100%; display:none">
                         </div>
-                        <div class="disabled"></div>
+                        <div class="available">
+                            <input type="file" name="fileToUpload" style="opacity: 0.0; position: absolute; top: 0; left: 0; bottom: 0; right: 0; width: 100%; height:100%; display:none">
+                        </div>
                         <div class="disabled"></div>
                     </div>
 

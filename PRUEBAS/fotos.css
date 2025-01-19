@@ -131,6 +131,23 @@ main div#photos-container div button {
     right: -15px;
 }
 
+main div#photos-content div#error-div {
+    text-align: center;
+    margin-top: 30px;
+}
+
+main div#photos-content div#error-div h3 {
+    padding:0;
+    padding-top: 8px;
+    color: #e53e3e;
+    font-size: 1.25rem;
+    text-align: center;
+    font-weight: 100;
+    font-family: 'Inter', sans-serif;
+}
+
+
+
 nav {
 
     padding: 1.1rem;

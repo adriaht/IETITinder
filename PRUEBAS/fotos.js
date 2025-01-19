@@ -28,7 +28,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         errorDiv.id = "error-div";
         const error = document.createElement("h3");
         error.id = "error-text";
-        error.innerText = "polla"
         errorDiv.appendChild(error);
         divContent.appendChild(errorDiv);
          
@@ -71,12 +70,15 @@ function renderPhotos(photoContainer, arrPhotos){
 
             if (arrPhotos.length === 1) {
 
-                alert("NECESITAS TENER UNA FOTO")
+                const error = document.getElementById("error-text")
+                error.innerText = "Minim has de tenir una foto de perfil";
 
             } else {
 
+                const error = document.getElementById("error-text")
+                error.innerText = "";
+            
                 // DELETE PHOTO FROM BBDD
-
                 console.log(arrPhotos[deleteButton.value].photo_ID)
                 const isDeleted = await deletePhoto(arrPhotos[deleteButton.value].photo_ID);
                 if (isDeleted) {

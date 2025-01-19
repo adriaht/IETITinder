@@ -407,6 +407,8 @@ function updateUserPreferences($input, $loggedUserID) {
 // THIS WILL GET ALL POST REQUESTS. Each call in JS will have an endpoint as key_value to handle each endpoint request
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
+    logOperation($_SERVER["CONTENT_TYPE"]);
+    
     try {
 
         // Gets input from the request 
