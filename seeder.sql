@@ -224,14 +224,19 @@ VALUES
 (46, 'jpg', '/images/user46_photo2.jpg'),
 (47, 'jpg', '/images/user47_photo1.jpg'),
 (47, 'jpg', '/images/user47_photo2.jpg'),
+(47, 'jpg', '/images/user47_photo3.jpg'),
+(47, 'jpg', '/images/user47_photo4.jpg'),
 (48, 'jpg', '/images/user48_photo1.jpg'),
-(48, 'jpg', '/images/user48_photo2.jpg'),
 (49, 'jpg', '/images/user49_photo1.jpg'),
 (49, 'jpg', '/images/user49_photo2.jpg'),
 (50, 'jpg', '/images/user50_photo1.jpg'),
 (50, 'jpg', '/images/user50_photo2.jpg'),
 (51, 'jpg', '/images/user51_photo1.jpg'),
 (51, 'jpg', '/images/user51_photo2.jpg'),
+(51, 'jpg', '/images/user51_photo3.jpg'),
+(51, 'jpg', '/images/user51_photo4.jpg'),
+(51, 'jpg', '/images/user51_photo5.jpg'),
+(51, 'jpg', '/images/user51_photo6.jpg'),
 (52, 'jpg', '/images/user52_photo1.jpg'),
 (52, 'jpg', '/images/user52_photo2.jpg'),
 (53, 'jpg', '/images/user53_photo1.jpg'),
@@ -267,6 +272,81 @@ INSERT INTO interactions (`from`, `to`, `state`) VALUES (48, 1, "like");
 INSERT INTO interactions (`from`, `to`, `state`) VALUES (49, 1, "like");
 INSERT INTO interactions (`from`, `to`, `state`) VALUES (50, 1, "like");
 
+/* PRUEBA DE ALGORITMO */
+/*
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (52, 1, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (52, 1, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (52, 1, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (52, 1, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (52, 1, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (52, 1, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (52, 1, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (52, 1, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (52, 1, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (52, 1, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (52, 1, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (52, 1, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (52, 1, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (52, 1, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (52, 1, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (1, 52, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (1, 52, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (1, 52, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (1, 52, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (1, 52, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (1, 52, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (1, 52, "like");
+
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (53, 1, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (53, 1, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (53, 1, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (53, 1, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (53, 1, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (53, 1, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (1, 53, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (1, 53, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (1, 53, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (1, 53, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (1, 53, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (1, 53, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (1, 53, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (1, 53, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (1, 53, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (1, 53, "like");
+
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (54, 1, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (54, 1, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (54, 1, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (54, 1, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (1, 54, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (1, 54, "like");
+
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (55, 1, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (55, 1, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (55, 1, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (55, 1, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (55, 1, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (55, 1, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (55, 1, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (55, 1, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (55, 1, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (55, 1, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (55, 1, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (55, 1, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (55, 1, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (55, 1, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (55, 1, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (55, 1, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (55, 1, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (55, 1, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (55, 1, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (55, 1, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (55, 1, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (1, 55, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (1, 55, "like");
+INSERT INTO interactions (`from`, `to`, `state`) VALUES (1, 55, "like");
+*/
+
 INSERT INTO matches (participant1, participant2) VALUES (1, 4);
 INSERT INTO matches (participant1, participant2) VALUES (1, 8);
 INSERT INTO matches (participant1, participant2) VALUES (1, 10);
@@ -294,4 +374,3 @@ VALUES
 (3, 1, "Igual podríamos tomar un café por mi zona, si te apetece", '2025-01-30 08:32:00'),
 (3, 10, "Me parece perfecto, que día? Yo estoy libre mañana", '2025-01-30 09:00:00'),
 (3, 10, "Pues que te parece si lo hacemos el viernes por la tarde después de trabajar? A las 19", '2025-01-30 10:00:00');
-
