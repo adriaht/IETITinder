@@ -71,7 +71,7 @@ CREATE TABLE conversations (
 
 INSERT INTO users (email, password, name, surname, alias, birth_date, latitude, longitude, sex, sexual_orientation, last_login_date, creation_date, distance_user_preference, min_age_user_preference, max_age_user_preference, validated, expirate_date, validate_code)
 VALUES
-('johndoe1@ieti.site', SHA2('password1', 512), 'John', 'Doe', 'johndoe1', '1995-01-01', 40.7128, -74.0060, 'home', 'heterosexual', '2025-01-01 08:15:32', '2025-01-01 08:15:32', 200, 18, 50, 0, '2025-01-01 08:15:32', '123'),
+('johndoe1@ieti.site', SHA2('password1', 512), 'John', 'Doe', 'johndoe1', '1995-01-01', 40.7128, -74.0060, 'home', 'heterosexual', '2025-01-01 08:15:32', '2025-01-01 08:15:32', 200, 18, 50, 1, '2025-01-01 08:15:32', '123'),
 ('janesmith2@ieti.site', SHA2('password2', 512), 'Jane', 'Smith', 'janesmith2', '1994-02-02', 41.9028, 12.4964, 'dona', 'homosexual', '2025-01-02 09:20:14', '2025-01-02 09:20:14', 200, 18, 50, 1, '2025-01-03 08:15:32', '123'),
 ('michaelbrown3@ieti.site', SHA2('password3', 512), 'Michael', 'Brown', 'michaelbrown3', '1990-03-03', 34.0522, -118.2437, 'home', 'bisexual', '2025-01-03 10:25:45', '2025-01-03 10:25:45', 200, 18, 50, 1, '2025-01-04 08:15:32', '123'),
 ('emilyjones4@ieti.site', SHA2('password4', 512), 'Emily', 'Jones', 'emilyjones4', '1992-04-04', 51.5074, -0.1278, 'dona', 'heterosexual', '2025-01-04 11:30:21', '2025-01-04 11:30:21', 200, 18, 50, 1, '2025-01-05 08:15:32', '123'),
