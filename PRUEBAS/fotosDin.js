@@ -63,7 +63,7 @@ function renderPhotos(photoContainer, arrPhotos){
         const deleteButton = document.createElement("button");
         deleteButton.innerText = "X"
         deleteButton.value = index;
-
+         /*MARK: DELETE*/ 
         deleteButton.addEventListener("click", async () => {
 
             // console.log(deleteButton.value);
@@ -121,6 +121,9 @@ function renderPhotos(photoContainer, arrPhotos){
         divAvailable.appendChild(input);
 
         divAvailable.addEventListener("click", async () => {
+
+            const error = document.getElementById("error-text")
+            error.innerText = "";
 
             input.click();
 
