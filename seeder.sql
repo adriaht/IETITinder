@@ -23,7 +23,7 @@ CREATE TABLE users (
     last_login_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     distance_user_preference INT DEFAULT 200, 
     min_age_user_preference INT DEFAULT 18, 
-    max_age_user_preference INT DEFAULT 50,
+    max_age_user_preference INT DEFAULT 60,
 	role ENUM('admin', 'user') NOT NULL DEFAULT 'user'
 );
 
