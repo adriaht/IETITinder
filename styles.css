@@ -899,6 +899,97 @@ main.profile #butonsEditProfile {
 
 /*  END PROFILE EDITION*/
 
+/* MARK : PHOTOS*/
+main.photos {
+    padding: 0px 24px;
+} 
+
+main.photos div div#photos-container {
+    display: flex;
+    flex-wrap: wrap;
+    /*
+    justify-content: space-evenly;
+    align-content: space-between;
+    */
+    padding: 0px 32px;
+    gap: 34px;
+}
+
+main.photos div > h2 {
+    margin-bottom: 20px;
+}
+
+main.photos div#photos-container div {
+    width: 156px;
+    height: 156px;
+    background-color: grey;
+    /*margin-bottom: 32px;*/
+    position: relative;
+}
+
+main.photos div#photos-container div.available {
+    --b: 10px; /* the thickness */
+    border: 48px solid grey; 
+    background:
+      conic-gradient(from 90deg at var(--b) var(--b),grey 90deg,#fff 0) 
+      calc(100% + var(--b)/2) calc(100% + var(--b)/2)/
+      calc(50%  + var(--b))   calc(50%  + var(--b));
+    display: inline-block;
+}
+
+main.photos div#photos-container div.available input {
+    opacity: 0.0; 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    bottom: 0; 
+    right: 0; 
+    width: 100%; 
+    height:100%; 
+    display:none
+}
+
+/*
+main div#photos-container div.disabled {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background-color: #f3f3f3;
+    pointer-events: none;
+    cursor: default;
+}
+ */
+ main.photos div#photos-container div img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+}
+
+main.photos div#photos-container div button {
+    position: absolute;
+    padding: 10px 15px;
+    font-size: 1.10rem;
+    border: none;
+    border-radius: 25px;
+    background-color: red;
+    top: -15px;
+    right: -15px;
+}
+
+main.photos div#photos-content div#error-div {
+    text-align: center;
+    margin-top: 30px;
+}
+
+main.photos div#photos-content div#error-div h3 {
+    padding:0;
+    padding-top: 8px;
+    color: #e53e3e;
+    font-size: 1.25rem;
+    text-align: center;
+    font-weight: 100;
+    font-family: 'Inter', sans-serif;
+}
+
 
 /* MARK: MESSAGES */
 main.messages {
@@ -1059,4 +1150,35 @@ nav ul li a {
 } 
 
 /* END OF NAV */
+
+/* ADMIN PANEL */
+
+body.admin-panel div.dashboard {
+
+    width: 98%;
+    height: 98vh;
+    background-color: white;
+    border-radius: 25px;
+
+}
+
+body.admin-panel div.dashboard {
+
+    width: 98%;
+    height: 98vh;
+    background-color: white;
+    border-radius: 25px;
+    text-align: center;
+
+}
+
+body.admin-panel div.dashboard {
+
+    width: 99vw;
+    height: 98vh;
+    background-color: white;
+    border-radius: 25px;
+    text-align: center;
+
+}
 

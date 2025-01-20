@@ -23,7 +23,8 @@ CREATE TABLE users (
     last_login_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     distance_user_preference INT DEFAULT 200, 
     min_age_user_preference INT DEFAULT 18, 
-    max_age_user_preference INT DEFAULT 50
+    max_age_user_preference INT DEFAULT 60,
+	role ENUM('admin', 'user') NOT NULL DEFAULT 'user'
 );
 
 -- Creación de la tabla de fotos
@@ -124,9 +125,11 @@ VALUES
 ('andreamoore@ieti.site', SHA2('password7', 512), 'Andrea', 'Moore', 'andreamoore', '1990-12-05', 40.9000, -74.2000, 'dona', 'heterosexual', '2025-01-01 08:15:32', '2025-01-01 08:15:32', 200, 25, 45),
 ('onanderson@ieti.site', SHA2('password8', 512), 'On', 'Anderson', 'onanderson', '1989-06-25', 41.0000, -74.2500, 'dona', 'heterosexual', '2025-01-01 08:15:32', '2025-01-01 08:15:32', 200, 30, 55),
 ('billiethomas@ieti.site', SHA2('password9', 512), 'Billie', 'Thomas', 'billiethomas', '1997-08-14', 40.7500, -74.0500, 'dona', 'heterosexual', '2025-01-01 08:15:32', '2025-01-01 08:15:32', 200, 22, 50),
-('naiaraharris@ieti.site', SHA2('password10', 512), 'Naiara', 'Harris', 'naiaraharris', '1988-04-07', 40.9500, -74.3000, 'dona', 'heterosexual', '2025-01-01 08:15:32', '2025-01-01 08:15:32', 200, 28, 60);
+('naiaraharris@ieti.site', SHA2('password10', 512), 'Naiara', 'Harris', 'naiaraharris', '1988-04-07', 40.9500, -74.3000, 'dona', 'heterosexual', '2025-01-01 08:15:32', '2025-01-01 08:15:32', 200, 28, 50);
 
-
+INSERT INTO users (email, password, name, surname, alias, birth_date, latitude, longitude, sex, sexual_orientation, last_login_date, creation_date, distance_user_preference, min_age_user_preference, max_age_user_preference, role)
+VALUES
+('admin@ieti.site', SHA2('admin', 512), 'Administrador', 'Torrente', 'admin_of_tinder', '1988-04-07', 40.9500, -74.3000, 'home', 'heterosexual', '2025-01-01 08:15:32', '2025-01-01 08:15:32', 200, 28, 50, 'admin');
 
 INSERT INTO photos (user_ID, type, path)
 VALUES
@@ -246,7 +249,8 @@ VALUES
 (55, 'jpg', '/images/user55_photo1.jpg'),
 (55, 'jpg', '/images/user55_photo2.jpg'),
 (56, 'jpg', '/images/user56_photo1.jpg'),
-(56, 'jpg', '/images/user56_photo2.jpg');
+(56, 'jpg', '/images/user56_photo2.jpg'),
+(57, 'jpg', '/images/user56_photo1.jpg');
 
 /* SON MATCH */
 INSERT INTO interactions (`from`, `to`, `state`) VALUES (1, 4, "like");
