@@ -49,6 +49,7 @@ function renderPhotos(photoContainer, arrPhotos){
 
     // console.log(`INDEX ANTES DE ENTRAR = ${index}`)
 
+    // GENERATION OF GET PHOTOS
     while (index < max_photos && index < arrPhotos.length) {
 
         // console.log(`INDEX ANTES DE GENERAR = ${index}`)
@@ -105,18 +106,31 @@ function renderPhotos(photoContainer, arrPhotos){
 
     // console.log(`INDEX DESPUÉS DE ENTRAR = ${index}`)
 
+    // GENERATION OF AVAILABLE SPACES
     while(index < max_photos) {
 
         const divAvailable = document.createElement("div");
         divAvailable.classList.add("available");
 
+        let input = document.createElement("input");
+        input.type = "file";
+        input.name = "fileToUpload";
+
+        input.addEventListener("change", () => {
+            handlePhotoUpload(input);
+        })
+
+        divAvailable.appendChild(input);
+
         divAvailable.addEventListener("click", async () => {
 
-            // INSERT PHOTO
+            input.click();
 
-            // IF OK
-            userReloadedPhotos = await fetchLoggedUserPhotos();
-            renderPhotos(photoContainer, userReloadedPhotos);
+            /* IF EVERYTHING IS ALRIGHT
+                userReloadedPhotos = await fetchLoggedUserPhotos();
+                renderPhotos(photoContainer, userReloadedPhotos);
+            */
+
         })
 
         photoContainer.appendChild(divAvailable);
@@ -155,6 +169,33 @@ function renderPhotos(photoContainer, arrPhotos){
     */
     // console.log(`INDEX AL FINAL = ${index}`)
 
+}
+
+function handlePhotoUpload(input) {
+
+    const file = input.files[0];
+    console.log(file);
+
+    if (file) {
+
+        const validImageTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/webp'];
+        const fileType = file.type;
+
+        if (!validImageTypes.includes(fileType)) {
+
+            // MENSAJE DE ERROR
+            alert("Please select a valid image (JPG, JPEG, PNG, or WEBP).");
+            return; 
+
+        }
+
+        let formData = new FormData();
+        formData.append("image", file);
+        formData.append("endpoint", "imageUpload");
+        console.log(formData);
+
+        uploadPhoto(formData);
+    }
 }
 
 async function fetchLoggedUserPhotos() {

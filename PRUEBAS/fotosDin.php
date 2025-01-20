@@ -168,7 +168,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IETinder - Descobrir</title>
     <link rel="stylesheet" type="text/css" href="fotos.css?t=<?php echo time();?>" />
-    <script src="fotos.js"></script>
+    <script src="fotosDin.js"></script>
 </head>
 <body>
 
