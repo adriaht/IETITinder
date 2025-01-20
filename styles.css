@@ -123,6 +123,22 @@ body.errors main#content a {
 /* MARK: LOGIN */
 /* LOGIN Y REGISTER*/
 
+.body-register form input#latitud,
+.body-register form input#longitud{
+    display: block;
+}
+
+.body-register #map {
+    height: 23%;
+    width: 360px;
+    margin: 10 auto 30px;
+}
+
+.body-register  div#showErrors p{
+    text-align: center;
+    color: red;
+}
+
 .body-login,
 .body-register {
     min-height: 100vh;
@@ -149,7 +165,7 @@ body.errors main#content a {
  
 }
 
-.body-register form  {
+.body-register div#content-register  {
     height: 500px;
     max-height: 500px;
     overflow: auto;
@@ -790,10 +806,12 @@ main.profile div#content-profile{
     overflow:auto;
 }
 
-main.profile #map {
+main.profile div#map {
     height: 23%;
     width: 360px;
     margin: 10 auto 30px;
+    position: relative; 
+    overflow: scroll;
 }
 
 

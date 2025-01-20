@@ -1,9 +1,7 @@
 // funcion para validar cada camp del formulario enviando todos los valores registrados
 function validateData(formData) {
 
-    // variables de traduccion, ya que el formulario es en ingles y la base de datos tambien
-    // me da algunos problemas al cambiar de ingles a catalan, con esto hacemos que el mensaje de error
-    // sea en catalan
+    // variables de traduccion, ya que el formulario es en ingles y la base de datos també
     const fieldTranslations = {
         user_ID: "Identificador d'usuari",
         email: "Correu electrònic",
@@ -17,25 +15,40 @@ function validateData(formData) {
         sex: "Sexe",
         sexual_orientation: "Orientació sexual",
         creation_date: "Data de creació",
-        last_login_date: "Data de l'última connexió"
+        last_login_date: "Data de l'última connexió",
+        image: "Imatge"
     };
 
     let errores = [];
     formData.forEach((value, key) => {
-        if (!value.trim()) {
+        // Convertir value a string antes de usar trim
+        if (!String(value).trim()) {
             const fieldName = fieldTranslations[key] || key; // Traduir el camp si existeix al mapa
             errores.push(`${fieldName} és obligatori.`);
         }
     });
+
+
+     // Validar que los valores de "latitude" y "longitude" son números válidos
+     const latitude = parseFloat(formData.get('latitude'));
+     const longitude = parseFloat(formData.get('longitude'));
+
+     if (isNaN(latitude) || latitude === "") {
+        errores.push(`La latitud és obligatòria i ha de ser un número vàlid.`);
+    }
+
+    if (isNaN(longitude) || longitude === "") {
+        errores.push(`La longitud és obligatòria i ha de ser un número vàlid.`);
+    }
+
     return errores;
 }
-
 // funcion para registrar valores de latitud y longitud segun la ubicacion del mapa
 function initMap() {
 
     // coger las cordenadas del formulario, dependiendo del usuario que este iniciado
-    const latitude = parseFloat(document.getElementById("latitud").value);
-    const longitude = parseFloat(document.getElementById("longitud").value);
+    const latitude =  parseFloat('2');
+    const longitude = parseFloat('2');
 
     // Coordenadas iniciales
     const initialPosition = { lat: latitude, lng: longitude };
@@ -74,3 +87,4 @@ function initMap() {
     });
 
 }
+
