@@ -73,7 +73,7 @@ function renderPhotos(photoContainer, arrPhotos){
             if (arrPhotos.length === 1) {
 
                 const error = document.getElementById("error-text")
-                error.innerText = "Minim has de tenir una foto de perfil";
+                error.innerText = "Mínim has de tenir una foto de perfil";
 
             } else {
 
@@ -81,9 +81,7 @@ function renderPhotos(photoContainer, arrPhotos){
                 error.innerText = "";
             
                 // DELETE PHOTO FROM BBDD
-                console.log("PHOTO TO DELETE ---------------------------------------------------------------------------------")
-                console.log(arrPhotos[deleteButton.value].path)
-                console.log(arrPhotos[deleteButton.value].photo_ID)
+
                 const isDeleted = await deletePhoto(arrPhotos[deleteButton.value].photo_ID, arrPhotos[deleteButton.value].path);
                 if (isDeleted) {
                     arrPhotos.splice(deleteButton.value, 1)
@@ -171,7 +169,7 @@ function renderPhotos(photoContainer, arrPhotos){
 
 }
 
-function handlePhotoUpload(input) {
+async function handlePhotoUpload(input) {
 
     const file = input.files[0];
     console.log(file);
@@ -194,7 +192,17 @@ function handlePhotoUpload(input) {
         formData.append("endpoint", "imageUpload");
         console.log(formData);
 
-        uploadPhoto(formData);
+        let isUploadedCorrectly = await uploadPhoto(formData);
+        if(isUploadedCorrectly) {
+
+            userReloadedPhotos = await fetchLoggedUserPhotos(); 
+            const container = document.getElementById("photos-container")
+            renderPhotos(container, userReloadedPhotos);
+
+        } else {
+            const error = document.getElementById("error-text")
+            error.innerText = "Error al pujar la imatge";
+        }
     }
 }
 
@@ -223,7 +231,7 @@ async function uploadPhoto(formData) {
 
     try {
         
-        const response = await fetch('upload.php', { 
+        const response = await fetch('fotosDin.php', { 
             method: 'POST',
             body: formData
         });
@@ -233,9 +241,9 @@ async function uploadPhoto(formData) {
 
         // Segun resultado, pone mensaje de error o no
         if (result.success) { 
-            console.log(result.message);
+            return result.success
         } else {
-            console.log(result.message);
+            return false;
         }
 
     } catch (error) {
