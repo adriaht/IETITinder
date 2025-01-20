@@ -346,7 +346,7 @@ $perfilDates = searchInDatabase("*", "users", $loggedUserId);
                         <!-- Botón de enviar -->
                         <button id="submitEditProfileForm" type="submit">Guardar</button>
                         </form>
-                        <a id="linkChangeImagePerfil" href="#" target="_blank">Modificar les meves fotos</a>
+                        <a id="linkChangeImagePerfil" href="/photos.php">Modificar les meves fotos</a>
                     </div>
                 </div>
 
