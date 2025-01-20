@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // Gets array of fetched photos
     userPhotos = await fetchLoggedUserPhotos();
+    console.log(userPhotos);
 
     if (userPhotos && userPhotos.length > 0) {
 
@@ -48,6 +49,7 @@ function renderPhotos(photoContainer, arrPhotos){
 
     // console.log(`INDEX ANTES DE ENTRAR = ${index}`)
 
+    // GENERATION OF GET PHOTOS
     while (index < max_photos && index < arrPhotos.length) {
 
         // console.log(`INDEX ANTES DE GENERAR = ${index}`)
@@ -61,7 +63,7 @@ function renderPhotos(photoContainer, arrPhotos){
         const deleteButton = document.createElement("button");
         deleteButton.innerText = "X"
         deleteButton.value = index;
-
+         /*MARK: DELETE*/ 
         deleteButton.addEventListener("click", async () => {
 
             // console.log(deleteButton.value);
@@ -71,7 +73,7 @@ function renderPhotos(photoContainer, arrPhotos){
             if (arrPhotos.length === 1) {
 
                 const error = document.getElementById("error-text")
-                error.innerText = "Minim has de tenir una foto de perfil";
+                error.innerText = "Mínim has de tenir una foto de perfil";
 
             } else {
 
@@ -79,8 +81,8 @@ function renderPhotos(photoContainer, arrPhotos){
                 error.innerText = "";
             
                 // DELETE PHOTO FROM BBDD
-                console.log(arrPhotos[deleteButton.value].photo_ID)
-                const isDeleted = await deletePhoto(arrPhotos[deleteButton.value].photo_ID);
+
+                const isDeleted = await deletePhoto(arrPhotos[deleteButton.value].photo_ID, arrPhotos[deleteButton.value].path);
                 if (isDeleted) {
                     arrPhotos.splice(deleteButton.value, 1)
                     renderPhotos(photoContainer, arrPhotos)
@@ -102,25 +104,41 @@ function renderPhotos(photoContainer, arrPhotos){
 
     // console.log(`INDEX DESPUÉS DE ENTRAR = ${index}`)
 
+    // GENERATION OF AVAILABLE SPACES
     while(index < max_photos) {
 
         const divAvailable = document.createElement("div");
         divAvailable.classList.add("available");
 
+        let input = document.createElement("input");
+        input.type = "file";
+        input.name = "fileToUpload";
+
+        input.addEventListener("change", () => {
+            handlePhotoUpload(input);
+        })
+
+        divAvailable.appendChild(input);
+
         divAvailable.addEventListener("click", async () => {
 
-            // INSERT PHOTO
-          
-            // IF OK
-            arrPhotos.push({id:50, path:"/images/user5_photo1.jpg"})
-            renderPhotos(photoContainer, arrPhotos)
+            const error = document.getElementById("error-text")
+            error.innerText = "";
+
+            input.click();
+
+            /* IF EVERYTHING IS ALRIGHT
+                userReloadedPhotos = await fetchLoggedUserPhotos();
+                renderPhotos(photoContainer, userReloadedPhotos);
+            */
+
         })
 
         photoContainer.appendChild(divAvailable);
         index += 1;
     }
 
-    /*
+    /* IF WANT TO BE DISABLED
     if (index < max_photos) {
 
         const divAvailable = document.createElement("div");
@@ -151,6 +169,44 @@ function renderPhotos(photoContainer, arrPhotos){
     }
     */
     // console.log(`INDEX AL FINAL = ${index}`)
+
+}
+
+async function handlePhotoUpload(input) {
+
+    const file = input.files[0];
+    console.log(file);
+
+    if (file) {
+
+        const validImageTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/webp'];
+        const fileType = file.type;
+
+        if (!validImageTypes.includes(fileType)) {
+
+            // MENSAJE DE ERROR
+            alert("Please select a valid image (JPG, JPEG, PNG, or WEBP).");
+            return; 
+
+        }
+
+        let formData = new FormData();
+        formData.append("image", file);
+        formData.append("endpoint", "imageUpload");
+        console.log(formData);
+
+        let isUploadedCorrectly = await uploadPhoto(formData);
+        if(isUploadedCorrectly) {
+
+            userReloadedPhotos = await fetchLoggedUserPhotos(); 
+            const container = document.getElementById("photos-container")
+            renderPhotos(container, userReloadedPhotos);
+
+        } else {
+            const error = document.getElementById("error-text")
+            error.innerText = "Error al pujar la imatge";
+        }
+    }
 }
 
 async function fetchLoggedUserPhotos() {
@@ -173,15 +229,40 @@ async function fetchLoggedUserPhotos() {
     }
 }
 
-// JS that makes AJAX call to insert user interaction in BBDD
-async function deletePhoto(photoID) {
+// JS that makes AJAX call to upload photo to database
+async function uploadPhoto(formData) {
+
+    try {
+        
+        const response = await fetch('fotosDin.php', { 
+            method: 'POST',
+            body: formData
+        });
+
+        // resultado de JSON a objeto Javascript. PHP devuelve {success: error, message: "abc"}
+        const result = await response.json();
+
+        // Segun resultado, pone mensaje de error o no
+        if (result.success) { 
+            return result.success
+        } else {
+            return false;
+        }
+
+    } catch (error) {
+        console.log('Error al comunicarse con el servidor: ' + error)
+    }
+}
+
+// JS that deletes photo from database and directory
+async function deletePhoto(photoID, path) {
 
     try {
         
         const response = await fetch('fotosDin.php', { 
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({endpoint: "deletePhoto", photoID})
+            body: JSON.stringify({endpoint: "deletePhoto", photoID, path})
         });
 
         // resultado de JSON a objeto Javascript. PHP devuelve {success: error, message: "abc"}
@@ -199,3 +280,4 @@ async function deletePhoto(photoID) {
     }
 
 }
+

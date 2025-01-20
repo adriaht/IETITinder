@@ -106,13 +106,26 @@ main div#photos-container div.available {
     display: inline-block;
 }
 
+main div#photos-container div.available input {
+    opacity: 0.0; 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    bottom: 0; 
+    right: 0; 
+    width: 100%; 
+    height:100%; 
+    display:none
+}
+
+/*
 main div#photos-container div.disabled {
     border: 1px solid rgba(0, 0, 0, 0.1);
     background-color: #f3f3f3;
     pointer-events: none;
     cursor: default;
 }
- 
+ */
 main div#photos-container div img {
     width: 100%;
     height: 100%;

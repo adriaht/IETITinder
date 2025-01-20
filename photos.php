@@ -5,7 +5,7 @@ session_start();
 
 $_SESSION["user"] = 1;
 
-include("../functions.php"); /* Loads search from users + logs + startPDO */ 
+include("functions.php"); /* Loads search from users + logs + startPDO */ 
 
 // $_SESSION['user'] = 7;
 
@@ -271,16 +271,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IETinder - Descobrir</title>
-    <link rel="stylesheet" type="text/css" href="fotos.css?t=<?php echo time();?>" />
-    <script src="fotosDin.js"></script>
+    <title>IETinder - Fotos</title>
+    <link rel="stylesheet" type="text/css" href="/styles.css?t=<?php echo time();?>" />
+    <script src="/photos.js"></script>
 </head>
 <body>
 
     <div class="container">
 
         <div class="card">
-
         
             <header id="header">
                 <p class="logo">IETinder ❤️</p>

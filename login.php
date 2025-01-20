@@ -77,8 +77,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $user = $stmt->fetch();
 
             if (!$user) {
+
                 logOperation("Email or password incorrect in login.php" , "ERROR");
                 $errors['email'] = 'Correu electrònic o contrasenya incorrecte';
+                
             } else {
                 // Verify password
                 $stmtpwd = $pdo->prepare("SELECT COUNT(*) FROM users WHERE email = :email AND password = SHA2(:password, 512)");

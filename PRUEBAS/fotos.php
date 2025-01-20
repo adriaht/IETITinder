@@ -24,15 +24,15 @@
                     <h2>Les meves fotos</h2>
                     <div id="photos-container">
                         <div>
-                            <img src="../images/user1_photo1.jpg" alt="">
+                            <img src="/images/user1_photo1.jpg" alt="">
                             <button>X</button>
                         </div>
                         <div>
-                            <img src="../images/user1_photo2.jpg" alt="">
+                            <img src="/images/user1_photo2.jpg" alt="">
                             <button>X</button>
                         </div>
                         <div>
-                            <img src="../images/user2_photo1.jpg" alt="">
+                            <img src="/images/user2_photo1.jpg" alt="">
                             <button>X</button>
                         </div>
                         <div class="available">
