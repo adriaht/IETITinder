@@ -61,6 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
 function deletePhoto($input){
 
     $photoID = $input["photoID"];
+    $path = $input["path"];
 
     logOperation("[PROFILE.PHP] [PHOTOS] Starting photo $photoID deletion");
 
@@ -77,10 +78,38 @@ function deletePhoto($input){
     // Cleans stored space for query and PDO
     unset($stmt);
     unset($pdo);
+    
+    logOperation("[PROFILE.PHP] [PHOTOS] Photo $photoID deleted in BBDD successfully");
 
-    logOperation("[PROFILE.PHP] [PHOTOS] Photo $photoID deleted");
+    // FILE DELETION
+    $file = __DIR__ . $path;
+    
+    if (file_exists($file)) {
+
+        if (unlink($file)) {
+
+            logOperation("[PROFILE.PHP] [PHOTOS] File deleted successfully.");
+            echo json_encode(['success' => true, 'message' => "Error deleting the file $file"]);
+            exit;
+
+        } else {
+
+            logOperation("[PROFILE.PHP] [PHOTOS] Error deleting the file $file", "ERROR");
+            echo json_encode(['success' => false, 'message' => "Error deleting the file $file"]);
+            exit;
+
+        }
+
+    } else {
+
+        logOperation("[PROFILE.PHP] [PHOTOS] File $file does not exist.", "ERROR");
+        echo json_encode(['success' => false, 'message' => "File $file does not exist."]);
+        exit;
+
+    }
+
     // Sends response to 
-    echo json_encode(['success' => true, 'message' => "Match creat entre usuari $interactedUserID i usuari $loggedUserID"]);
+    echo json_encode(['success' => true, 'message' => "Photo deleted successfully"]);
     exit;
 }
 
