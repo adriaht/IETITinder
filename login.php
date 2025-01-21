@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $pdo = startPDO();
         
         if (!$pdo) {
-            logOperation("Error conection" , "ERROR");
+            logOperation("Error conection with database" , "ERROR");
             $errors['db'] = 'Error de connexió. Torna-ho a intentar més tard.';
         } else {
             // Verify email
@@ -140,7 +140,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IETinder - Login</title>
     <link rel="stylesheet" type="text/css" href="/styles.css?t=<?php echo time();?>" />
-    <script src="index.js"></script>
 </head>
 <body class="body-login">
     <div class="container">
@@ -183,7 +182,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <div class="links-group">
                     <a href="#" class="secondary-link">¿Has oblidat la contrasenya?</a>
-                    <a href="#" class="secondary-link">Crea una compte nova</a>
+                    <a href="/register.php" class="secondary-link">Crea una compte nova</a>
                 </div>
             </form>
 

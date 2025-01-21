@@ -202,6 +202,8 @@ $perfilDates = searchInDatabase("*", "users", $loggedUserId);
             }
         }
         });
+
+        
     });
 
     /* SUBMIT FUNCTIONALITY ----------------------------------------------------------------------------- */ 
@@ -280,10 +282,10 @@ $perfilDates = searchInDatabase("*", "users", $loggedUserId);
 
                 <div id="content-profile">
 
-                <div id="showErrors">
+                    <div id="showErrors">
 
 
-                </div>
+                    </div>
                    
                     <div id="infoPerfil">
                         <form id="edit-profile-form" action="" method="POST" enctype="multipart/form-data">
