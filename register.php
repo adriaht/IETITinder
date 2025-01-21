@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['validacio'])) {
     try {
         // comprobar que no este vacio, ya que estaremos esperando una respuesta en js con esta url
         if ($validacioParam === '') {
-           
+
             echo json_encode(['success' => false, 'message' => 'codigo de validacion no apto']);
             exit;
 
@@ -27,6 +27,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['validacio'])) {
 
             // Verificar si el email y el código coinciden con la base de datos
             if (isEmailAndCodeValid($email, $code)) {
+
+                if(setEmailValidated($email)){
+                    echo "usuario apro para login";
+                }else{
+                    echo "error al validar el usuario";
+                }
+
+
                 // dar validacion al usuaro en la base de datos
                 echo "El email y el código son válidos.";
             } else {
@@ -96,25 +104,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     // añadimos la imagen a la carpeta de imagenes, y devolvemos la ruta con su nombre
                     $pathImage = uploadImage($_FILES["image"]);
+                    // añadimos al usuario a la base de datos aunque no estara admitido para login
+                    $insertInDatabase= addUserToDatabase(
+                        $email,
+                        $password,
+                        $name,
+                        $surname,
+                        $alias,
+                        $birth_date,
+                        $latitude,
+                        $longitude,
+                        $sex,
+                        $sexual_orientation,
+                        date('Y-m-d H:i:s'),
+                        date('Y-m-d H:i:s'),
+                        0,
+                        date('Y-m-d H:i:s', strtotime('+48 hours')),
+                        $verificationCode
+                    );
 
-                    if (
-                        insertUserInDatabase(
-                            $email,
-                            $password,
-                            $name,
-                            $surname,
-                            $alias,
-                            $birth_date,
-                            $latitude,
-                            $longitude,
-                            $sex,
-                            $sexual_orientation,
-                             date('Y-m-d H:i:s'),
-                             date('Y-m-d H:i:s', strtotime('+48 hours')),
-                            validated: '0',
-                            validateCode: $verificationCode
-                        )
-                    ) {
+                    if ($insertInDatabase  ) {
 
                         echo json_encode(['success' => true, 'message' => 'AÑADIDO EN LA BASE DE DATOS']);
                         exit;
@@ -243,7 +252,7 @@ function searchEmailInDatabase($email)
 //  '0' es el caracter que añadiremos,STR_PAD_LEFT: Añade los ceros a la izquierda.
 function generateValidationCode()
 {
-    return str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT);
+    return str_pad(rand(0, 9999), 3, '0', STR_PAD_LEFT);
 }
 
 
@@ -281,30 +290,29 @@ function sendValidateEmail($email, $code)
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Codi de Validació</title>
     </head>
-    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-        <div style="max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
-            <h2 style="color: #4CAF50; text-align: center;">Validació de Correu Electrònic</h2>
+    <body style="font-family: \'Montserrat\', sans-serif; line-height: 1.6; color: #333; background: linear-gradient(135deg, #ff6b6b, #cc2faa, #4158D0); background-size: 200% 200%; animation: gradient 15s ease infinite; padding: 20px; display: flex; align-items: center; justify-content: center; min-height: 100vh;">
+        <div style="max-width: 600px; margin: 0 auto; padding: 20px; background-color: #fff; border: 1px solid #ddd; border-radius: 10px;">
+            <h2 style="color: #FF6B6B; text-align: center; font-size: 2.5rem; font-weight: bold; animation: pulse 2s infinite;">Validació de Correu Electrònic</h2>
             <p>Hola,</p>
             <p>Gràcies per registrar-te al nostre lloc. Si us plau, utilitza el següent codi per completar el teu procés de validació:</p>
             <div style="text-align: center; margin: 20px 0;">
-                <span style="display: inline-block; font-size: 24px; font-weight: bold; background: #f4f4f4; padding: 10px 20px; border-radius: 5px; border: 1px solid #ddd;">
+                <span style="display: inline-block; font-size: 1.5rem; font-weight: bold; background: #f4f4f4; padding: 10px 20px; border-radius: 5px; border: 1px solid #ddd;">
                     ' . htmlspecialchars($code) . '
                 </span>
-                <p style="margin-top: 20px;">Aquest codi és vàlid durant 48 hores.</p>
+                <p style="margin-top: 20px; font-size: 0.875rem;">Aquest codi és vàlid durant 48 hores.</p>
                 <p>Per confirmar, fes clic aquí: 
                     <a href="register.php?validacio=' . $validacioParam . '" 
-                       style="background-color: #4CAF50; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;">
+                       style="background-color: #FF6B6B; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block; font-size: 1rem; font-weight: 600;">
                        Confirmar
                     </a>
                 </p>
             </div>
             <p>Si no has sol·licitat aquest codi, pots ignorar aquest missatge.</p>
-            <p style="margin-top: 20px;">Salutacions,<br><strong>L\'equip d\'IETinder</strong></p>
+            <p style="margin-top: 20px; font-size: 0.875rem; color: #718096;">Salutacions,<br><strong>L\'equip d\'IETinder</strong></p>
         </div>
     </body>
     </html>
 ';
-
     // Cabeceras
     $cabeceras = 'MIME-Version: 1.0' . "\r\n";
     $cabeceras .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
@@ -362,23 +370,8 @@ function uploadImage($file)
 
 // funcion para insertar el usuario en la base de datos, pasamos todos los valores, incluyendo la fecha de 
 // expiracion, la validacion y el codigo de validacion, que se envia por correo
-function insertUserInDatabase(
-    $email,
-    $password,
-    $name,
-    $surname,
-    $alias,
-    $birth_date,
-    $latitude,
-    $longitude,
-    $sex,
-    $sexual_orientation,
-    $creation_date,
-    $expirate_date,
-    $validated,
-    $validateCode,
-    // $path_image
-) {
+function addUserToDatabase($email, $password, $name, $surname, $alias, $birth_date, $latitude, $longitude, $sex, $sexual_orientation, $last_login_date, $creation_date, $validated, $expirate_date, $validate_code)
+{
     try {
         // Inicializamos la conexión con la base de datos
         $pdo = startPDO();
@@ -386,19 +379,15 @@ function insertUserInDatabase(
             throw new Exception("No se pudo conectar a la base de datos.");
         }
 
-        // Hash de la contraseña
-        $hashedPassword = hash('sha512', $password);
-
-        // Consulta SQL para insertar los datos en la base de datos
-        $sql = "INSERT INTO users (email, password, name, surname, alias, birth_date, latitude, longitude,
-         sex, sexual_orientation, creation_date, expitare_date, validated, validateCode)
-                VALUES (:email, :password, :name, :surname, :alias, :birth_date, :latitude, 
-                :longitude, :sex, :sexual_orientation, CURRENT_TIMESTAMP, :expirate_date, :validated, :validateCode)";
+        // Consulta SQL para insertar el usuario
+        $sql = "INSERT INTO users (email, password, name, surname, alias, birth_date, latitude, longitude, sex, sexual_orientation, last_login_date, creation_date, distance_user_preference, min_age_user_preference, max_age_user_preference, validated, expirate_date, validate_code)
+                VALUES (:email, SHA2(:password, 512), :name, :surname, :alias, :birth_date, :latitude, :longitude, :sex, :sexual_orientation, :last_login_date, :creation_date, DEFAULT, DEFAULT, DEFAULT, :validated, :expirate_date, :validate_code)";
+        
         $stmt = $pdo->prepare($sql);
 
         // Vinculamos los parámetros
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
-        $stmt->bindParam(':password', $hashedPassword, PDO::PARAM_STR);
+        $stmt->bindParam(':password', $password, PDO::PARAM_STR);
         $stmt->bindParam(':name', $name, PDO::PARAM_STR);
         $stmt->bindParam(':surname', $surname, PDO::PARAM_STR);
         $stmt->bindParam(':alias', $alias, PDO::PARAM_STR);
@@ -407,30 +396,27 @@ function insertUserInDatabase(
         $stmt->bindParam(':longitude', $longitude, PDO::PARAM_STR);
         $stmt->bindParam(':sex', $sex, PDO::PARAM_STR);
         $stmt->bindParam(':sexual_orientation', $sexual_orientation, PDO::PARAM_STR);
+        $stmt->bindParam(':last_login_date', $last_login_date, PDO::PARAM_STR);
         $stmt->bindParam(':creation_date', $creation_date, PDO::PARAM_STR);
+        $stmt->bindParam(':validated', $validated, PDO::PARAM_INT);
         $stmt->bindParam(':expirate_date', $expirate_date, PDO::PARAM_STR);
-        $stmt->bindParam(':validated', $validated, PDO::PARAM_STR);
-        $stmt->bindParam(':validateCode', $validateCode, PDO::PARAM_STR);
-        // $stmt->bindParam(':imagePath', $path_image, PDO::PARAM_STR);
-
-        // hay que añadir la imagen a la tabla de imagenes
+        $stmt->bindParam(':validate_code', $validate_code, PDO::PARAM_STR);
 
         // Ejecutamos la consulta
         $stmt->execute();
 
-        // Cerramos la conexión
+        // Cerramos conexión
         unset($stmt);
         unset($pdo);
 
-        // Si todo ha ido bien, devolvemos true
+        // Retornamos true si se insertó correctamente
         return true;
 
     } catch (PDOException $e) {
-        // En caso de error con la base de datos, registramos el error y devolvemos false
-        logOperation("Error al insertar usuario en la base de datos: " . $e->getMessage(), "ERROR");
+        // En caso de error, mostramos un mensaje y lo registramos
+        logOperation("Error en la consulta: " . $e->getMessage(), "ERROR");
         return false;
     } catch (Exception $e) {
-        // En caso de error general, registramos el error y devolvemos false
         logOperation("Error general: " . $e->getMessage(), "ERROR");
         return false;
     }
@@ -438,34 +424,81 @@ function insertUserInDatabase(
 
 // funcion para comprobar si el correo y el codigo son validos para mas adelante dar validacion al usuario
 // en la base de datos
+
 function isEmailAndCodeValid($email, $code)
+{
+    try {
+        // Inicializamos la conexión con la base de datos
+        $pdo = startPDO();
+        if (!$pdo) {
+            throw new Exception("No se pudo conectar a la base de datos.");
+        }
+
+        // Consulta SQL para buscar el email y el código de validación
+        $sql = "SELECT validate_code FROM users WHERE email = :email";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+        $stmt->execute();
+
+        // Verificamos si se encontró el email
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // Cerramos conexión
+        unset($stmt);
+        unset($pdo);
+
+        // Si no se encuentra el usuario o el código no coincide, devolvemos false
+        if (!$user || $user['validate_code'] !== $code) {
+            return false;
+        }
+
+        // Si el código es correcto, devolvemos true
+        return true;
+
+    } catch (PDOException $e) {
+        // En caso de error, mostramos un mensaje y salimos
+        logOperation("Error en la conexión: " . $e->getMessage(), "ERROR");
+        return false;
+    } catch (Exception $e) {
+        logOperation("Error general: " . $e->getMessage(), "ERROR");
+        return false;
+    }
+}
+
+
+// funcion para cambiar la validacion el la base de datos y permitir al usuario hacer login
+function setEmailValidated($email)
 {
     try {
         // Inicializa la conexión PDO
         $pdo = startPDO();
 
-        // Prepara la consulta
-        $stmt = $pdo->prepare("SELECT COUNT(*) FROM users WHERE email = :email AND validation_code = :code");
+        // Prepara la consulta SQL para actualizar el campo 'validated'
+        $sql = "UPDATE users SET validated = 1 WHERE email = :email";
+        $stmt = $pdo->prepare($sql);
 
-        // Vincula los parámetros
+        // Vincula el parámetro de correo electrónico
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
-        $stmt->bindParam(':code', $code, PDO::PARAM_STR);
 
         // Ejecuta la consulta
         $stmt->execute();
 
-        // Obtiene el resultado (número de coincidencias)
-        $count = $stmt->fetchColumn();
-
-        // Devuelve true si hay coincidencias, false en caso contrario
-        return $count > 0;
-    } catch (PDOException $e) {
-        // Manejo de errores (opcional)
-        error_log("Error en la consulta: " . $e->getMessage());
+        // Verifica si se actualizó alguna fila
+        if ($stmt->rowCount() > 0) {
+            // Si se actualizó, retorna true
+            logOperation("El email '$email' ha sido validado correctamente.", "INFO");
+            return true;
+        } else {
+            // Si no se actualizó, significa que el correo no existe
+            logOperation("No se encontró el email '$email' para validar.", "WARNING");
+            return false;
+        }
+    } catch (Exception $e) {
+        // Maneja cualquier error
+        logOperation("Error al validar el email '$email': " . $e->getMessage(), "ERROR");
         return false;
     }
 }
-
 
 $errors = [];
 // FINAL DEL PHP
@@ -497,12 +530,13 @@ $errors = [];
             </div>
 
 
-            <div class="error-message" id="error-message">
 
-            </div>
 
             <form method="POST" action="">
                 <div id="content-register">
+                    <div class="error-message" id="error-message">
+
+                    </div>
                     <div class="input-group ">
                         <label for="name">Nom</label>
                         <input type="text" id="name" name="name" value="">
@@ -582,7 +616,7 @@ $errors = [];
 
 </html>
 
-
+<script src="register.js"></script>
 <script>
     // INICIO DEL JS
 
@@ -598,79 +632,13 @@ $errors = [];
         // capturamos los datos del formulario
         const formElement = document.getElementsByTagName("form")[0];
         console.log(formElement);
-        formElement.addEventListener("submit", async (event) => {
-            event.preventDefault(); // Evita el recargado de la página
+        formElement.addEventListener("submit", sendRegisterForm);
 
-            const dataRegisterForm = new FormData(formElement);
-            const areErrors = validateData(dataRegisterForm); // Valida los datos y devuelve errores
-            console.log(dataRegisterForm);
-            console.log('detecta que Hay algun error, hay ' + areErrors.length + ' errores.');
-            console.log(areErrors);
-            // Selecciona el primer elemento con la clase "error-message"
-            const errorDiv = document.getElementById("error-message");
-
-
-            errorDiv.innerHTML = ''; // Limpiar errores anteriores
-
-            if (areErrors && areErrors.length > 0) {
-                console.log('detecta que Hay algun error, hay ' + areErrors.length + ' errores.');
-                // Si hay errores, agregarlos al contenedor
-                areErrors.forEach(error => {
-                    const pElement = document.createElement("p");
-                    pElement.textContent = error;
-                    errorDiv.appendChild(pElement);
-                });
-
-
-            } else {
-                console.log('No hay errores.');
-
-                // Convertir FormData a JSON para enviarlo en el cuerpo de la solicitud
-                const dataObject = {};
-                dataRegisterForm.forEach((value, key) => {
-                    dataObject[key] = value;  // Rellenamos un objeto con los datos del FormData
-                });
-
-
-                try {
-
-                    // enviamos el email para comprobar si este existe
-                    const sendEmail = document.getElementById("email").value
-
-                    const response = await fetch('register.php', {
-                        method: 'POST',
-
-                        // coger el email por .value en vez de enviar todo el form
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ endpoint: "register", form: dataObject, email: sendEmail })
-                        // enviar los datos del formulario para verificar si el usuario existe
-                    });
-
-                    if (response.ok) {
-                        // Si el usuario no existe, seguimos y enviamos un una solicitud 
-                        // al servidor para enviar el correo de validacion, y lo añadimos a la base de datos
-                        const register = await response.json();
-                        console.log(register.message);
-
-
-
-                    } else {
-                        console.log(register.message);
-                        console.log('error en la respuesta del server');
-                    }
-
-
-                } catch (error) {
-                    console.log('Error al comunicarse con el servidor: ' + error);
-                }
-            }
-
-
-
-        });
     });
 
 
+
+    
 
     // FINAL DEL JS
 </script>

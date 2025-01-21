@@ -134,7 +134,7 @@ body.errors main#content a {
     margin: 10 auto 30px;
 }
 
-.body-register  div#showErrors p{
+.body-register  div#error-message p{
     text-align: center;
     color: red;
 }
