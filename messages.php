@@ -15,11 +15,64 @@ logOperation("Session started in messages.php for user ".$_SESSION['user'], "INF
 // Store loggedUser Object
 $loggedUser = searchUserInDatabase("*", "users", $_SESSION['user']);
 
+//GET MATCH ID
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['getMatchID'])) {
+    try {
+        $alias = $_GET['getMatchID'];
 
+        // Initialize BBDD
+        $pdo = startPDO();
+
+        // SQL query
+        $sql = "SELECT m.match_ID
+                FROM matches m
+                JOIN users u1 ON (m.participant1 = u1.user_ID OR m.participant2 = u1.user_ID)
+                JOIN users u2 ON (m.participant1 = u2.user_ID OR m.participant2 = u2.user_ID)
+                WHERE u1.user_ID = :user
+                AND u2.alias = :alias;";
+        
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindValue(':user', $loggedUser["user_ID"], PDO::PARAM_INT);
+        $stmt->bindValue(':alias', $alias, PDO::PARAM_STR);
+        $stmt->execute();
+        $match = $stmt->fetchColumn(); //Devuelve el match_ID si existe
+
+        // Verifica si se encontró un match
+        if ($match === false) {
+            echo json_encode(['success' => false, 'message' => 'No se encontraron resultados.']);
+        } else {
+            logOperation("Successfully got matchID from user_ID: ".$loggedUser["user_ID"]." and ".$alias." messages.php in GET method getMatchID" , "INFO");
+            echo json_encode(['success' => true, 'match_ID' => $match]);
+        }
+        exit;
+
+    } catch (PDOException $e) {
+        logOperation("Connection error in messages.php for user_ID: ".$loggedUser["user_ID"]." and ".$alias." in GET method getMatchID: " . $e->getMessage(), "ERROR");
+        echo json_encode(['success' => false, 'message' => 'Error en la conexión: ' . $e->getMessage()]);
+        exit;
+    }
+}
+
+// GET LOGGED USER
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['action'] === 'getLoggedUserID') {
+    try {
+        logOperation("Successfully got UserID from logged user ".$loggedUser["user_ID"]." messages.php in GET method getLoggedUserID" , "INFO");
+        echo json_encode(['success' => true, 'message' => array_values($loggedUser)]);
+        exit;
+
+    } catch (PDOException $e) {
+
+        logOperation("Connection error in messages.php for user ".$loggedUser["user_ID"]." in GET method getLoggedUserID: " . $e->getMessage(), "ERROR");
+        echo json_encode(['success' => false, 'message' => 'Error en la conexión: ' . $e->getMessage()]);
+        exit;
+
+    }
+}    
+
+//GET MATCHES
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['action'] === 'get_matches') {
 
     try {
-
           // Initialize BBDD
         $pdo = startPDO();
 
@@ -41,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
                     SELECT photo_ID, user_ID, path
                     FROM photos
                     WHERE (user_ID, photo_ID) IN (
-                        SELECT user_ID, MAX(photo_ID) AS max_photo_ID
+                        SELECT user_ID, MIN(photo_ID) AS max_photo_ID
                         FROM photos
                         GROUP BY user_ID
                     )
@@ -95,11 +148,89 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
     }
 }    
 
+//GET CONVERSATION
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['getConversation'])) {
+    
+    try {
+        $alias = $_GET['getConversation'];
+        $user = $loggedUser["user_ID"];
+
+        $pdo = startPDO();
+        $sql = "SELECT c.* 
+                FROM conversations c
+                INNER JOIN matches m ON c.match_ID = m.match_ID
+                WHERE m.match_ID = (
+                    SELECT match_ID
+                    FROM matches
+                    WHERE (participant1 = :user AND participant2 = (
+                        SELECT user_ID 
+                        FROM users 
+                        WHERE alias = :alias
+                    )) OR (participant1 = (
+                        SELECT user_ID 
+                        FROM users 
+                        WHERE alias = :alias
+                    ) AND participant2 = :user)
+                )
+            ";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':alias', $alias);
+        $stmt->bindParam(':user', $user);
+        $stmt->execute();
+        $conversation = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        unset($stmt);
+        unset($pdo);
+
+        logOperation("Successfully got conversation from match " . $matchID . " messages.php in GET method getConversation", "INFO");
+        echo json_encode(['success' => true, 'message' => array_values($conversation)]);
+        exit;
+
+    } catch (PDOException $e) {
+
+        logOperation("Connection error in messages.php from match " . $matchID . " in GET method getConversation: " . $e->getMessage(), "ERROR");
+        echo json_encode(['success' => false, 'message' => 'Error en la conexión: ' . $e->getMessage()]);
+        exit;
+
+    }
+}
+
+//GET USER NAME AND IMAGE
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['getUserNameAndImage'])) {
+    
+    try {
+        $alias = $_GET['getUserNameAndImage'];
+
+        $pdo = startPDO();
+        $sql = "SELECT u.name, p.path, TIMESTAMPDIFF(YEAR, u.birth_date, CURDATE()) AS age
+                FROM users u 
+                LEFT JOIN photos p ON u.user_ID = p.user_ID 
+                WHERE u.alias = :alias LIMIT 1;";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':alias', $alias);
+        $stmt->execute();
+        $user = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        unset($stmt);
+        unset($pdo);
+
+        logOperation("Successfully got UserName and Image from user alias: " . $alias . " messages.php in GET method getUserNameAndImage", "INFO");
+        echo json_encode(['success' => true, 'message' => array_values($user)]);
+        exit;
+
+    } catch (PDOException $e) {
+
+        logOperation("Connection error in messages.php for user alias: " . $alias . " in GET method getUserNameAndImage: " . $e->getMessage(), "ERROR");
+        echo json_encode(['success' => false, 'message' => 'Error en la conexión: ' . $e->getMessage()]);
+        exit;
+
+    }
+}
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     try {
-
         // Gets input from the request
         $input = json_decode(file_get_contents('php://input'), true);
 
@@ -119,14 +250,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Gets endpoint and redirects to function that will handle the AJAX call
         switch ($input['endpoint']){
-        
+            case "insertMessage":
+                $matchID = $input['matchID'] ?? null;
+                $senderID = $input['senderID'] ?? null;
+                $messageContent = $input['messageContent'] ?? null;
+                insertMessage($matchID, $senderID, $messageContent);
+                break;
             case "insertLog":
                 logOperation($input["logMessage"], $input["type"]);
                 logOperation("Successfully inserted log from client: ".$input["logMessage"], $input["type"]);
                 echo json_encode(['success' => true, 'message' => "Log inserit correctament"]);
                 exit;
                 
-                break;
             default: // In case of 
                 logOperation("Endpoint not found for POST request in messages.php. Endpoint sended: ".$input["logMessage"], "ERROR");
                 echo json_encode(['success' => false, 'message' => 'Endpoint desconegut.']);
@@ -139,6 +274,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 }
+
+
+
+//Funcion para insertar mensajes en la BBDD
+function insertMessage($matchID, $senderID, $messageContent){
+       
+    try {
+        $pdo = startPDO();
+
+        $sql = "INSERT INTO conversations (match_ID, sender_id, content) VALUES (:matchID, :senderID, :messageContent)";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':matchID', $matchID);
+        $stmt->bindParam(':senderID', $senderID);
+        $stmt->bindParam(':messageContent', $messageContent);
+        $stmt->execute();
+        
+        unset($stmt);
+        unset($pdo);
+
+        logOperation("Message inserted in match $matchID conversation, sender is $senderID , content is: $messageContent , in FUNCTION insertMessage", "INFO");
+        echo json_encode(['success' => true, 'message' => "Missatge enviat per usuari $senderID , en el chat del match $matchID , amb el contingut $messageContent"]);
+        exit;
+
+    } catch (PDOException $e) {
+        logOperation("Connection error in messages.php for match $matchID conversation, sender is $senderID , content is: $messageContent in FUNCTION insertMessage: " . $e->getMessage(), "ERROR");
+        echo json_encode(['success' => false, 'message' => 'Error en la conexión: ' . $e->getMessage()]);
+        exit;
+    }
+}
+
+
 ?>
 
 <!DOCTYPE html>
@@ -161,6 +327,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <p class="find">Cercar</p>
             </header>
 
+            <!-- CONTENIDO MESSAGES -->
             <main id="content" class="content messages">
                 <div id="container-without-messages">
                     <h2>Els meus matches</h2>
@@ -169,6 +336,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <h2>Missatges</h2>
                 </div>
             </main>
+
+            <!--CONTENIDO CHAT -->
+            <main id="chat-page" style="display:none" >
+
+                <!-- Menú de chat-->
+                <div class="chat-header">
+                    <div class="chat-header-left">
+                        <a id="goBackToMessages" href="messages.php">🡄</a>
+                        <img id="chat-image" src="/images/user1_photo1.jpg">
+                        <h3 id="chat-name"></h3>
+                    </div>
+                    <div class="chat-header-right">
+                        <button id="submenu-button" class="button-submenu">· · ·</button>
+                    </div>
+
+                </div>
+                <!-- Botones de las tabs -->
+                <div class="chat-tabs">
+                    <button class="tablinks" onclick="openTab(event, 'chatTabs-chat')"
+                        id="defaultOpen">Conversa</button>
+                    <button class="tablinks" onclick="openTab(event, 'chatTabs-profile')">Perfil</button>
+                </div>
+
+                <!-- TAB de CHAT -->
+                <div id="chatTabs-chat" class="tabcontent">
+                    <!-- Div para los mensajes -->
+                    <div id="chat-messages-container">
+                    </div>
+                    <!-- Div para escribir -->
+                    <div id="chat-input-container">
+                        <input type="text" id="chat-text-input">
+                        <button id="chat-send-button">⮞</button>
+                    </div>
+                </div>
+
+                <!-- TAB de PERFIL -->
+                <div id="chatTabs-profile" class="tabcontent">
+                    <img id="profileTab-img" src="" alt="profile picture">
+                    <div id="profileTab-info">
+                        <h2 id="profileTab-name"></h2>
+                        <h3 id="profileTab-age"></h3>
+                    </div>
+
+                </div>
+            </main>
+
 
             <nav>
                 <ul>
