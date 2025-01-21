@@ -99,7 +99,13 @@ function updateUserData($userData)
     }
 }
 
-
+//Funcion de calcular edad
+function calculateAge($birthDate) {
+    $birthDate = new DateTime($birthDate);
+    $today = new DateTime('today');
+    $age = $birthDate->diff($today)->y;
+    return $age;
+}
 
 // guardamos todos los datos del usuario para mostrarlos en el formulario
 $perfilDates = searchInDatabase("*", "users", $loggedUserId);
@@ -118,7 +124,36 @@ $perfilDates = searchInDatabase("*", "users", $loggedUserId);
 <script>
 
     // funcion para guardar los datos en la base de datos sin recargar la pagina
-    document.addEventListener("DOMContentLoaded", () => {
+    document.addEventListener("DOMContentLoaded", async () => {
+        // Función para mostrar la tab seleccionada
+        window.openTab = function(evt, tabName) {
+            var i, tabcontent, tablinks;
+
+            // Ocultar todo el contenido de las tabs
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+                tabcontent[i].classList.remove("activeTab");
+            }
+
+            // Desactivar todos los botones
+            tablinks = document.getElementsByClassName("profile-tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("activeTab");
+            }
+
+            // Mostrar la tab seleccionada
+            document.getElementById(tabName).style.display = "block";
+            document.getElementById(tabName).classList.add("activeTab");
+
+            // Activar el botón correspondiente
+            evt.currentTarget.classList.add("activeTab");
+            
+        };
+
+    // Abrir la primera tab por defecto
+    document.getElementById("defaultOpen").click();
+
 
         /* SUBMIT FUNCTIONALITY ----------------------------------------------------------------------------- */ 
         const submenuButton = document.getElementById("submenu-button");
@@ -202,7 +237,71 @@ $perfilDates = searchInDatabase("*", "users", $loggedUserId);
             }
         }
         });
+
+        // Fetch de las fotos para el perfil
+        photosOfUser = await fetchLoggedUserPhotos();
+        renderUserPhotos(photosOfUser);
+
     });
+
+
+    function renderUserPhotos(userPhotos){
+
+        // Delete all html inside the main content Div
+        const container = document.getElementById('profile-image-content');
+        //container.innerHTML = ''; 
+
+        // IMAGE 
+        // TE FALTARÁ EL USER O DONDE SEA QUE TENGAS LA IMAGEN
+        const image = document.getElementById('user-image');
+        image.src = userPhotos[0].path;
+
+        /* IMAGE CARROUSELL*/
+
+        /* LOS BOTONCITOS*/ 
+        let carrouselContainer = null;
+        if (userPhotos.length > 1) {
+
+            carrouselContainer = document.createElement('div');
+            carrouselContainer.id = "carrousel-container";
+
+            let currentIndex = 0;
+            const dots = [];
+
+            userPhotos.map((photo , i) => {
+                const dot = document.createElement('span');
+                dot.classList.add('dot');
+                dots.push(dot);
+                if (i === 0) dot.classList.add('active');
+                carrouselContainer.appendChild(dot);
+            })
+
+            console.log(dots);
+
+            carrouselContainer.addEventListener("click", handleCarouselClick) 
+
+            function handleCarouselClick() {
+                
+                currentIndex += 1;
+
+                if (currentIndex >= userPhotos.length) {
+                    currentIndex = 0;
+                }
+
+                image.src = userPhotos[currentIndex].path;
+
+                dots.map(dot => dot.classList.remove('active'));
+                dots[currentIndex].classList.add('active');
+            }
+
+        }
+
+        if(carrouselContainer) {
+            container.insertBefore(carrouselContainer, container.lastElementChild);
+        }
+
+    }
+
 
     /* SUBMIT FUNCTIONALITY ----------------------------------------------------------------------------- */ 
     function renderSubmenu() {
@@ -276,15 +375,20 @@ $perfilDates = searchInDatabase("*", "users", $loggedUserId);
                 <button id="submenu-button" class="button-submenu">· · ·</button>
             </header>
 
-            <main id="content" class="profile content">
 
+
+            <!-- Botones de las tabs -->
+            <div class="profile-tabs">
+                <button class="profile-tablinks" onclick="openTab(event, 'profileTabs-edit')"
+                    id="defaultOpen">Editar</button>
+                <button class="profile-tablinks" onclick="openTab(event, 'profileTabs-view')">Veure</button>
+            </div>
+
+
+            <main id="profileTabs-edit" class="profile content tabcontent">
                 <div id="content-profile">
-
                 <div id="showErrors">
-
-
                 </div>
-                   
                     <div id="infoPerfil">
                         <form id="edit-profile-form" action="" method="POST" enctype="multipart/form-data">
                             <!-- Nombre -->
@@ -349,9 +453,20 @@ $perfilDates = searchInDatabase("*", "users", $loggedUserId);
                         <a id="linkChangeImagePerfil" href="#" target="_blank">Modificar les meves fotos</a>
                     </div>
                 </div>
+            </main>
 
+            <main id="profileTabs-view" class="tabcontent">
+                <div id="profile-image-content">
+                    <img id="user-image" src="" alt="photoof<?php echo htmlspecialchars($perfilDates['name']); ?>">
+                    <div id="info-container">
+                        <h2><?php echo htmlspecialchars($perfilDates['name']); ?></h2>
+                        <h3><?php echo htmlspecialchars(calculateAge($perfilDates['birth_date'])); ?></h3>
+                    </div>
+                </div>
 
             </main>
+
+
 
             <nav>
                 <ul>

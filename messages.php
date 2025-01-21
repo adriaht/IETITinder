@@ -338,7 +338,7 @@ function insertMessage($matchID, $senderID, $messageContent){
             </main>
 
             <!--CONTENIDO CHAT -->
-            <main id="chat-page"style="display:none" >
+            <main id="chat-page" style="display:none" >
 
                 <!-- Menú de chat-->
                 <div class="chat-header">
