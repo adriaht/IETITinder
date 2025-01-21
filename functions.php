@@ -46,15 +46,18 @@ function searchUserInDatabase($whatYouWant, $whereYouWant, $userYouWant) {
         $stmt->bindParam(':loggedUserId', $userYouWant);
         $stmt->execute();
 
+        logOperation("[FUNCTIONS.PHP] Query to get data of user $userYouWant in function searchUserInDatabase: $sql");
+
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if (!$data) {
 
-            logOperation("No data found for user $userYouWant in function searchUserInDatabase in discover.php", "INFO");
+            logOperation("[FUNCTIONS.PHP] No data found for user $userYouWant in function searchUserInDatabase");
             die("Data not found");
         }
 
-        logOperation("Found data for $userYouWant in function searchUserInDatabase in discover.php" , "INFO");
+        logOperation("[FUNCTIONS.PHP] Found for user $userYouWant in function searchUserInDatabase");
+
         // Cerramos conexión
         unset($stmt);
         unset($pdo);
@@ -63,7 +66,7 @@ function searchUserInDatabase($whatYouWant, $whereYouWant, $userYouWant) {
 
     } catch (PDOException $e) {
 
-        logOperation("Connection error in searchUserInDatabase function in discover.php: " . $e->getMessage(), "ERROR");
+        logOperation("[FUNCTIONS.PHP] Connection error in searchUserInDatabase function" . $e->getMessage(), "ERROR");
         die("Connection error: " . $e->getMessage());
     }
 

@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $pdo = startPDO();
         
         if (!$pdo) {
-            logOperation("Error conection in login.php" , "ERROR");
+            logOperation("Error conection" , "ERROR");
             $errors['db'] = 'Error de connexió. Torna-ho a intentar més tard.';
         } else {
             // Verify email
@@ -77,8 +77,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $user = $stmt->fetch();
 
             if (!$user) {
-                logOperation("Email or password incorrect in login.php" , "ERROR");
+
+                logOperation("Email or password incorrect" , "ERROR");
                 $errors['email'] = 'Correu electrònic o contrasenya incorrecte';
+                
             } else {
                 // Verify password
                 $stmtpwd = $pdo->prepare("SELECT COUNT(*) FROM users WHERE email = :email AND password = SHA2(:password, 512)");
@@ -89,19 +91,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $passwordCorrecta = $stmtpwd->fetchColumn();
 
                 if (!$passwordCorrecta) {
-                    logOperation("Password incorrect in login.php" , "ERROR");
+
+                    logOperation("Password incorrect in $email" , "ERROR");
                     $errors['password'] = 'Contrasenya incorrecta';
+                    
                 } else {
-                    logOperation("Login successful in login.php" , "INFO");
-                    $updateStmt = $pdo->prepare("UPDATE users SET last_login_date = CURRENT_TIMESTAMP WHERE user_ID = :id");
-                    $updateStmt->bindParam(':id', $user['user_ID']);
-                    $updateStmt->execute();
+
+                    $stmtvalid= $pdo->prepare("SELECT validated FROM users WHERE email = :email");
+                    $stmtvalid->bindParam(':email', $email);
+                    $stmtvalid->execute();
                     
-                    $_SESSION['user'] = $user['user_ID'];
-                    
-                    logOperation("User " . $user['user_ID'] . " logged in", "INFO");
-                    header('Location: discover.php');
-                    exit;
+                    $validated = $stmtvalid->fetchColumn();
+
+                    if (!$validated) {
+
+                        logOperation("User $email not validated" , "ERROR");
+                        $errors['validation'] = 'Usuari no validat';
+
+                    } else {
+
+                        logOperation("Login $email successful" , "INFO");
+                        $updateStmt = $pdo->prepare("UPDATE users SET last_login_date = CURRENT_TIMESTAMP WHERE user_ID = :id");
+                        $updateStmt->bindParam(':id', $user['user_ID']);
+                        $updateStmt->execute();
+                        
+                        $_SESSION['user'] = $user['user_ID'];
+                        
+                        logOperation("User " . $user['user_ID'] . " logged in", "INFO");
+                        header('Location: discover.php');
+                        exit;
+                    }
+
+                   
                 }
             }
         }
@@ -117,9 +138,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IETinder</title>
+    <title>IETinder - Login</title>
     <link rel="stylesheet" type="text/css" href="/styles.css?t=<?php echo time();?>" />
-    <script src="index.js"></script>
+
 </head>
 <body class="body-login">
     <div class="container">
@@ -138,6 +159,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             echo htmlspecialchars($errors['password']);
                         } elseif (isset($errors['db'])) {
                             echo htmlspecialchars($errors['db']);
+                        }  elseif (isset($errors['validation'])) {
+                            echo htmlspecialchars($errors['validation']);
                         }
                         ?>
                     </div>
@@ -160,12 +183,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <div class="links-group">
                     <a href="#" class="secondary-link">¿Has oblidat la contrasenya?</a>
-                    <a href="#" class="secondary-link">Crea una compte nova</a>
+                    <a href="register.php" class="secondary-link">Crea una compte nova</a>
                 </div>
             </form>
 
         </div>
     </div>
-    <script src="index.js"></script>
+
 </body>
 </html>

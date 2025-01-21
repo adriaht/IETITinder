@@ -157,6 +157,7 @@ function generateWithoutMessageCard(match) {
 }
 
 function generateWithMessageCard(match) {
+
     // Create the main div container
     const withMessageContent = document.createElement('div');
     withMessageContent.classList.add('with-message-content');
@@ -191,7 +192,6 @@ function generateWithMessageCard(match) {
     withMessageContent.addEventListener("click", () => {
         generateConversation(match.alias);
     });
-
 
     // Append the created div to the body or any other parent element
     return withMessageContent;
