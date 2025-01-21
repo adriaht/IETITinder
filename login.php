@@ -12,7 +12,7 @@ session_start();
 function startPDO() {
     $hostname = "localhost";
     $dbname = "IETinder";
-    $username = "admin";
+    $username = "adminTinder";
     $password = "admin123";
 
     try {
