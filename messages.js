@@ -114,6 +114,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (messageText !=""){
             insertMessage(match_id, user_ID, messageText);
             renderTextMessage(user_ID, Date.now(), user_ID, messageText);
+            scrollToBottom();
+            console.log("SCROOOOLL");
         }
         document.getElementById("chat-text-input").value = "";//vaciamos input
     });
@@ -542,18 +544,14 @@ async function insertMessage(matchID, senderID, messageContent) {
 async function renderConversation(alias, user_ID){
     let conversation = await fetchConversation(alias); //recogemos los mensajes de la bbdd
 
-    console.log(oldconversation);
-    console.log(conversation);
-
-    if (oldconversation != conversation){ //si ha cambiado algo, recargamos chat
-        console.log("HA CAMBIADO!");
+    if (JSON.stringify(oldconversation) !== JSON.stringify(conversation)){ //si ha cambiado algo, recargamos chat
         const chatMessagesContainer = document.getElementById('chat-messages-container');
         chatMessagesContainer.innerHTML = ''; //clear
         for (let i = 0; i < conversation.length; i++) {
         const message = conversation[i];
-        renderTextMessage(user_ID, message.creation_date, message.sender_id, message.content); //llamamos a renderizar 1 mensaje
+        renderTextMessage(user_ID, message.creation_date, message.sender_id, message.content); //llamamos a renderizar 1 mensaje        
+        }
         scrollToBottom();
-    }
     }
 
     oldconversation = conversation;
@@ -624,4 +622,5 @@ function renderTextMessage(user_ID, creation_date, sender_id, content) {
     }
 
     chatContainer.appendChild(textMessage);
+    
 }
