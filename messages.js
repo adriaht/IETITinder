@@ -2,6 +2,7 @@ const matchesWithoutMessages = [];
 const matchesWithMessages = [];
 let user = [];
 let actualMatch = 0;
+let oldconversation = {};
 
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -102,7 +103,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // Abrir la primera tab por defecto
     document.getElementById("defaultOpen").click();
-    scrollToBottom();
 
     //SEND MESSAGE BUTTON
     const sendMessageButton = document.getElementById("chat-send-button");
@@ -198,18 +198,44 @@ function generateWithMessageCard(match) {
 }
 
 async function generateConversation(alias) {
+    //CHAT TAB ------------
     document.getElementById("chat-page").style.display = "block";
     document.getElementById("content").style.display = "none";
 
     let userData = await fetchUserNameAndImage(alias); //recogemos nombre y foto de la persona
     let match_ID = await fetchMatchID(alias); //recogemos el matchID
 
+    console.log("USER DATA AQUI: ", userData)
+
     document.getElementById("chat-image").src = userData[0].path;
     document.getElementById("chat-name").textContent = userData[0].name;
 
     document.getElementById("chat-name").setAttribute("match_ID", match_ID); //ponemos el match_ID en el nombre
-    
-    renderConversation(alias,user_ID);
+   
+    //definimos funcion de Ejecutar Render
+    const executeRender = () => {
+        console.log("RENDER CONVERSATION");
+        renderConversation(alias, user_ID);
+    };
+
+    //ejecutamos 1 vez para cuando se entre al chat
+    executeRender();
+
+    //hacemos que a partir de entonces se ejecute cada 5seg
+    setInterval(executeRender, 5000);
+
+    //PROFILE TAB -------------------
+
+    const image = document.getElementById('profileTab-img');
+    image.src = userData[0].path;
+    image.alt = `photo_of_,${ alias }`;
+
+    const nameText = document.getElementById('profileTab-name');
+    nameText.innerText = userData[0].name;
+
+    const ageText = document.getElementById('profileTab-age');
+    ageText.innerText = userData[0].age;
+
 }
 
 function renderNoMatchWithoutConversation() {
@@ -450,6 +476,7 @@ async function fetchUserNameAndImage(alias) {
     try {
         const response = await fetch(`messages.php?getUserNameAndImage=${encodeURIComponent(alias)}`);
         const user = await response.json();
+        console.log(user);
         if (user.success){
             insertLog("Sucessfully fetched user name and image in messages.js", "INFO");
             return user.message;
@@ -513,12 +540,23 @@ async function insertMessage(matchID, senderID, messageContent) {
 
 // Funcion para renderizar toda una conversacion
 async function renderConversation(alias, user_ID){
-    let conversation = await fetchConversation(alias); //primero recogemos los mensajes de la bbdd
+    let conversation = await fetchConversation(alias); //recogemos los mensajes de la bbdd
 
-    for (let i = 0; i < conversation.length; i++) {
+    console.log(oldconversation);
+    console.log(conversation);
+
+    if (oldconversation != conversation){ //si ha cambiado algo, recargamos chat
+        console.log("HA CAMBIADO!");
+        const chatMessagesContainer = document.getElementById('chat-messages-container');
+        chatMessagesContainer.innerHTML = ''; //clear
+        for (let i = 0; i < conversation.length; i++) {
         const message = conversation[i];
         renderTextMessage(user_ID, message.creation_date, message.sender_id, message.content); //llamamos a renderizar 1 mensaje
+        scrollToBottom();
     }
+    }
+
+    oldconversation = conversation;
 }
 
 
@@ -586,5 +624,4 @@ function renderTextMessage(user_ID, creation_date, sender_id, content) {
     }
 
     chatContainer.appendChild(textMessage);
-    scrollToBottom();
 }

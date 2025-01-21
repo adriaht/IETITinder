@@ -202,7 +202,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['getUserNameAndImage']))
         $alias = $_GET['getUserNameAndImage'];
 
         $pdo = startPDO();
-        $sql = "SELECT u.name, p.path 
+        $sql = "SELECT u.name, p.path, TIMESTAMPDIFF(YEAR, u.birth_date, CURDATE()) AS age
                 FROM users u 
                 LEFT JOIN photos p ON u.user_ID = p.user_ID 
                 WHERE u.alias = :alias LIMIT 1;";
@@ -373,7 +373,12 @@ function insertMessage($matchID, $senderID, $messageContent){
 
                 <!-- TAB de PERFIL -->
                 <div id="chatTabs-profile" class="tabcontent">
-                    <h3>Contenido Tab 2</h3>
+                    <img id="profileTab-img" src="" alt="profile picture">
+                    <div id="profileTab-info">
+                        <h2 id="profileTab-name"></h2>
+                        <h3 id="profileTab-age"></h3>
+                    </div>
+
                 </div>
             </main>
 

@@ -770,7 +770,7 @@ nav ul li a {
 
 
 
-/* MARK: CHAT */
+/* MARK: MESSAGES tab Chat */
 .chat-header {
     display: flex;
     flex-direction: row;
@@ -897,4 +897,44 @@ nav ul li a {
     padding-top: 3px;
     color: #FF6B6B;
     border-color: #FF6B6B;
+}
+
+
+/* MESSAGES Tab Profile */
+
+#chatTabs-profile{
+    position: relative;
+}
+
+
+
+#chatTabs-profile img {
+
+    width: 100%;
+    height: 500px;
+    object-fit: cover;
+    object-position: top;
+
+}
+#chatTabs-profile #profileTab-info {
+
+    position: absolute;
+    top: 74%;
+    left: 50%; /* Move the element to the center based on its left edge */
+    transform: translateX(-50%); /* Offset the element by half of its width */
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    color: white;
+
+    font-size: 1.25rem;
+
+    backdrop-filter: blur(10px);
+    padding: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5); /* Optional: add shadow */
+    border-radius: 5px;
+
+    font-family: "Poppins";
 }
