@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['validacio'])) {
 
 
                 // dar validacion al usuaro en la base de datos
-                echo "El email y el código son válidos.";
+                echo "   "."El email y el código son válidos.";
             } else {
                 echo "No se encontró ninguna coincidencia.";
             }
