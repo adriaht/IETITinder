@@ -898,42 +898,47 @@ main.profile #butonsEditProfile {
 }
 
 
-/* MARK: TABS estilos del panel de TABS*/
+/* MARK: PROFILE TABS*/
 .profile-tabs {
     padding-top: 10px;
     display: flex;
     flex-direction: row;
     justify-content: center;
-    border-bottom: 1px solid black;
 }
 
 .profile-tablinks {
-    border-top: 1px solid black;
-    border-left: 1px solid black;
-    border-right: 1px solid black;
-    border-bottom: none;
+    border-top:none;
+    border-left: none;
+    border-right: none;
     padding: 10px;
     font-size: 15px;
     cursor: pointer;
+    font-weight: bold;
+    background-color: white;
+    color:gray;
+    border-bottom: 2px solid rgb(192, 192, 192);
 }
 
-.activeTab {
+.profile-tablinks.activeTab {
     font-weight: bold;
-    border-bottom: 0;
     background-color: white;
+    color: #FF6B6B;
+    border-bottom: 2px solid #FF6B6B;
 }
 
 #profileTabs-edit{
     overflow-y: scroll;
     max-height: 638px;
+    border-bottom: none;
 
 }
 
-/* MARK: estilos de la TAB de VEURE*/
+/* MARK: PROFILE TAB VEURE*/
 
 #profileTabs-view{
     max-height: 638px;
     padding: 20px;
+    border-bottom: none;
 
 }
 
@@ -1008,12 +1013,11 @@ main.profile #butonsEditProfile {
 }
 
 
-
-
-
 /*  END PROFILE EDITION*/
 
-/* MARK : PHOTOS*/
+
+
+/* MARK: PHOTOS*/
 main.photos {
     padding: 0px 24px;
 } 
@@ -1330,7 +1334,7 @@ body.admin-panel div.dashboard {
 
 
 
-/* MARK: MESSAGES tab Chat */
+/* MARK: MESSAGES CHAT header*/
 .chat-header {
     display: flex;
     flex-direction: row;
@@ -1355,11 +1359,8 @@ body.admin-panel div.dashboard {
     margin-left: 10px;
     height: 60px;
     width: 60px;
-    object-fit: cover;
-    /* Recorta lo que sobra */
-    object-position: 50% 15%;
-    /*50% (horizontal al centro) 35% (vertical, ligeramente arriba)*/
-
+    object-fit: cover; /* Recorta lo que sobra */
+    object-position: 50% 15%; /*50% (horizontal al centro) 35% (vertical, ligeramente arriba)*/
 }
 
 #chat-name {
@@ -1368,43 +1369,50 @@ body.admin-panel div.dashboard {
 }
 
 
+/*MARK: MESSAGES CHAT TABS */
 .chat-tabs {
     padding-top: 10px;
     display: flex;
     flex-direction: row;
     justify-content: center;
-    border-bottom: 1px solid black;
 }
 
-.tablinks {
-    border-top: 1px solid black;
-    border-left: 1px solid black;
-    border-right: 1px solid black;
-    border-bottom: none;
+.chat-tablinks {
+    border-top:none;
+    border-left: none;
+    border-right: none;
+    border-bottom: 2px solid rgb(192, 192, 192);
     padding: 10px;
     font-size: 15px;
     cursor: pointer;
-}
-
-.activeTab {
+    color:gray;
     font-weight: bold;
-    border-bottom: 0;
     background-color: white;
 }
 
+.chat-tablinks.activeTab {
+    font-weight: bold;
+    background-color: white;
+    color: #FF6B6B;
+    border-bottom: 2px solid #FF6B6B;
+}
+
+
+/*MARK: CHAT tabs CHAT */
 #chatTabs-chat {
     padding: 15px;
     display: flex;
     flex-direction: column;
     height: 500px;
+    border-bottom: none;
+    color:black;
 }
 
 #chat-messages-container {
     display: flex;
     height: 460px;
     flex-direction: column;
-    flex: 1;
-    /* Ocupa todo el espacio restante dentro de #chatTabs-chat */
+    flex: 1; /* Ocupa todo el espacio restante dentro de #chatTabs-chat */
     overflow-y: auto;
 }
 
@@ -1460,14 +1468,13 @@ body.admin-panel div.dashboard {
 }
 
 
-/* MESSAGES Tab Profile */
+/* MARK: CHAT Tab PROFILE */
 
 #chatTabs-profile{
     position: relative;
     padding: 20px;
+    border-bottom: none;
 }
-
-
 
 #chatTabs-profile img {
 
@@ -1499,4 +1506,6 @@ body.admin-panel div.dashboard {
 
     font-family: "Poppins";
 }
+
+
 

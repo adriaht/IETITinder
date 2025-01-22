@@ -354,9 +354,9 @@ function insertMessage($matchID, $senderID, $messageContent){
                 </div>
                 <!-- Botones de las tabs -->
                 <div class="chat-tabs">
-                    <button class="tablinks" onclick="openTab(event, 'chatTabs-chat')"
+                    <button class="chat-tablinks" onclick="openTab(event, 'chatTabs-chat')"
                         id="defaultOpen">Conversa</button>
-                    <button class="tablinks" onclick="openTab(event, 'chatTabs-profile')">Perfil</button>
+                    <button class="chat-tablinks" onclick="openTab(event, 'chatTabs-profile')">Perfil</button>
                 </div>
 
                 <!-- TAB de CHAT -->
