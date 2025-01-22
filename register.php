@@ -355,7 +355,7 @@ function sendValidateEmail($email, $code)
     $validacioParam = $encryptedEmail . "_" . $encryptedCode;
 
     // Parámetros del correo
-    $from = "super@tinder5.ieti.site";
+    $from = "tinder5@ieticloudpro.ieti.site";
     $to = $email;
     $subject = 'Aquest és un codi de validació';
 
