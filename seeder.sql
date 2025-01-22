@@ -272,7 +272,7 @@ VALUES
 (55, 'jpg', '/images/user55_photo2.jpg'),
 (56, 'jpg', '/images/user56_photo1.jpg'),
 (56, 'jpg', '/images/user56_photo2.jpg'),
-(57, 'jpg', '/images/user56_photo1.jpg');
+(57, 'jpg', '/images/user57_photo1.jpg');
 
 /* SON MATCH */
 INSERT INTO interactions (`from`, `to`, `state`) VALUES (1, 4, "like");
