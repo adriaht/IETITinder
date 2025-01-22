@@ -953,7 +953,7 @@ main.profile #butonsEditProfile {
 
 #profileTabs-view #carrousel-container {
     position: absolute;
-    top: 460px;
+    top: 420px;
     left: 50%; /* Move the element to the center based on its left edge */
     transform: translateX(-50%); /* Offset the element by half of its width */
 
