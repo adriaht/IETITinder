@@ -590,16 +590,12 @@ function renderTextMessage(user_ID, creation_date, sender_id, content) {
     const chatContainer = document.getElementById("chat-messages-container");
     let lastTextMessage = chatContainer.lastElementChild; //ultimo mensaje
 
+    let messageContainer = document.createElement("div");
     let textMessage = document.createElement('p');
-
-    if (sender_id == user_ID) {
-        textMessage.classList.add("chat-me");
-    } else {
-        textMessage.classList.add("chat-you");
-    }
+    
 
     textMessage.textContent = content; //mensaje
-    textMessage.setAttribute("data-timestamp", creation_date); //timestamp
+    messageContainer.setAttribute("data-timestamp", creation_date); //timestamp
 
     //Si el contenedor no está vacío, verificamos el último mensaje
     if (lastTextMessage) {
@@ -621,6 +617,18 @@ function renderTextMessage(user_ID, creation_date, sender_id, content) {
         chatContainer.append(textTime);
     }
 
-    chatContainer.appendChild(textMessage);
+    if (sender_id == user_ID) {
+        messageContainer.classList.add("chat-me");
+    } else {
+        messageContainer.classList.add("chat-you");
+        let messageProfilePicture = document.createElement("img");
+        let picture= document.getElementById("chat-image").src;
+        messageProfilePicture.src = picture;
+        messageProfilePicture.id = "mini-chat-image";
+        messageContainer.append(messageProfilePicture);
+    }
+
+    messageContainer.append(textMessage);
+    chatContainer.appendChild(messageContainer);
     
 }

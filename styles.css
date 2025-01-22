@@ -796,6 +796,7 @@ main.profile div#content-header h4:hover {
 
 
 main.profile div#showErrors p{
+    padding-top: 20px;
     text-align: center;
     color: red;
 }
@@ -1371,7 +1372,6 @@ body.admin-panel div.dashboard {
 
 /*MARK: MESSAGES CHAT TABS */
 .chat-tabs {
-    padding-top: 10px;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -1428,18 +1428,38 @@ body.admin-panel div.dashboard {
     display: flex;
     justify-content: flex-end;
     margin: 5px;
-    background-color: rgb(251, 101, 101);
     padding: 5px;
     padding-left: 60px;
+}
+.chat-me p {
+    background-color: rgb(251, 101, 101);
+    padding: 7px;
 }
 
 .chat-you {
     display: flex;
     justify-content: flex-start;
     margin: 5px;
-    background-color: rgb(245, 171, 171);
     padding: 5px;
     padding-right: 60px;
+}
+
+.chat-you p {
+    background-color: rgb(245, 171, 171);
+    padding: 7px;
+}
+
+#mini-chat-image{
+    margin-left: 10px;
+    object-fit: cover; /* Recorta lo que sobra */
+    object-position: 50% 15%; /*50% (horizontal al centro) 35% (vertical, ligeramente arriba)*/
+    width: 40px;
+    height: 40px;
+    max-width: 40px;
+    max-height:40px;
+    min-width: 40px;
+    min-height:40px;
+    margin-right: 10px;
 }
 
 #chat-input-container {
