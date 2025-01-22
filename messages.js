@@ -87,7 +87,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
         // Desactivar todos los botones
-        tablinks = document.getElementsByClassName("tablinks");
+        tablinks = document.getElementsByClassName("chat-tablinks");
         for (i = 0; i < tablinks.length; i++) {
             tablinks[i].classList.remove("activeTab");
         }
