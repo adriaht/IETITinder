@@ -562,6 +562,7 @@ $errors = [];
                         <input type="email" id="email" name="email" value="">
                     </div>
                     <br>
+                    <label for="map">Ubicació: </label>
                     <div id="map"></div>
                     <div class="input-group">
                         <input type="number" id="latitud" name="latitude" value="" step="any">

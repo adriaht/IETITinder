@@ -3,8 +3,6 @@
 // Init sessión
 session_start();
 
-$_SESSION["user"] = 1;
-
 include("functions.php"); /* Loads search from users + logs + startPDO */ 
 
 // $_SESSION['user'] = 7;

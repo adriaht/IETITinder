@@ -126,3 +126,22 @@ function validateData(formData) {
     return errores;
 }
 
+async function fetchLoggedUserPhotos() {
+
+    try {
+
+        const response = await fetch("photos.php?action=get_user_photos");
+        const userPhotos = await response.json();
+
+        // IF SUCCESS = returns array of users data | ELSE = returns empty array
+        if (userPhotos.success){
+            return userPhotos.message;
+        } else {
+            return;
+        }
+
+    } catch (error) {
+        console.log(error)
+        return;
+    }
+}

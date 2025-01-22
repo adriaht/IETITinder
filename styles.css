@@ -796,6 +796,7 @@ main.profile div#content-header h4:hover {
 
 
 main.profile div#showErrors p{
+    padding-top: 20px;
     text-align: center;
     color: red;
 }
@@ -897,9 +898,127 @@ main.profile #butonsEditProfile {
     color: #4a5568;
 }
 
+
+/* MARK: PROFILE TABS*/
+.profile-tabs {
+    padding-top: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.profile-tablinks {
+    border-top:none;
+    border-left: none;
+    border-right: none;
+    padding: 10px;
+    font-size: 15px;
+    cursor: pointer;
+    font-weight: bold;
+    background-color: white;
+    color:gray;
+    border-bottom: 2px solid rgb(192, 192, 192);
+}
+
+.profile-tablinks.activeTab {
+    font-weight: bold;
+    background-color: white;
+    color: #FF6B6B;
+    border-bottom: 2px solid #FF6B6B;
+}
+
+#profileTabs-edit{
+    overflow-y: scroll;
+    max-height: 638px;
+    border-bottom: none;
+
+}
+
+/* MARK: PROFILE TAB VEURE*/
+
+#profileTabs-view{
+    max-height: 638px;
+    padding: 20px;
+    border-bottom: none;
+
+}
+
+#profileTabs-view img#user-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+
+}
+
+#profileTabs-view #carrousel-container {
+    position: absolute;
+    top: 460px;
+    left: 50%; /* Move the element to the center based on its left edge */
+    transform: translateX(-50%); /* Offset the element by half of its width */
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    color: white;
+
+    backdrop-filter: blur(10px);
+    padding: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5); /* Optional: add shadow */
+    border-radius: 5px;
+
+    font-family: "Poppins";
+
+    text-align: center;
+    margin-top: 10px;
+}
+
+#profileTabs-view #carrousel-container span.dot {
+    height: 10px;
+    width: 10px;
+    margin: 0 5px;
+    background-color: gray;
+    border-radius: 50%;
+    display: inline-block;
+    cursor: pointer;
+
+}
+
+#profileTabs-view #carrousel-container span.dot.active {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Optional: add shadow */
+    background-color: white;
+}
+
+
+#profileTabs-view #info-container {
+    position: absolute;
+    top: 74%;
+    left: 50%; /* Move the element to the center based on its left edge */
+    transform: translateX(-50%); /* Offset the element by half of its width */
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    color: white;
+
+    font-size: 1.25rem;
+
+    backdrop-filter: blur(10px);
+    padding: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5); /* Optional: add shadow */
+    border-radius: 5px;
+
+    font-family: "Poppins";
+}
+
+
 /*  END PROFILE EDITION*/
 
-/* MARK : PHOTOS*/
+
+
+/* MARK: PHOTOS*/
 main.photos {
     padding: 0px 24px;
 } 
@@ -1181,4 +1300,232 @@ body.admin-panel div.dashboard {
     text-align: center;
 
 }
+
+
+/* ADMIN PANEL */
+
+body.admin-panel div.dashboard {
+
+    width: 98%;
+    height: 98vh;
+    background-color: white;
+    border-radius: 25px;
+
+}
+
+body.admin-panel div.dashboard {
+
+    width: 98%;
+    height: 98vh;
+    background-color: white;
+    border-radius: 25px;
+    text-align: center;
+
+}
+
+body.admin-panel div.dashboard {
+
+    width: 99vw;
+    height: 98vh;
+    background-color: white;
+    border-radius: 25px;
+    text-align: center;
+
+}
+
+
+
+/* MARK: MESSAGES CHAT header*/
+.chat-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between
+}
+
+.chat-header-left {
+    display: flex;
+    flex-direction: row;
+    margin-left: 10px;
+    align-items: center;
+}
+
+#goBackToMessages {
+    font-size: 30px;
+    color: #FF6B6B;
+    text-decoration: none;
+    padding-top: 5px;
+}
+
+#chat-image {
+    margin-left: 10px;
+    height: 60px;
+    width: 60px;
+    object-fit: cover; /* Recorta lo que sobra */
+    object-position: 50% 15%; /*50% (horizontal al centro) 35% (vertical, ligeramente arriba)*/
+}
+
+#chat-name {
+    margin-left: 10px;
+    font-size: 24px;
+}
+
+
+/*MARK: MESSAGES CHAT TABS */
+.chat-tabs {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.chat-tablinks {
+    border-top:none;
+    border-left: none;
+    border-right: none;
+    border-bottom: 2px solid rgb(192, 192, 192);
+    padding: 10px;
+    font-size: 15px;
+    cursor: pointer;
+    color:gray;
+    font-weight: bold;
+    background-color: white;
+}
+
+.chat-tablinks.activeTab {
+    font-weight: bold;
+    background-color: white;
+    color: #FF6B6B;
+    border-bottom: 2px solid #FF6B6B;
+}
+
+
+/*MARK: CHAT tabs CHAT */
+#chatTabs-chat {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    height: 500px;
+    border-bottom: none;
+    color:black;
+}
+
+#chat-messages-container {
+    display: flex;
+    height: 460px;
+    flex-direction: column;
+    flex: 1; /* Ocupa todo el espacio restante dentro de #chatTabs-chat */
+    overflow-y: auto;
+}
+
+.chat-time {
+    font-size: 12px;
+    display: flex;
+    justify-content: center;
+    font-weight: normal;
+    margin: 7px;
+}
+
+.chat-me {
+    display: flex;
+    justify-content: flex-end;
+    margin: 5px;
+    padding: 5px;
+    padding-left: 60px;
+}
+.chat-me p {
+    background-color: rgb(251, 101, 101);
+    padding: 7px;
+}
+
+.chat-you {
+    display: flex;
+    justify-content: flex-start;
+    margin: 5px;
+    padding: 5px;
+    padding-right: 60px;
+}
+
+.chat-you p {
+    background-color: rgb(245, 171, 171);
+    padding: 7px;
+}
+
+#mini-chat-image{
+    margin-left: 10px;
+    object-fit: cover; /* Recorta lo que sobra */
+    object-position: 50% 15%; /*50% (horizontal al centro) 35% (vertical, ligeramente arriba)*/
+    width: 40px;
+    height: 40px;
+    max-width: 40px;
+    max-height:40px;
+    min-width: 40px;
+    min-height:40px;
+    margin-right: 10px;
+}
+
+#chat-input-container {
+    padding: 10px 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+#chat-text-input {
+    width: 370px;
+    border-color: #FF6B6B;
+    padding: 10px;
+}
+
+#chat-send-button {
+    display: flex;
+    width: 40px;
+    font-size: 20px;
+    justify-content: center;
+    align-items: center;
+    padding-top: 3px;
+    color: #FF6B6B;
+    border-color: #FF6B6B;
+}
+
+
+/* MARK: CHAT Tab PROFILE */
+
+#chatTabs-profile{
+    position: relative;
+    padding: 20px;
+    border-bottom: none;
+}
+
+#chatTabs-profile img {
+
+    width: 100%;
+    height: 500px;
+    object-fit: cover;
+    object-position: top;
+
+}
+#chatTabs-profile #profileTab-info {
+
+    position: absolute;
+    top: 74%;
+    left: 50%; /* Move the element to the center based on its left edge */
+    transform: translateX(-50%); /* Offset the element by half of its width */
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    color: white;
+
+    font-size: 1.25rem;
+
+    backdrop-filter: blur(10px);
+    padding: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5); /* Optional: add shadow */
+    border-radius: 5px;
+
+    font-family: "Poppins";
+}
+
+
 
