@@ -12,7 +12,7 @@ session_start();
 function startPDO() {
     $hostname = "localhost";
     $dbname = "IETinder";
-    $username = "admin";
+    $username = "adminTinder";
     $password = "admin123";
 
     try {
@@ -182,12 +182,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <div class="links-group">
                     <a href="#" class="secondary-link">¿Has oblidat la contrasenya?</a>
-                    <a href="/register.php" class="secondary-link">Crea una compte nova</a>
+                    <a href="register.php" class="secondary-link">Crea una compte nova</a>
                 </div>
             </form>
 
         </div>
     </div>
-    <script src="index.js"></script>
+
 </body>
 </html>

@@ -174,7 +174,8 @@ function renderPhotos(photoContainer, arrPhotos){
 }
 
 async function handlePhotoUpload(input) {
-
+    console.log(input);
+    console.log(input.files);
     const file = input.files[0];
     console.log(file);
 

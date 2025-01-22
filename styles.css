@@ -121,9 +121,26 @@ body.errors main#content a {
 
 
 /* MARK: LOGIN */
-/* LOGIN */
+/* LOGIN Y REGISTER*/
 
-.body-login {
+.body-register form input#latitud,
+.body-register form input#longitud{
+    display: block;
+}
+
+.body-register #map {
+    height: 23%;
+    width: 360px;
+    margin: 10 auto 30px;
+}
+
+.body-register  div#error-message p{
+    text-align: center;
+    color: red;
+}
+
+.body-login,
+.body-register {
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -140,6 +157,19 @@ body.errors main#content a {
     100% { background-position: 0% 50%; }
 }
 
+.body-register #register-card{
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+ 
+}
+
+.body-register div#content-register  {
+    height: 500px;
+    max-height: 500px;
+    overflow: auto;
+}
 
 .body-login #login-card {
     padding: 2rem;
@@ -148,11 +178,13 @@ body.errors main#content a {
     flex-direction: column;
 }
 
-.body-login .card-header {
+.body-login .card-header,
+.body-register .card-header {
     margin-bottom: 2rem;
 }
 
-.body-login .logo-login {
+.body-login .logo-login,
+.body-register .logo-register {
     text-align: center;
     margin-bottom: 1rem;
     color: #FF6B6B;
@@ -181,7 +213,9 @@ body.errors main#content a {
     color: #e53e3e;
 }
 
-.body-login label {
+.body-login label,
+.body-register label
+ {
     display: block;
     margin-bottom: 0.5rem;
     color: #4a5568;
@@ -189,7 +223,8 @@ body.errors main#content a {
     font-family: 'Montserrat', sans-serif;
 }
 
-.body-login input {
+.body-login input,
+.body-register input {
     width: 100%;
     padding: 0.75rem 1rem;
     border: 1px solid #e2e8f0;
@@ -208,7 +243,8 @@ body.errors main#content a {
     position: relative;
 }
 
-.body-login .primary-button {
+.body-login .primary-button,
+.body-register .primary-button {
     width: 100%;
     padding: 0.75rem 1rem;
     background: linear-gradient(to right, #ff6b6b, #cc2faa);
@@ -224,22 +260,26 @@ body.errors main#content a {
     font-family: 'Montserrat', sans-serif;
 }
 
-.body-login .primary-button:hover {
+.body-login .primary-button:hover,
+.body-register .primary-button:hover {
     opacity: 0.9;
 }
 
-.body-login .primary-button:disabled {
+.body-login .primary-button:disabled,
+.body-register .primary-button:disabled {
     opacity: 0.7;
     cursor: not-allowed;
 }
 
-.body-login .links-group {
+.body-login .links-group,
+.body-register .links-group {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
 }
 
-.body-login .secondary-link {
+.body-login .secondary-link,
+.body-register .secondary-link {
     color: #4a5568;
     text-decoration: none;
     font-size: 0.875rem;
@@ -247,7 +287,8 @@ body.errors main#content a {
     transition: color 0.2s;
 }
 
-.body-login .secondary-link:hover {
+.body-login .secondary-link:hover,
+.body-register .secondary-link:hover {
     color: #ff6b6b;
 }
 
@@ -259,7 +300,8 @@ body.errors main#content a {
     min-height: 1.25rem;
 }
 
-.body-login .footer-text {
+.body-login .footer-text,
+.body-register .footer-text {
     text-align: center;
     color: #718096;
     font-size: 0.875rem;
@@ -754,6 +796,7 @@ main.profile div#content-header h4:hover {
 
 
 main.profile div#showErrors p{
+    padding-top: 20px;
     text-align: center;
     color: red;
 }
@@ -764,10 +807,12 @@ main.profile div#content-profile{
     overflow:auto;
 }
 
-main.profile #map {
+main.profile div#map {
     height: 23%;
     width: 360px;
     margin: 10 auto 30px;
+    position: relative; 
+    overflow: scroll;
 }
 
 
@@ -853,9 +898,127 @@ main.profile #butonsEditProfile {
     color: #4a5568;
 }
 
+
+/* MARK: PROFILE TABS*/
+.profile-tabs {
+    padding-top: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.profile-tablinks {
+    border-top:none;
+    border-left: none;
+    border-right: none;
+    padding: 10px;
+    font-size: 15px;
+    cursor: pointer;
+    font-weight: bold;
+    background-color: white;
+    color:gray;
+    border-bottom: 2px solid rgb(192, 192, 192);
+}
+
+.profile-tablinks.activeTab {
+    font-weight: bold;
+    background-color: white;
+    color: #FF6B6B;
+    border-bottom: 2px solid #FF6B6B;
+}
+
+#profileTabs-edit{
+    overflow-y: scroll;
+    max-height: 638px;
+    border-bottom: none;
+
+}
+
+/* MARK: PROFILE TAB VEURE*/
+
+#profileTabs-view{
+    max-height: 638px;
+    padding: 20px;
+    border-bottom: none;
+
+}
+
+#profileTabs-view img#user-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+
+}
+
+#profileTabs-view #carrousel-container {
+    position: absolute;
+    top: 420px;
+    left: 50%; /* Move the element to the center based on its left edge */
+    transform: translateX(-50%); /* Offset the element by half of its width */
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    color: white;
+
+    backdrop-filter: blur(10px);
+    padding: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5); /* Optional: add shadow */
+    border-radius: 5px;
+
+    font-family: "Poppins";
+
+    text-align: center;
+    margin-top: 10px;
+}
+
+#profileTabs-view #carrousel-container span.dot {
+    height: 10px;
+    width: 10px;
+    margin: 0 5px;
+    background-color: gray;
+    border-radius: 50%;
+    display: inline-block;
+    cursor: pointer;
+
+}
+
+#profileTabs-view #carrousel-container span.dot.active {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Optional: add shadow */
+    background-color: white;
+}
+
+
+#profileTabs-view #info-container {
+    position: absolute;
+    top: 74%;
+    left: 50%; /* Move the element to the center based on its left edge */
+    transform: translateX(-50%); /* Offset the element by half of its width */
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    color: white;
+
+    font-size: 1.25rem;
+
+    backdrop-filter: blur(10px);
+    padding: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5); /* Optional: add shadow */
+    border-radius: 5px;
+
+    font-family: "Poppins";
+}
+
+
 /*  END PROFILE EDITION*/
 
-/* MARK : PHOTOS*/
+
+
+/* MARK: PHOTOS*/
 main.photos {
     padding: 0px 24px;
 } 
@@ -1030,6 +1193,9 @@ main.messages #container-with-messages #container-with-messages-content div.with
     display: flex;
     flex-direction: column;
     gap: 10px;
+    width: 320px;
+    max-height: 98px;
+    overflow: hidden;
 }
 
 main.messages #container-with-messages #container-with-messages-content div.with-message-content div.user-info-with-message-content p:first-child {
@@ -1137,4 +1303,232 @@ body.admin-panel div.dashboard {
     text-align: center;
 
 }
+
+
+/* ADMIN PANEL */
+
+body.admin-panel div.dashboard {
+
+    width: 98%;
+    height: 98vh;
+    background-color: white;
+    border-radius: 25px;
+
+}
+
+body.admin-panel div.dashboard {
+
+    width: 98%;
+    height: 98vh;
+    background-color: white;
+    border-radius: 25px;
+    text-align: center;
+
+}
+
+body.admin-panel div.dashboard {
+
+    width: 99vw;
+    height: 98vh;
+    background-color: white;
+    border-radius: 25px;
+    text-align: center;
+
+}
+
+
+
+/* MARK: MESSAGES CHAT header*/
+.chat-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between
+}
+
+.chat-header-left {
+    display: flex;
+    flex-direction: row;
+    margin-left: 10px;
+    align-items: center;
+}
+
+#goBackToMessages {
+    font-size: 30px;
+    color: #FF6B6B;
+    text-decoration: none;
+    padding-top: 5px;
+}
+
+#chat-image {
+    margin-left: 10px;
+    height: 60px;
+    width: 60px;
+    object-fit: cover; /* Recorta lo que sobra */
+    object-position: 50% 15%; /*50% (horizontal al centro) 35% (vertical, ligeramente arriba)*/
+}
+
+#chat-name {
+    margin-left: 10px;
+    font-size: 24px;
+}
+
+
+/*MARK: MESSAGES CHAT TABS */
+.chat-tabs {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.chat-tablinks {
+    border-top:none;
+    border-left: none;
+    border-right: none;
+    border-bottom: 2px solid rgb(192, 192, 192);
+    padding: 10px;
+    font-size: 15px;
+    cursor: pointer;
+    color:gray;
+    font-weight: bold;
+    background-color: white;
+}
+
+.chat-tablinks.activeTab {
+    font-weight: bold;
+    background-color: white;
+    color: #FF6B6B;
+    border-bottom: 2px solid #FF6B6B;
+}
+
+
+/*MARK: CHAT tabs CHAT */
+#chatTabs-chat {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    height: 500px;
+    border-bottom: none;
+    color:black;
+}
+
+#chat-messages-container {
+    display: flex;
+    height: 460px;
+    flex-direction: column;
+    flex: 1; /* Ocupa todo el espacio restante dentro de #chatTabs-chat */
+    overflow-y: auto;
+}
+
+.chat-time {
+    font-size: 12px;
+    display: flex;
+    justify-content: center;
+    font-weight: normal;
+    margin: 7px;
+}
+
+.chat-me {
+    display: flex;
+    justify-content: flex-end;
+    margin: 5px;
+    padding: 5px;
+    padding-left: 60px;
+}
+.chat-me p {
+    background-color: lightgray;
+    padding: 7px;
+}
+
+.chat-you {
+    display: flex;
+    justify-content: flex-start;
+    margin: 5px;
+    padding: 5px;
+    padding-right: 60px;
+}
+
+.chat-you p {
+    background-color: rgb(245, 171, 171);
+    padding: 7px;
+}
+
+#mini-chat-image{
+    margin-left: 10px;
+    object-fit: cover; /* Recorta lo que sobra */
+    object-position: 50% 15%; /*50% (horizontal al centro) 35% (vertical, ligeramente arriba)*/
+    width: 40px;
+    height: 40px;
+    max-width: 40px;
+    max-height:40px;
+    min-width: 40px;
+    min-height:40px;
+    margin-right: 10px;
+}
+
+#chat-input-container {
+    padding: 10px 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+#chat-text-input {
+    width: 370px;
+    border-color: #FF6B6B;
+    padding: 10px;
+}
+
+#chat-send-button {
+    display: flex;
+    width: 40px;
+    font-size: 20px;
+    justify-content: center;
+    align-items: center;
+    padding-top: 3px;
+    color: #FF6B6B;
+    border-color: #FF6B6B;
+}
+
+
+/* MARK: CHAT Tab PROFILE */
+
+#chatTabs-profile{
+    position: relative;
+    padding: 20px;
+    border-bottom: none;
+}
+
+#chatTabs-profile img {
+
+    width: 100%;
+    height: 500px;
+    object-fit: cover;
+    object-position: top;
+
+}
+#chatTabs-profile #profileTab-info {
+
+    position: absolute;
+    top: 74%;
+    left: 50%; /* Move the element to the center based on its left edge */
+    transform: translateX(-50%); /* Offset the element by half of its width */
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    color: white;
+
+    font-size: 1.25rem;
+
+    backdrop-filter: blur(10px);
+    padding: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5); /* Optional: add shadow */
+    border-radius: 5px;
+
+    font-family: "Poppins";
+}
+
+
 

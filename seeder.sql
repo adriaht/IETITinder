@@ -30,6 +30,27 @@ CREATE TABLE users (
     validate_code VARCHAR(255) NOT NULL
 );
 
+
+-- creacion del evento para borrar usuarios no validados
+
+DELIMITER $$
+
+CREATE EVENT IF NOT EXISTS delete_expired_users
+ON SCHEDULE EVERY 1 MINUTE
+STARTS CURRENT_TIMESTAMP
+DO
+BEGIN
+    DELETE FROM users
+    WHERE expirate_date < NOW()
+    AND validated = 0;
+END $$
+
+DELIMITER ;
+
+-- asegurar que los eventos esten habilitados
+SET GLOBAL event_scheduler = ON;
+
+
 -- Creación de la tabla de fotos
 CREATE TABLE photos (
     photo_ID INT AUTO_INCREMENT PRIMARY KEY,        
@@ -130,7 +151,7 @@ VALUES
 
 INSERT INTO users (email, password, name, surname, alias, birth_date, latitude, longitude, sex, sexual_orientation, last_login_date, creation_date, distance_user_preference, min_age_user_preference, max_age_user_preference, role, validated, expirate_date, validate_code)
 VALUES
-('admin@ieti.site', SHA2('admin', 512), 'Administrador', 'Torrente', 'admin_of_tinder', '1988-04-07', 40.9500, -74.3000, 'home', 'heterosexual', '2025-01-01 08:15:32', '2025-01-01 08:15:32', 200, 28, 50, 'admin', TRUE, '2025-01-01 08:15:32', '123');
+('admin@ieti.site', SHA2('admin', 512), 'Administrador', 'Torrente', 'admin_of_tinder', '2025-01-01', 40.9500, -74.3000, 'home', 'heterosexual', '2025-01-01 08:15:32', '2025-01-01 08:15:32', 200, 28, 50, 'admin', TRUE, '2025-01-01 08:15:32', '123');
 
 INSERT INTO photos (user_ID, type, path)
 VALUES
@@ -251,7 +272,7 @@ VALUES
 (55, 'jpg', '/images/user55_photo2.jpg'),
 (56, 'jpg', '/images/user56_photo1.jpg'),
 (56, 'jpg', '/images/user56_photo2.jpg'),
-(57, 'jpg', '/images/user56_photo1.jpg');
+(57, 'jpg', '/images/user57_photo1.jpg');
 
 /* SON MATCH */
 INSERT INTO interactions (`from`, `to`, `state`) VALUES (1, 4, "like");
@@ -361,21 +382,21 @@ INSERT INTO matches (participant1, participant2) VALUES (1, 24);
 
 INSERT INTO conversations (match_ID, sender_id, content, creation_date) 
 VALUES 
-(1, 1, "Hola, me llamo John", '2025-01-30 08:15:23'),
-(1, 4, "Soy Emily, encantada", '2025-01-30 08:16:50'),
-(1, 1, "Llevas mucho por aqui?", '2025-01-30 08:17:22'),
-(1, 4, "Que va, me creé la cuenta hace poco", '2025-01-30 08:30:00'),
-(1, 4, "De momento me parece buena aplicación", '2025-01-30 08:31:00'),
-(1, 1, "Igual podríamos tomar un café por mi zona, si te apetece", '2025-01-30 08:32:00'),
-(1, 4, "Me parece perfecto, que día? Yo estoy libre el lunes, martes, miércoles, jueves, viernes, sábado y domingo", '2025-01-30 09:00:00'),
-(1, 1, "Pues que te parece si lo hacemos el viernes por la tarde después de trabajar?", '2025-01-30 09:01:00');
+(1, 1, "Hola, me llamo John", '2025-01-13 08:15:23'),
+(1, 4, "Soy Emily, encantada", '2025-01-13 08:16:50'),
+(1, 1, "Llevas mucho por aqui?", '2025-01-13 08:17:22'),
+(1, 4, "Que va, me creé la cuenta hace poco", '2025-01-13 08:30:00'),
+(1, 4, "De momento me parece buena aplicación", '2025-01-13 08:31:00'),
+(1, 1, "Igual podríamos tomar un café por mi zona, si te apetece", '2025-01-13 08:32:00'),
+(1, 4, "Me parece perfecto, que día? Yo estoy libre el lunes, martes, miércoles, jueves, viernes, sábado y domingo", '2025-01-13 09:00:00'),
+(1, 1, "Pues que te parece si lo hacemos el viernes por la tarde después de trabajar?", '2025-01-13 09:01:00');
 
 INSERT INTO conversations (match_ID, sender_id, content, creation_date) 
 VALUES 
-(3, 10, "Hola, me llamo Ava", '2025-01-30 08:15:23'),
-(3, 1, "Soy John, un placer", '2025-01-30 08:16:50'),
-(3, 10, "Llevas mucho por aqui?", '2025-01-30 08:17:22'),
-(3, 10, "Que va, me creé la cuenta hace poco", '2025-01-30 08:30:00'),
-(3, 1, "Igual podríamos tomar un café por mi zona, si te apetece", '2025-01-30 08:32:00'),
-(3, 10, "Me parece perfecto, que día? Yo estoy libre mañana", '2025-01-30 09:00:00'),
-(3, 10, "Pues que te parece si lo hacemos el viernes por la tarde después de trabajar? A las 19", '2025-01-30 10:00:00');
+(3, 10, "Hola, me llamo Ava", '2025-01-13 08:15:23'),
+(3, 1, "Soy John, un placer", '2025-01-13 08:16:50'),
+(3, 10, "Llevas mucho por aqui?", '2025-01-13 08:17:22'),
+(3, 10, "Que va, me creé la cuenta hace poco", '2025-01-13 08:30:00'),
+(3, 1, "Igual podríamos tomar un café por mi zona, si te apetece", '2025-01-13 08:32:00'),
+(3, 10, "Me parece perfecto, que día? Yo estoy libre mañana", '2025-01-13 09:00:00'),
+(3, 10, "Pues que te parece si lo hacemos el viernes por la tarde después de trabajar? A las 19", '2025-01-13 10:00:00');
