@@ -10,7 +10,7 @@ if (!isset($_SESSION['user'])) {
     exit;
 }
 
-logOperation("Session started in messages.php for user ".$_SESSION['user'], "INFO");
+logOperation("[MESSAGES.PHP] Session started in messages.php for user ".$_SESSION['user'], "INFO");
 
 // Store loggedUser Object
 $loggedUser = searchUserInDatabase("*", "users", $_SESSION['user']);
@@ -41,13 +41,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['getMatchID'])) {
         if ($match === false) {
             echo json_encode(['success' => false, 'message' => 'No se encontraron resultados.']);
         } else {
-            logOperation("Successfully got matchID from user_ID: ".$loggedUser["user_ID"]." and ".$alias." messages.php in GET method getMatchID" , "INFO");
+            logOperation("[MESSAGES.PHP] Successfully got matchID from user_ID: ".$loggedUser["user_ID"]." and alias: ".$alias." in GET method getMatchID" , "INFO");
             echo json_encode(['success' => true, 'match_ID' => $match]);
         }
         exit;
 
     } catch (PDOException $e) {
-        logOperation("Connection error in messages.php for user_ID: ".$loggedUser["user_ID"]." and ".$alias." in GET method getMatchID: " . $e->getMessage(), "ERROR");
+        logOperation("[MESSAGES.PHP] Connection error in messages.php for user_ID: ".$loggedUser["user_ID"]." and alias: ".$alias." in GET method getMatchID: " . $e->getMessage(), "ERROR");
         echo json_encode(['success' => false, 'message' => 'Error en la conexión: ' . $e->getMessage()]);
         exit;
     }
@@ -56,13 +56,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['getMatchID'])) {
 // GET LOGGED USER
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['action'] === 'getLoggedUserID') {
     try {
-        logOperation("Successfully got UserID from logged user ".$loggedUser["user_ID"]." messages.php in GET method getLoggedUserID" , "INFO");
+        logOperation("[MESSAGES.PHP] Successfully got UserID from logged user ".$loggedUser["user_ID"]." in GET method getLoggedUserID" , "INFO");
         echo json_encode(['success' => true, 'message' => array_values($loggedUser)]);
         exit;
 
     } catch (PDOException $e) {
 
-        logOperation("Connection error in messages.php for user ".$loggedUser["user_ID"]." in GET method getLoggedUserID: " . $e->getMessage(), "ERROR");
+        logOperation("[MESSAGES.PHP] Connection error for user ".$loggedUser["user_ID"]." in GET method getLoggedUserID: " . $e->getMessage(), "ERROR");
         echo json_encode(['success' => false, 'message' => 'Error en la conexión: ' . $e->getMessage()]);
         exit;
 
@@ -135,13 +135,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
         unset($stmt);
         unset($pdo);
 
-        logOperation("Successfully got matches of user ".$loggedUser["user_ID"]." messages.php in GET method get_matches" , "INFO");
+        logOperation("[MESSAGES.PHP] Successfully got matches from user_ID: ".$loggedUser["user_ID"]." in GET method get_matches" , "INFO");
         echo json_encode(['success' => true, 'message' => array_values($matches)]);
         exit;
 
     } catch (PDOException $e) {
 
-        logOperation("Connection error in messages.php for user ".$loggedUser["user_ID"]." in GET method get_matches: " . $e->getMessage(), "ERROR");
+        logOperation("[MESSAGES.PHP] Connection error for user_ID: ".$loggedUser["user_ID"]." in GET method get_matches: " . $e->getMessage(), "ERROR");
         echo json_encode(['success' => false, 'message' => 'Error en la conexión: ' . $e->getMessage()]);
         exit;
 
@@ -182,13 +182,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['getConversation'])) {
         unset($stmt);
         unset($pdo);
 
-        logOperation("Successfully got conversation from match " . $matchID . " messages.php in GET method getConversation", "INFO");
+        logOperation("[MESSAGES.PHP] Successfully got conversation from matchID: " . $matchID . " in GET method getConversation", "INFO");
         echo json_encode(['success' => true, 'message' => array_values($conversation)]);
         exit;
 
     } catch (PDOException $e) {
 
-        logOperation("Connection error in messages.php from match " . $matchID . " in GET method getConversation: " . $e->getMessage(), "ERROR");
+        logOperation("[MESSAGES.PHP] Connection error from matchID: " . $matchID . " in GET method getConversation: " . $e->getMessage(), "ERROR");
         echo json_encode(['success' => false, 'message' => 'Error en la conexión: ' . $e->getMessage()]);
         exit;
 
@@ -214,13 +214,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['getUserNameAndImage']))
         unset($stmt);
         unset($pdo);
 
-        logOperation("Successfully got UserName and Image from user alias: " . $alias . " messages.php in GET method getUserNameAndImage", "INFO");
+        logOperation("[MESSAGES.PHP] Successfully got UserName and Image from user alias: " . $alias . " in GET method getUserNameAndImage", "INFO");
         echo json_encode(['success' => true, 'message' => array_values($user)]);
         exit;
 
     } catch (PDOException $e) {
 
-        logOperation("Connection error in messages.php for user alias: " . $alias . " in GET method getUserNameAndImage: " . $e->getMessage(), "ERROR");
+        logOperation("[MESSAGES.PHP] Connection error for user alias: " . $alias . " in GET method getUserNameAndImage: " . $e->getMessage(), "ERROR");
         echo json_encode(['success' => false, 'message' => 'Error en la conexión: ' . $e->getMessage()]);
         exit;
 
@@ -236,14 +236,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Send error if there's no input
         if (!$input) {
-            logOperation("Invalid input for POST request in messages.php.", "ERROR");
+            logOperation("[MESSAGES.PHP] Invalid input for POST request in messages.php.", "ERROR");
             echo json_encode(['success' => false, 'message' => 'Dades invàlides']);
             exit;
         }
 
         // Checks if there's an endpoint defined
         if (!isset($input['endpoint'])) {
-            logOperation("Endpoint not defined for POST request in messages.php.", "ERROR");
+            logOperation("[MESSAGES.PHP] Endpoint not defined for POST request in messages.php.", "ERROR");
             echo json_encode(['success' => false, 'message' => 'Endpoint no especificat.']);
             exit;
         }
@@ -258,18 +258,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 break;
             case "insertLog":
                 logOperation($input["logMessage"], $input["type"]);
-                logOperation("Successfully inserted log from client: ".$input["logMessage"], $input["type"]);
+                logOperation("[MESSAGES.PHP] Successfully inserted log from client: ".$input["logMessage"], $input["type"]);
                 echo json_encode(['success' => true, 'message' => "Log inserit correctament"]);
                 exit;
                 
             default: // In case of 
-                logOperation("Endpoint not found for POST request in messages.php. Endpoint sended: ".$input["logMessage"], "ERROR");
+                logOperation("[MESSAGES.PHP] Endpoint not found for POST request in messages.php. Endpoint sended: ".$input["logMessage"], "ERROR");
                 echo json_encode(['success' => false, 'message' => 'Endpoint desconegut.']);
                 exit;
         }
 
     } catch (PDOException $e) {
-        logOperation("Connection error in messages.php in POST method: " . $e->getMessage(), "ERROR");
+        logOperation("[MESSAGES.PHP] Connection error in messages.php in POST method: " . $e->getMessage(), "ERROR");
         echo json_encode(['success' => false, 'message' => 'Error en la conexió: ' . $e->getMessage()]);
         exit;
     }
@@ -293,12 +293,12 @@ function insertMessage($matchID, $senderID, $messageContent){
         unset($stmt);
         unset($pdo);
 
-        logOperation("Message inserted in match $matchID conversation, sender is $senderID , content is: $messageContent , in FUNCTION insertMessage", "INFO");
+        logOperation("[MESSAGES.PHP] Message inserted in matchID: $matchID conversation, sender is: $senderID , content is: $messageContent , in FUNCTION insertMessage", "INFO");
         echo json_encode(['success' => true, 'message' => "Missatge enviat per usuari $senderID , en el chat del match $matchID , amb el contingut $messageContent"]);
         exit;
 
     } catch (PDOException $e) {
-        logOperation("Connection error in messages.php for match $matchID conversation, sender is $senderID , content is: $messageContent in FUNCTION insertMessage: " . $e->getMessage(), "ERROR");
+        logOperation("[MESSAGES.PHP] Connection error in messages.php for matchID: $matchID conversation, sender is: $senderID , content is: $messageContent in FUNCTION insertMessage: " . $e->getMessage(), "ERROR");
         echo json_encode(['success' => false, 'message' => 'Error en la conexión: ' . $e->getMessage()]);
         exit;
     }
