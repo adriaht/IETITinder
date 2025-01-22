@@ -1193,6 +1193,9 @@ main.messages #container-with-messages #container-with-messages-content div.with
     display: flex;
     flex-direction: column;
     gap: 10px;
+    width: 320px;
+    max-height: 98px;
+    overflow: hidden;
 }
 
 main.messages #container-with-messages #container-with-messages-content div.with-message-content div.user-info-with-message-content p:first-child {
@@ -1432,7 +1435,7 @@ body.admin-panel div.dashboard {
     padding-left: 60px;
 }
 .chat-me p {
-    background-color: rgb(251, 101, 101);
+    background-color: lightgray;
     padding: 7px;
 }
 
