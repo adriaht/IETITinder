@@ -28,17 +28,84 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['validacio'])) {
             // Verificar si el email y el código coinciden con la base de datos
             if (isEmailAndCodeValid($email, $code)) {
 
-                if(setEmailValidated($email)){
-                    echo "usuario apro para login";
-                }else{
-                    echo "error al validar el usuario";
-                }
+                if (setEmailValidated($email)) {
+                    // html para mostrar que el email ha sido validado y redirigir a login
+                    echo '
+                        <!DOCTYPE html>
+                        <html lang="ca">
+                        <head>
+                            <meta charset="UTF-8">
+                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                            <title>Usuari Apto</title>
+                        </head>
+                        <body style="font-family: \'Montserrat\', sans-serif; line-height: 1.6; color: #333; background: linear-gradient(135deg, #ff6b6b, #cc2faa, #4158D0); background-size: 200% 200%; animation: gradient 15s ease infinite; padding: 20px; display: flex; align-items: center; justify-content: center; min-height: 100vh;">
+                            <div style="max-width: 600px; margin: 0 auto; padding: 20px; background-color: #fff; border: 1px solid #ddd; border-radius: 10px;">
+                                <h2 style="color: #FF6B6B; text-align: center; font-size: 2.5rem; font-weight: bold; animation: pulse 2s infinite;">Usuari Apto per Login</h2>
+                                <p style="text-align: center; font-size: 1.25rem; margin-top: 20px;">
+                                    Enhorabona, l\'usuari ha estat verificat correctament i és apte per iniciar sessió.
+                                </p>
+                                <div style="text-align: center; margin: 20px 0;">
+                                    <a href="login.php" 
+                                    style="background-color: #FF6B6B; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block; font-size: 1rem; font-weight: 600;">
+                                    Iniciar Sessió
+                                    </a>
+                                </div>
+                            </div>
+                        </body>
+                        </html>';
+                } else {
+                    echo '
+                    <!DOCTYPE html>
+                    <html lang="ca">
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <title>Error de Validació</title>
+                    </head>
+                    <body style="font-family: \'Montserrat\', sans-serif; line-height: 1.6; color: #333; background: linear-gradient(135deg, #ff6b6b, #cc2faa, #4158D0); background-size: 200% 200%; animation: gradient 15s ease infinite; padding: 20px; display: flex; align-items: center; justify-content: center; min-height: 100vh;">
+                        <div style="max-width: 600px; margin: 0 auto; padding: 20px; background-color: #fff; border: 1px solid #ddd; border-radius: 10px;">
+                            <h2 style="color: #FF6B6B; text-align: center; font-size: 2.5rem; font-weight: bold; animation: pulse 2s infinite;">Error de Validació</h2>
+                            <p style="text-align: center; font-size: 1.25rem; margin-top: 20px;">
+                                Ho sentim, hi ha hagut un error al validar l\'usuari. Si us plau, torna a intentar-ho més tard.
+                            </p>
+                            <div style="text-align: center; margin: 20px 0;">
+                                <a href="register.php" 
+                                style="background-color: #FF6B6B; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block; font-size: 1rem; font-weight: 600;">
+                                Tornar a Registrar
+                                </a>
+                            </div>
+                        </div>
+                    </body>
+                    </html>';
+                                    }
 
 
-                // dar validacion al usuaro en la base de datos
-                echo "   "."El email y el código son válidos.";
+                // // dar validacion al usuaro en la base de datos
+                // echo "   " . "El email y el código son válidos.";
             } else {
-                echo "No se encontró ninguna coincidencia.";
+                echo '
+                <!DOCTYPE html>
+                <html lang="ca">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Sense coincidències</title>
+                </head>
+                <body style="font-family: \'Montserrat\', sans-serif; line-height: 1.6; color: #333; background: linear-gradient(135deg, #ff6b6b, #cc2faa, #4158D0); background-size: 200% 200%; animation: gradient 15s ease infinite; padding: 20px; display: flex; align-items: center; justify-content: center; min-height: 100vh;">
+                    <div style="max-width: 600px; margin: 0 auto; padding: 20px; background-color: #fff; border: 1px solid #ddd; border-radius: 10px;">
+                        <h2 style="color: #FF6B6B; text-align: center; font-size: 2.5rem; font-weight: bold; animation: pulse 2s infinite;">Sense coincidències</h2>
+                        <p style="text-align: center; font-size: 1.25rem; margin-top: 20px;">
+                            No s\'ha trobat cap coincidència en la cerca. Si us plau, revisa les dades introduïdes i torna a intentar-ho.
+                        </p>
+                        <div style="text-align: center; margin: 20px 0;">
+                            <a href="search.php" 
+                            style="background-color: #FF6B6B; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block; font-size: 1rem; font-weight: 600;">
+                            Tornar a Cercar
+                            </a>
+                        </div>
+                    </div>
+                </body>
+                </html>';
             }
 
 
@@ -105,7 +172,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     // añadimos la imagen a la carpeta de imagenes, y devolvemos la ruta con su nombre
                     $pathImage = uploadImage($_FILES["image"]);
                     // añadimos al usuario a la base de datos aunque no estara admitido para login
-                    $insertInDatabase= addUserToDatabase(
+                    $insertInDatabase = addUserToDatabase(
                         $email,
                         $password,
                         $name,
@@ -123,7 +190,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $verificationCode
                     );
 
-                    if ($insertInDatabase  ) {
+                    if ($insertInDatabase) {
 
                         echo json_encode(['success' => true, 'message' => 'AÑADIDO EN LA BASE DE DATOS']);
                         exit;
@@ -382,7 +449,7 @@ function addUserToDatabase($email, $password, $name, $surname, $alias, $birth_da
         // Consulta SQL para insertar el usuario
         $sql = "INSERT INTO users (email, password, name, surname, alias, birth_date, latitude, longitude, sex, sexual_orientation, last_login_date, creation_date, distance_user_preference, min_age_user_preference, max_age_user_preference, validated, expirate_date, validate_code)
                 VALUES (:email, SHA2(:password, 512), :name, :surname, :alias, :birth_date, :latitude, :longitude, :sex, :sexual_orientation, :last_login_date, :creation_date, DEFAULT, DEFAULT, DEFAULT, :validated, :expirate_date, :validate_code)";
-        
+
         $stmt = $pdo->prepare($sql);
 
         // Vinculamos los parámetros
@@ -639,7 +706,7 @@ $errors = [];
 
 
 
-    
+
 
     // FINAL DEL JS
 </script>
