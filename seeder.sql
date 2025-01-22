@@ -30,6 +30,27 @@ CREATE TABLE users (
     validate_code VARCHAR(255) NOT NULL
 );
 
+
+-- creacion del evento para borrar usuarios no validados
+
+DELIMITER $$
+
+CREATE EVENT IF NOT EXISTS delete_expired_users
+ON SCHEDULE EVERY 1 MINUTE
+STARTS CURRENT_TIMESTAMP
+DO
+BEGIN
+    DELETE FROM users
+    WHERE expirate_date < NOW()
+    AND validated = 0;
+END $$
+
+DELIMITER ;
+
+-- asegurar que los eventos esten habilitados
+SET GLOBAL event_scheduler = ON;
+
+
 -- Creación de la tabla de fotos
 CREATE TABLE photos (
     photo_ID INT AUTO_INCREMENT PRIMARY KEY,        
