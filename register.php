@@ -355,7 +355,7 @@ function sendValidateEmail($email, $code)
     $validacioParam = $encryptedEmail . "_" . $encryptedCode;
 
     // Parámetros del correo
-    $from = "tinder5@ieticloudpro.ieti.site";
+    $from = "super@tinder5.ieti.site";
     $to = $email;
     $subject = 'Aquest és un codi de validació';
 
@@ -379,7 +379,7 @@ function sendValidateEmail($email, $code)
                 </span>
                 <p style="margin-top: 20px; font-size: 0.875rem;">Aquest codi és vàlid durant 48 hores.</p>
                 <p>Per confirmar, fes clic aquí: 
-                    <a href="register.php?validacio=' . $validacioParam . '" 
+                    <a href="https://tinder5.ieti.site/register.php?validacio=' . $validacioParam . '" 
                        style="background-color: #FF6B6B; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block; font-size: 1rem; font-weight: 600;">
                        Confirmar
                     </a>
