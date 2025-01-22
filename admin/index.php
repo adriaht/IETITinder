@@ -26,7 +26,7 @@ if ($loggedUser['role'] !== "admin") {
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IETinder - Descobrir</title>
+    <title>IETinder - Panell d'Administració</title>
     <link rel="stylesheet" type="text/css" href="/styles.css?t=<?php echo time();?>" />
     
 </head>
@@ -36,7 +36,7 @@ if ($loggedUser['role'] !== "admin") {
         <header id="header">
             <p class="logo">IETinder ❤️</p>
         </header>
-        <h1>WELCOME TO ADMIN PANEL</h1>
+        <h1>BENVINGUT AL PANELL D'ADMINISTRACIÓ</h1>
     </div>
 
 </body>
