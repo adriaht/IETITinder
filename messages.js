@@ -1,81 +1,56 @@
 const matchesWithoutMessages = [];
 const matchesWithMessages = [];
+let user = [];
+let actualMatch = 0;
+let oldconversation = {};
+
 
 document.addEventListener("DOMContentLoaded", async () => {
-
-
     // Get the match_id and user_id from the URL
     const urlParams = new URLSearchParams(window.location.search);
     const action = urlParams.get('action');
     const userAlias = urlParams.get('user');
 
-    console.log(action)
-    console.log(userAlias)
+    user = await fetchLoggedUserID(); //recogemos userID
+    user_ID=user[0];
 
     // GO TO CONVERSATION
     if (action === "go_to_conversation" && userAlias) {
-       
         try {
-
             generateConversation(userAlias);
             insertLog(`Loaded conversation in messages.js for user ${userAlias}`, "INFO");
-
         } catch (error) {
-
             insertLog(`Failed while loading conversation in messages.js for user ${userAlias}`, "INFO");
-
         }
 
-        
-        // Call a function to generate the conversation
-       
-    
+
     // GO TO MATCHES
     } else {
-
-            insertLog("Loaded main page in messages.js", "INFO");
-
-            // Makes AJAX call to get matches
-            const arrMatchedUsers = await fetchMatches();
-
+        insertLog("Loaded main page in messages.js", "INFO");
+        // Makes AJAX call to get matches
+        const arrMatchedUsers = await fetchMatches();
         try {
-
             // inserts matches in each array
             classifyMatches(arrMatchedUsers);
-            
-            if (matchesWithoutMessages.length > 0){
-
+            if (matchesWithoutMessages.length > 0) {
                 insertLog("User got matches without messages. Generating content", "INFO");
-
                 const contentContainer = document.createElement("div");
                 contentContainer.id = 'container-without-messages-content';
-
                 matchesWithoutMessages.map(match => {
-
                     contentContainer.append(generateWithoutMessageCard(match));
-
                 })
-
                 const container = document.getElementById("container-without-messages");
                 container.appendChild(contentContainer);
-
                 insertLog("Successfully rendered matches without messages", "INFO");
-
-            } else {
-
-
+            } 
+            else {
                 insertLog("Initiating renderization that there are no matches without messages", "INFO");
-
                 renderNoMatchWithoutConversation();
-
                 insertLog("Successfully rendered there are no matches without messages", "INFO");
-
             }
-    
+
             if (matchesWithMessages.length > 0) {
-
                 insertLog("User got matches with messages. Generating content", "INFO");
-
                 const contentContainer = document.createElement("div");
                 contentContainer.id = 'container-with-messages-content';
 
@@ -85,28 +60,79 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                 const container = document.getElementById("container-with-messages");
                 container.appendChild(contentContainer);
-            
+
             } else {
-
                 insertLog("Initiating renderization that there are no matches with messages", "INFO");
-
                 renderNoMatchWithConversation();
-
                 insertLog("Successfully rendered there are no matches with messages", "INFO");
             }
 
         } catch (error) {
-
             insertLog(`Failed while loading matches in messages.js: ${error}`, "ERROR");
         }
-    } 
+    }
 
-   
-    
+
+    //FUNCIONALIDADES DEL CHAT ----------------------------------------------------------------------------------------------
+
+    // Función para mostrar la tab seleccionada
+    window.openTab = function(evt, tabName) {
+        var i, tabcontent, tablinks;
+
+        // Ocultar todo el contenido de las tabs
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+            tabcontent[i].classList.remove("activeTab");
+        }
+
+        // Desactivar todos los botones
+        tablinks = document.getElementsByClassName("chat-tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].classList.remove("activeTab");
+        }
+
+        // Mostrar la tab seleccionada
+        document.getElementById(tabName).style.display = "block";
+        document.getElementById(tabName).classList.add("activeTab");
+
+        // Activar el botón correspondiente
+        evt.currentTarget.classList.add("activeTab");
+        
+    };
+
+    // Abrir la primera tab por defecto
+    document.getElementById("defaultOpen").click();
+
+    //SEND MESSAGE BUTTON
+    const sendMessageButton = document.getElementById("chat-send-button");
+
+    sendMessageButton.addEventListener('click', async (e) => {
+        let messageText = document.getElementById("chat-text-input").value;
+        let match_id = document.getElementById("chat-name").getAttribute("match_ID"); //recogemos el match ID
+        //si no está vacío lo mandamos
+        if (messageText !=""){
+            insertMessage(match_id, user_ID, messageText);
+            renderTextMessage(user_ID, Date.now(), user_ID, messageText);
+            scrollToBottom();
+            console.log("SCROOOOLL");
+        }
+        document.getElementById("chat-text-input").value = "";//vaciamos input
+    });
+
+    const goBackButton = document.getElementById("goBackToMessages");
+        goBackButton.addEventListener('click', async (e) => {
+        document.getElementById("chat-page").style.display = "none";
+        document.getElementById("content").style.display = "block";
+        
+    });
+
 });
 
+//FUNCIONES MESSAGES --------------------------------------------------------------------
+
 function generateWithoutMessageCard(match) {
-    
+
     // Create the container div for the match
     const withoutMessageContent = document.createElement("div");
     withoutMessageContent.className = "without-message-content";
@@ -123,7 +149,7 @@ function generateWithoutMessageCard(match) {
     // Append the img and p elements to the withoutMessageContent div
     withoutMessageContent.appendChild(img);
     withoutMessageContent.appendChild(p);
-    
+
     withoutMessageContent.addEventListener("click", () => {
         generateConversation(match.alias);
     });
@@ -133,6 +159,7 @@ function generateWithoutMessageCard(match) {
 }
 
 function generateWithMessageCard(match) {
+
     // Create the main div container
     const withMessageContent = document.createElement('div');
     withMessageContent.classList.add('with-message-content');
@@ -160,7 +187,7 @@ function generateWithMessageCard(match) {
     userInfoWithMessageContent.appendChild(alias);
     userInfoWithMessageContent.appendChild(lastMessage);
 
-   
+
     withMessageContent.appendChild(img);
     withMessageContent.appendChild(userInfoWithMessageContent);
 
@@ -168,19 +195,49 @@ function generateWithMessageCard(match) {
         generateConversation(match.alias);
     });
 
-
     // Append the created div to the body or any other parent element
     return withMessageContent;
 }
 
-function generateConversation(alias) {
-    const mainContainer = document.getElementById("content");
-    mainContainer.innerHTML = "";
-    const p = document.createElement("p");
-    p.innerText = `Conversa amb ${alias}`;
-    mainContainer.appendChild(p);
+async function generateConversation(alias) {
+    //CHAT TAB ------------
+    document.getElementById("chat-page").style.display = "block";
+    document.getElementById("content").style.display = "none";
 
-    MostrarAlertas("warning", "Funcionalitat en desenvolupament")
+    let userData = await fetchUserNameAndImage(alias); //recogemos nombre y foto de la persona
+    let match_ID = await fetchMatchID(alias); //recogemos el matchID
+
+    console.log("USER DATA AQUI: ", userData)
+
+    document.getElementById("chat-image").src = userData[0].path;
+    document.getElementById("chat-name").textContent = userData[0].name;
+
+    document.getElementById("chat-name").setAttribute("match_ID", match_ID); //ponemos el match_ID en el nombre
+   
+    //definimos funcion de Ejecutar Render
+    const executeRender = () => {
+        console.log("RENDER CONVERSATION");
+        renderConversation(alias, user_ID);
+    };
+
+    //ejecutamos 1 vez para cuando se entre al chat
+    executeRender();
+
+    //hacemos que a partir de entonces se ejecute cada 5seg
+    setInterval(executeRender, 5000);
+
+    //PROFILE TAB -------------------
+
+    const image = document.getElementById('profileTab-img');
+    image.src = userData[0].path;
+    image.alt = `photo_of_,${ alias }`;
+
+    const nameText = document.getElementById('profileTab-name');
+    nameText.innerText = userData[0].name;
+
+    const ageText = document.getElementById('profileTab-age');
+    ageText.innerText = userData[0].age;
+
 }
 
 function renderNoMatchWithoutConversation() {
@@ -249,7 +306,7 @@ function clearWithoutMessageCard() {
 function clearWithMessageCard() {
     const container = document.getElementById("container-with-messages");
     container.innerHTML = "";
-    
+
     const title = document.createElement("h2");
     title.textContent = "Missatges";
     container.appendChild(title);
@@ -261,14 +318,14 @@ async function fetchMatches() {
     try {
         const response = await fetch("messages.php?action=get_matches");
         const users = await response.json();
-        if (users.success){
+        if (users.success) {
             insertLog("Sucessfully loaded matches in messages.js", "INFO");
             return users.message;
         } else {
             insertLog("Sucessfully loaded matches in messages.js", "ERROR");
             return [];
         }
-        
+
     } catch (error) {
         insertLog(`While loading matches: ${error}`, "ERROR");
         return [];
@@ -280,18 +337,18 @@ async function fetchMatches() {
 async function insertLog(logMessage, type) {
 
     try {
-        
-        const response = await fetch('discover.php', { 
+
+        const response = await fetch('discover.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({endpoint: "insertLog", logMessage, type})
+            body: JSON.stringify({ endpoint: "insertLog", logMessage, type })
         });
 
         // resultado de JSON a objeto Javascript. PHP devuelve {success: error, message: "abc"}
         const result = await response.json();
 
         // Segun resultado, pone mensaje de error o no
-        if (result.success) { 
+        if (result.success) {
             console.log(result.message);
         } else {
             console.log(result.message);
@@ -303,7 +360,7 @@ async function insertLog(logMessage, type) {
 }
 
 // Classify matches based on if it hasMessage or not (true/false)
-function classifyMatches(arrMatches){
+function classifyMatches(arrMatches) {
 
     arrMatches.map(match => {
 
@@ -371,5 +428,207 @@ function MostrarAlertas(nameAlerta, missageAlert) {
         typeAlerta.style.display = "none";
         typeAlerta.remove(); // Elimina el elemento del DOM
     }, 3000); // 3 segundos
+
+}
+
+
+//FUNCIONES DEL CHAT -------------------------------------------------------------------------
+
+// Funcion para coger el match_id
+async function fetchMatchID(alias) {
+    try {
+        const response = await fetch(`messages.php?getMatchID=${encodeURIComponent(alias)}`);
+        const match = await response.json();
+        if (match.success){
+            insertLog("Sucessfully fetched match_ID in messages.js", "INFO");
+            return match.match_ID;
+        } else {
+            insertLog("Error fetching match_ID in messages.js", "ERROR");
+            return [];
+        }
+        
+    } catch (error) {
+        insertLog(`While fetching match_ID: ${error}`, "ERROR");
+        return [];
+    }
+}
+
+
+// Funcion para coger el ID de la persona loggeada
+async function fetchLoggedUserID() {
+    try {
+        const response = await fetch('messages.php?action=getLoggedUserID');
+        const user = await response.json();
+        if (user.success){
+            insertLog("Sucessfully fetched logged userID in messages.js", "INFO");
+            return user.message;
+        } else {
+            insertLog("Error fetching logged userID in messages.js", "ERROR");
+            return [];
+        }
+        
+    } catch (error) {
+        insertLog(`While loading logged userID: ${error}`, "ERROR");
+        return [];
+    }
+}
+
+// Funcion para coger el nombre y la foto de la otra persona
+async function fetchUserNameAndImage(alias) {
+    try {
+        const response = await fetch(`messages.php?getUserNameAndImage=${encodeURIComponent(alias)}`);
+        const user = await response.json();
+        console.log(user);
+        if (user.success){
+            insertLog("Sucessfully fetched user name and image in messages.js", "INFO");
+            return user.message;
+        } else {
+            insertLog("Error fetching user name and image in messages.js", "ERROR");
+            return [];
+        }
+        
+    } catch (error) {
+        insertLog(`While fetching user name and image: ${error}`, "ERROR");
+        return [];
+    }
+}
+
+
+// Funcion para formatar el timestamp en catalan
+function formatTimestampToCatalan(timestamp) {
+    const date = new Date(timestamp);
+
+    // Configuración para el idioma catalán
+    const formatter = new Intl.DateTimeFormat('ca-ES', {
+        weekday: 'long', // Día de la semana completo
+        day: '2-digit', // Día del mes con dos dígitos
+        month: 'long', // Mes completo
+        year: 'numeric', // Año completo
+        hour: '2-digit', // Hora en formato 24 horas
+        minute: '2-digit', // Minutos
+    });
+
+    // Formatear la fecha
+    const formattedDate = formatter.format(date);
+
+    return formattedDate.replace(",", ""); // Quitar coma si es necesario
+}
+
+// Funcion para insertar 1 mensaje en la bbdd
+async function insertMessage(matchID, senderID, messageContent) {
+    try {
+        const response = await fetch('messages.php', { 
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({endpoint: "insertMessage", matchID, senderID, messageContent})
+        });
+
+        // resultado de JSON a objeto Javascript. PHP devuelve {success: error, message: "abc"}
+        const result = await response.json();
+
+        // Segun resultado, pone mensaje de error o no
+        if (result.success) { 
+            console.log(result.message);
+        } else {
+            console.log(result.message);
+        }
+
+    } catch (error) {
+        console.log('Error al comunicarse con el servidor: ' + error)
+    }
+
+}
+
+
+// Funcion para renderizar toda una conversacion
+async function renderConversation(alias, user_ID){
+    let conversation = await fetchConversation(alias); //recogemos los mensajes de la bbdd
+
+    if (JSON.stringify(oldconversation) !== JSON.stringify(conversation)){ //si ha cambiado algo, recargamos chat
+        const chatMessagesContainer = document.getElementById('chat-messages-container');
+        chatMessagesContainer.innerHTML = ''; //clear
+        for (let i = 0; i < conversation.length; i++) {
+        const message = conversation[i];
+        renderTextMessage(user_ID, message.creation_date, message.sender_id, message.content); //llamamos a renderizar 1 mensaje        
+        }
+        scrollToBottom();
+    }
+
+    oldconversation = conversation;
+}
+
+
+// Funcion para recuperar mensajes de la bbdd
+async function fetchConversation(alias) {
+    try {
+        const response = await fetch(`messages.php?getConversation=${encodeURIComponent(alias)}`);
+        const conversation = await response.json();
+        if (conversation.success){
+            insertLog("Sucessfully fetched conversation in messages.js", "INFO");
+            return conversation.message;
+        } else {
+            insertLog("Error fetching  conversation in messages.js", "ERROR");
+            return [];
+        }
+        
+    } catch (error) {
+        insertLog(`While fetching conversation: ${error}`, "ERROR");
+        return [];
+    }
+}
+
+
+// Función para desplazar hacia el final del contenedor
+function scrollToBottom() {
+    const chatMessagesContainer = document.getElementById("chat-messages-container");
+    chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
+}
+
+
+// Funcion para renderizar 1 mensaje
+function renderTextMessage(user_ID, creation_date, sender_id, content) {
+    const chatContainer = document.getElementById("chat-messages-container");
+    let lastTextMessage = chatContainer.lastElementChild; //ultimo mensaje
+
+    let messageContainer = document.createElement("div");
+    let textMessage = document.createElement('p');
+    
+
+    textMessage.textContent = content; //mensaje
+    messageContainer.setAttribute("data-timestamp", creation_date); //timestamp
+
+    //Si el contenedor no está vacío, verificamos el último mensaje
+    if (lastTextMessage) {
+        let lastTimestamp = lastTextMessage.getAttribute("data-timestamp");
+        const date1 = new Date(creation_date);
+        const date2 = new Date(lastTimestamp);
+
+        if (date1 - date2 > (5*60 * 1000)) { //5min
+            let textTime = document.createElement('p');
+            textTime.classList.add("chat-time");
+            textTime.textContent = formatTimestampToCatalan(creation_date);
+            chatContainer.append(textTime);
+        }
+    }
+    else{
+        let textTime = document.createElement('p');
+        textTime.classList.add("chat-time");
+        textTime.textContent = formatTimestampToCatalan(creation_date);
+        chatContainer.append(textTime);
+    }
+
+    if (sender_id == user_ID) {
+        messageContainer.classList.add("chat-me");
+    } else {
+        messageContainer.classList.add("chat-you");
+        let messageProfilePicture = document.createElement("img");
+        let picture= document.getElementById("chat-image").src;
+        messageProfilePicture.src = picture;
+        messageProfilePicture.id = "mini-chat-image";
+        messageContainer.append(messageProfilePicture);
+    }
+
+    messageContainer.append(textMessage);
+    chatContainer.appendChild(messageContainer);
     
 }
