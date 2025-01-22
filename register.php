@@ -54,6 +54,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['validacio'])) {
                         </body>
                         </html>';
                 } else {
+
+                    // html para mostrar que el email no ha sido validado y redirigir a register
                     echo '
                     <!DOCTYPE html>
                     <html lang="ca">
