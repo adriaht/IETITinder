@@ -135,7 +135,7 @@ async function sendRegisterForm(event) {
     dataRegisterForm.append('email', document.getElementById("email").value);
     
     try {
-        const response = await fetch('pruebaIetiTinder.php', {
+        const response = await fetch('register.php', {
             method: 'POST',
             body: dataRegisterForm, // Deja que el navegador establezca automáticamente el Content-Type
         });
