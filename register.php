@@ -30,29 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['validacio'])) {
 
                 if (setEmailValidated($email)) {
                     // html para mostrar que el email ha sido validado y redirigir a login
-                    echo '
-                        <!DOCTYPE html>
-                        <html lang="ca">
-                        <head>
-                            <meta charset="UTF-8">
-                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                            <title>Usuari Apto</title>
-                        </head>
-                        <body style="font-family: \'Montserrat\', sans-serif; line-height: 1.6; color: #333; background: linear-gradient(135deg, #ff6b6b, #cc2faa, #4158D0); background-size: 200% 200%; animation: gradient 15s ease infinite; padding: 20px; display: flex; align-items: center; justify-content: center; min-height: 100vh;">
-                            <div style="max-width: 600px; margin: 0 auto; padding: 20px; background-color: #fff; border: 1px solid #ddd; border-radius: 10px;">
-                                <h2 style="color: #FF6B6B; text-align: center; font-size: 2.5rem; font-weight: bold; animation: pulse 2s infinite;">Usuari Apto per Login</h2>
-                                <p style="text-align: center; font-size: 1.25rem; margin-top: 20px;">
-                                    Enhorabona, l\'usuari ha estat verificat correctament i és apte per iniciar sessió.
-                                </p>
-                                <div style="text-align: center; margin: 20px 0;">
-                                    <a href="login.php" 
-                                    style="background-color: #FF6B6B; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block; font-size: 1rem; font-weight: 600;">
-                                    Iniciar Sessió
-                                    </a>
-                                </div>
-                            </div>
-                        </body>
-                        </html>';
+                    header('Location: login.php');
                 } else {
 
                     // html para mostrar que el email no ha sido validado y redirigir a register
@@ -126,33 +104,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
     header('Content-Type: application/json; charset=utf-8');
-    $input = json_decode(file_get_contents('php://input'), true);
-
+   
 
     // declaramos email como variable fuera del bloque para tener registrado el valor,
 //  ya que lo vamos a necesitar varias veces
-    $email = isset($input['email']) ? $input['email'] : null;
+    $email = isset($_POST['email']) ? $_POST['email'] : null;
 
 
 
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($input['endpoint']) && $input['endpoint'] === 'register') {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['endpoint']) && $_POST['endpoint'] === 'register') {
         try {
             header('Content-Type: application/json; charset=utf-8');
 
             // una vez validado todos los datos, guardamos todos los datos del formulario
 
-            $email = isset($input['form']['email']) ? $input['form']['email'] : null;
-            $name = isset($input['form']['name']) ? $input['form']['name'] : null;
-            $surname = isset($input['form']['surname']) ? $input['form']['surname'] : null;
-            $alias = isset($input['form']['alias']) ? $input['form']['alias'] : null;
-            $birth_date = isset($input['form']['birth_date']) ? $input['form']['birth_date'] : null;
-            $latitude = isset($input['form']['latitude']) ? $input['form']['latitude'] : null;
-            $longitude = isset($input['form']['longitude']) ? $input['form']['longitude'] : null;
-            $sex = isset($input['form']['sex']) ? $input['form']['sex'] : null;
-            $sexual_orientation = isset($input['form']['sexual_orientation']) ? $input['form']['sexual_orientation'] : null;
-            $image = isset($input['form']['image']) ? $input['form']['image'] : null;
-            $password = isset($input['form']['password']) ? $input['form']['password'] : null;
-
+            $email = isset($_POST['email']) ? $_POST['email'] : null;
+            $name = isset($_POST['name']) ? $_POST['name'] : null;
+            $surname = isset($_POST['surname']) ? $_POST['surname'] : null;
+            $alias = isset($_POST['alias']) ? $_POST['alias'] : null;
+            $birth_date = isset($_POST['birth_date']) ? $_POST['birth_date'] : null;
+            $latitude = isset($_POST['latitude']) ? $_POST['latitude'] : null;
+            $longitude = isset($_POST['longitude']) ? $_POST['longitude'] : null;
+            $sex = isset($_POST['sex']) ? $_POST['sex'] : null;
+            $sexual_orientation = isset($_POST['sexual_orientation']) ? $_POST['sexual_orientation'] : null;
+            $image = isset($_FILES['image']) ? $_FILES['image'] : null;
+            $password = isset($_POST['password']) ? $_POST['password'] : null;
+            
+           
             // Validar que los datos requeridos no sean nulos o vacíos
             if (!$email || !$name || !$surname || !$alias || !$birth_date || !$latitude || !$longitude || !$sex || !$sexual_orientation || !$password) {
                 echo json_encode([
@@ -171,8 +149,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ($validateEmail) {
                     // se envia el correo de validacion correctamente
 
-                    // añadimos la imagen a la carpeta de imagenes, y devolvemos la ruta con su nombre
-                    $pathImage = uploadImage($_FILES["image"]);
+                    
                     // añadimos al usuario a la base de datos aunque no estara admitido para login
                     $insertInDatabase = addUserToDatabase(
                         $email,
@@ -193,6 +170,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     );
 
                     if ($insertInDatabase) {
+
+                        // si se registra el usuario en la base de datos. llamamos a la funcion para guardar la imagen
+                        // en la base de datos
+                        $user_ID = serchUserID($email);
+                        // añadimos la imagen a la carpeta de imagenes, y devolvemos la ruta con su nombre
+                        $pathImage = uploadImage($image,$user_ID);
+
+                        
+
 
                         echo json_encode(['success' => true, 'message' => 'AÑADIDO EN LA BASE DE DATOS']);
                         exit;
@@ -317,6 +303,7 @@ function searchEmailInDatabase($email)
 }
 
 
+
 // funcion para generar el codigo de validacion, despues lo pasaremos al email
 //  '0' es el caracter que añadiremos,STR_PAD_LEFT: Añade los ceros a la izquierda.
 function generateValidationCode()
@@ -370,7 +357,7 @@ function sendValidateEmail($email, $code)
                 </span>
                 <p style="margin-top: 20px; font-size: 0.875rem;">Aquest codi és vàlid durant 48 hores.</p>
                 <p>Per confirmar, fes clic aquí: 
-                    <a href="register.php?validacio=' . $validacioParam . '" 
+                    <a href="https://tinder5.ieti.site/register.php?validacio=' . $validacioParam . '" 
                        style="background-color: #FF6B6B; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block; font-size: 1rem; font-weight: 600;">
                        Confirmar
                     </a>
@@ -399,13 +386,48 @@ function sendValidateEmail($email, $code)
 
 
 
+// funcion para agregar la imagen en la base de datos, la cual la llamaremos dentro de otra funcion
+
+function insertPhotoInBBDD($type, $path, $user_ID){
+
+    
+    logOperation('entra en insert image in database');
+
+    // Gets the input data: usedID of the user the loggedUser interacted with + the state of the interaction (like or dislike)
+
+    $pdo = startPDO(); // Starts PDO
+
+    $extension = str_replace(".", "", $type);
+
+    // Inserts interaction in database (from loggedUser to the user interacted with and the type (like/dislike))
+    $sql = "INSERT INTO photos (user_ID, type, path) VALUES (:loggedUserID, :typeOfFile, :pathOfFile)";
+    logOperation($sql);
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':loggedUserID', $user_ID);
+    $stmt->bindParam(':typeOfFile', $extension);
+    $stmt->bindParam(':pathOfFile', $path);
+    $stmt->execute();
+
+    // Cleans space of the query and PDO
+    unset($stmt);
+    unset($pdo);
+
+}
 
 
 // funcion para subir la imagen a la carpeta de imagenes, devolveremos la ruta donde esta el archivo 
 // junto a su nombre, para asi poder guardarlo en la base de datos
 // esta la ejecutaremos justo antes de llamar a la funcion de adregar el usuario a la base de datos
-function uploadImage($file)
+function uploadImage($file, $user_ID)
 {
+
+    $image_file=$file;
+    logOperation('file: '.$file);
+    logOperation('image_file: '.$image_file);
+    logOperation('USER ID: '.$user_ID);
+
+    logOperation('entra en upload image');
     // Exit if no file uploaded
     if (!isset($file)) {
         return 'No file uploaded.';
@@ -429,10 +451,20 @@ function uploadImage($file)
     $image_name = bin2hex(random_bytes(16)) . $image_extension;
 
     // Move the temp image file to the images directory
-    $target_path = __DIR__ . "/images/" . $image_name;
+    $uploadDir = __DIR__ . "/images/";
+    $target_path =$uploadDir . $image_name;
+    $pathToDatabase = "/images/" . $image_name;
+
+    logOperation('target path: '.$target_path);
+    logOperation('file tmpname: '.$file["tmp_name"]);
+
     if (move_uploaded_file($file["tmp_name"], $target_path)) {
+        
+        logOperation('va a entrar en insert image');
+        insertPhotoInBBDD($image_extension,$pathToDatabase,$user_ID);
         return $target_path; // Return the name of the path file
-    } else {
+    } else { 
+        logOperation('no acepta move_uploaded'.$file["tmp_name"]. ' '.$target_path);
         return 'Error al guardar la imagen.';
     }
 }
@@ -491,6 +523,41 @@ function addUserToDatabase($email, $password, $name, $surname, $alias, $birth_da
     }
 }
 
+
+
+// busca la id del usuario mediante el email para despues guardar la imagen en la base de datos
+function serchUserID($email){
+    
+
+    try {
+        // Inicializamos la conexión con la base de datos
+        $pdo = startPDO();
+        if (!$pdo) {
+            throw new Exception("No se pudo conectar a la base de datos.");
+        }
+
+        // Consulta SQL para buscar el email y el código de validación
+        $sql = "SELECT user_ID FROM users WHERE email = :email";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+        $stmt->execute();
+
+        // Verificamos si se encontró el email
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // Cerramos conexión
+        unset($stmt);
+        unset($pdo);
+
+        return $user['user_ID'];
+
+
+
+    }catch (PDOException $e) {
+
+    }
+
+}
 // funcion para comprobar si el correo y el codigo son validos para mas adelante dar validacion al usuario
 // en la base de datos
 
@@ -601,7 +668,7 @@ $errors = [];
 
 
 
-            <form method="POST" action="">
+            <form method="POST" action="" enctype="multipart/form-data">
                 <div id="content-register">
                     <div class="error-message" id="error-message">
 
@@ -658,7 +725,7 @@ $errors = [];
                     <br>
                     <div class="input-group">
                         <label for="image">Selecciona una imatge:</label>
-                        <input type="file" name="image" id="image">
+                        <input type="file" name="image" id="image" accept="image/*">
                     </div>
                     <br>
                     <div class="input-group">
