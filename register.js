@@ -191,9 +191,12 @@ async function sendRegisterForm(event) {
     
         if (response.ok) {
             const register = await response.json();
-            console.log('respuesta todo ok ',register.message);
-            window.location.href = "login.php";
             showAlerts("info", "Usuari registrat correctament, valida el teu correo electrònic.");
+            console.log('respuesta todo ok ',register.message);
+            setTimeout(() => {
+                window.location.href = "login.php";
+            },"2000 ");
+            
 
         } else {
             console.error('Error en la respuesta del servidor');
