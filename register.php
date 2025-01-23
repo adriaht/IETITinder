@@ -30,29 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['validacio'])) {
 
                 if (setEmailValidated($email)) {
                     // html para mostrar que el email ha sido validado y redirigir a login
-                    echo '
-                        <!DOCTYPE html>
-                        <html lang="ca">
-                        <head>
-                            <meta charset="UTF-8">
-                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                            <title>Usuari Apto</title>
-                        </head>
-                        <body style="font-family: \'Montserrat\', sans-serif; line-height: 1.6; color: #333; background: linear-gradient(135deg, #ff6b6b, #cc2faa, #4158D0); background-size: 200% 200%; animation: gradient 15s ease infinite; padding: 20px; display: flex; align-items: center; justify-content: center; min-height: 100vh;">
-                            <div style="max-width: 600px; margin: 0 auto; padding: 20px; background-color: #fff; border: 1px solid #ddd; border-radius: 10px;">
-                                <h2 style="color: #FF6B6B; text-align: center; font-size: 2.5rem; font-weight: bold; animation: pulse 2s infinite;">Usuari Apto per Login</h2>
-                                <p style="text-align: center; font-size: 1.25rem; margin-top: 20px;">
-                                    Enhorabona, l\'usuari ha estat verificat correctament i és apte per iniciar sessió.
-                                </p>
-                                <div style="text-align: center; margin: 20px 0;">
-                                    <a href="login.php" 
-                                    style="background-color: #FF6B6B; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block; font-size: 1rem; font-weight: 600;">
-                                    Iniciar Sessió
-                                    </a>
-                                </div>
-                            </div>
-                        </body>
-                        </html>';
+                    header('Location: login.php');
                 } else {
 
                     // html para mostrar que el email no ha sido validado y redirigir a register
