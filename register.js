@@ -92,17 +92,23 @@ function initMap() {
 async function sendRegisterForm(event) {
     event.preventDefault(); // Evita el recargado de la página
     const formElement = event.target; // Formulario que disparó el evento
+    
+    
     const dataRegisterForm = new FormData(formElement);
+    console.log(dataRegisterForm);
+    
+    
+    console.log(dataRegisterForm.get('image'))
     const areErrors = validateData(dataRegisterForm); // Valida los datos y devuelve errores
     console.log(dataRegisterForm);
     console.log('detecta que Hay algun error, hay ' + areErrors.length + ' errores.');
     console.log(areErrors);
     // Selecciona el primer elemento con la clase "error-message"
     const errorDiv = document.getElementById("error-message");
-
-
+    
+    
     errorDiv.innerHTML = ''; // Limpiar errores anteriores
-
+    
     if (areErrors && areErrors.length > 0) {
         console.log('detecta que Hay algun error, hay ' + areErrors.length + ' errores.');
         // Si hay errores, agregarlos al contenedor
@@ -111,52 +117,40 @@ async function sendRegisterForm(event) {
             pElement.textContent = error;
             errorDiv.appendChild(pElement);
         });
-
+    
         // Desplazar la página hacia el div de errores
         errorDiv.scrollIntoView({ behavior: "smooth", block: "start" });
-
+    
     } else {
         console.log('No hay errores.');
-
-        // Convertir FormData a JSON para enviarlo en el cuerpo de la solicitud
-        const dataObject = {};
-        dataRegisterForm.forEach((value, key) => {
-            dataObject[key] = value;  // Rellenamos un objeto con los datos del FormData
-        });
-
-
-        try {
-
-            // enviamos el email para comprobar si este existe
-            const sendEmail = document.getElementById("email").value
-
-            const response = await fetch('register.php', {
-                method: 'POST',
-
-                // coger el email por .value en vez de enviar todo el form
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ endpoint: "register", form: dataObject, email: sendEmail })
-                // enviar los datos del formulario para verificar si el usuario existe
-            });
-
-            if (response.ok) {
-                // Si el usuario no existe, seguimos y enviamos un una solicitud 
-                // al servidor para enviar el correo de validacion, y lo añadimos a la base de datos
-                const register = await response.json();
-                console.log(register.message);
-
-
-
-            } else {
-                console.log(register.message);
-                console.log('error en la respuesta del server');
-            }
-
-
-        } catch (error) {
-            console.log('Error al comunicarse con el servidor: ' + error);
-        }
+    
+    
+        const inputElementFile = document.getElementById("image");
+    
+    if (inputElementFile.files.length > 0) {
+        dataRegisterForm.append('image', inputElementFile.files[0]);
     }
-
-
-}
+    
+    dataRegisterForm.append('endpoint', 'register');
+    dataRegisterForm.append('email', document.getElementById("email").value);
+    
+    try {
+        const response = await fetch('register.php', {
+            method: 'POST',
+            body: dataRegisterForm, // Deja que el navegador establezca automáticamente el Content-Type
+        });
+    
+        if (response.ok) {
+            const register = await response.json();
+            console.log(register.message);
+            window.location.href = "login.php";
+        } else {
+            console.error('Error en la respuesta del servidor');
+        }
+    } catch (error) {
+        console.error('Error al comunicarse con el servidor:', error);
+    }
+    }
+    
+    
+    }
