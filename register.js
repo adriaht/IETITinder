@@ -143,6 +143,7 @@ async function sendRegisterForm(event) {
         if (response.ok) {
             const register = await response.json();
             console.log(register.message);
+            header('Location: login.php');
         } else {
             console.error('Error en la respuesta del servidor');
         }
