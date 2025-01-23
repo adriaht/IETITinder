@@ -195,7 +195,7 @@ async function sendRegisterForm(event) {
             console.log('respuesta todo ok ',register.message);
             setTimeout(() => {
                 window.location.href = "login.php";
-            },"2000 ");
+            },"3000 ");
             
 
         } else {
