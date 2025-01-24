@@ -6,7 +6,7 @@ include("../functions.php"); /* Loads search from users + logs + startPDO */
 
 // Check if session is active. Otherwise, get to login
 if (!isset($_SESSION['user'])) {
-    header('Location: ../login.php');
+    header('Location: /login.php');
     exit;
 }
 
@@ -14,7 +14,7 @@ if (!isset($_SESSION['user'])) {
 $loggedUser = searchUserInDatabase("*", "users", $_SESSION['user']);
 
 if ($loggedUser['role'] !== "admin") {
-    header('Location: ../errors/error403.php');
+    http_response_code(403);
     exit;
 }
 
