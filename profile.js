@@ -244,7 +244,7 @@ function deleteSubmenu() {
     submenu.remove();
 }  
 
-function  renderDeleteConfirmation(e) {
+function renderDeleteConfirmation(e) {
 
     e.preventDefault();
 
@@ -277,6 +277,7 @@ function  renderDeleteConfirmation(e) {
 
         const form = document.createElement("form");
         form.method = "POST";
+        form.action = "delete-account.php";
         
             const textInput = document.createElement("input");
             textInput.type = "text";
@@ -315,7 +316,7 @@ function  renderDeleteConfirmation(e) {
 
         form.addEventListener("submit", (e) => {
             errorParagraph.innerText = "";
-            handleDeleteAccount(e, form, errorParagraph);
+            handleDeleteAccount(e, form, errorParagraph, mainDiv);
         })
 
     mainDiv.appendChild(attentionTitle);
@@ -326,23 +327,26 @@ function  renderDeleteConfirmation(e) {
 
 }   
 
-function handleDeleteAccount(e, form, errorPTag) {
+function handleDeleteAccount(e, form, errorPTag, containerContent) {
 
     e.preventDefault();
 
     const userInput = form.elements[0].value;
 
     if(userInput != "ESBORRAR") {
-    
+        
         errorPTag.innerText = "Has d'escriure 'ESBORRAR' en el camp superior";
 
     } else {
-        
-        window.location.href = `delete-account.php`;
+        containerContent.style.display = "none";
+        showAlerts("info", "Has eliminat el teu compte");
+
+        setTimeout(() =>{
+            form.submit();
+        }, 3000)
+      
 
     }
-
-  
 
 }
 

@@ -70,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $errors['db'] = 'Error de connexió. Torna-ho a intentar més tard.';
         } else {
             // Verify email
-            $stmt = $pdo->prepare("SELECT user_ID, password FROM users WHERE email = :email");
+            $stmt = $pdo->prepare("SELECT user_ID, password FROM users WHERE email = :email AND deactivated = 0");
             $stmt->bindParam(':email', $email);
             $stmt->execute();
 
