@@ -2,6 +2,9 @@ let fetchedUsers = [];
 
 document.addEventListener("DOMContentLoaded", async () => {
 
+    //NAV changer
+    document.getElementById("navDiscover").classList.add("navActive");
+
     // Gets array of fetched users
     fetchedUsers = await fetchUsers();
     // console.log("INITIAL USER FETCH");

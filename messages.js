@@ -6,6 +6,10 @@ let oldconversation = {};
 
 
 document.addEventListener("DOMContentLoaded", async () => {
+
+    //NAV changer
+    document.getElementById("navMessages").classList.add("navActive");
+
     // Get the match_id and user_id from the URL
     const urlParams = new URLSearchParams(window.location.search);
     const action = urlParams.get('action');
