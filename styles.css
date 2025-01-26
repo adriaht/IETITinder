@@ -1659,6 +1659,7 @@ body.admin-panel div.dashboard #content {
     align-items: center;
     height: 100%;
     overflow-x: auto;
+    overflow-y: hidden;
 }
 
 /* MARK: title */

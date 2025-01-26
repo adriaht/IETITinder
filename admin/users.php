@@ -6,6 +6,7 @@ include("../functions.php"); /* Loads search from users + logs + startPDO */
 
 // Check if session is active. Otherwise, get to login
 if (!isset($_SESSION['user'])) {
+    logOperation("[USERS.PHP] User is not logged in");
     header('Location: /login.php');
     exit;
 }
@@ -13,11 +14,13 @@ if (!isset($_SESSION['user'])) {
 // Store loggedUser Object
 $loggedUser = searchUserInDatabase("role", "users", $_SESSION['user']);
 if ($loggedUser['role'] !== "admin") {
+    logOperation("[USERS.PHP] User is not an admin. Sent error 403.");
     http_response_code(403);
     exit;
 }
 
 function getAge($date){
+    logOperation("[USERS.PHP] Calculating age from birthday $date.");
     $birthDate = $date; // Expected format: YYYY-MM-DD
     $birthDateObj = new DateTime($birthDate);
     $today = new DateTime();
@@ -33,8 +36,7 @@ function getUserInteractionData($userID) {
         // Initialize BBDD
         $pdo = startPDO();
 
-        // Se calcular las perferencias y se añaden a la consulta SQL para obtener usuarios
-
+        // Calculates users stats from database
         logOperation("[USERS.PHP] Started to get user $userID interaction data");
 
         $sql = "SELECT 
@@ -46,28 +48,23 @@ function getUserInteractionData($userID) {
         
         logOperation("[USERS.PHP] Sent query to get user $userID interaction data: $sql");
 
-        // Algorithm query
-
         $stmt = $pdo->prepare($sql);
         $stmt->bindParam(':loggedUserId', $userID);
         $stmt->execute();
         
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        // Cleans stored space for pdo and the query used. 
         unset($stmt);
         unset($pdo);
 
         logOperation("[USERS.PHP] Successfully got data of user interaction.");
 
-        // Send successful objects of users
         return $user;
 
     } catch (PDOException $e) {
 
         logOperation("[USERS.PHP] Connection error getting user $userID interaction data: " . $e->getMessage(), "ERROR");
 
-        // catch error and send it to JS
         return false;
 
     }
@@ -135,10 +132,10 @@ function userExists($userID) {
         unset($pdo);
 
         if($user){
-            logOperation("[USERS.PHP] User $userID exists.");
+            logOperation("[USERS.PHP] User $userID exists. Loading data.");
             return true;
         } else {
-            logOperation("[USERS.PHP] User $userID doesn't exist.");
+            logOperation("[USERS.PHP] User $userID doesn't exist. Returned to /admin/users.php");
             return false;
         }
 

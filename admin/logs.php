@@ -6,6 +6,7 @@ include("../functions.php"); /* Loads search from users + logs + startPDO */
 
 // Check if session is active. Otherwise, get to login
 if (!isset($_SESSION['user'])) {
+    logOperation("[LOGS.PHP] User is not logged in");
     header('Location: /login.php');
     exit;
 }
@@ -14,6 +15,7 @@ if (!isset($_SESSION['user'])) {
 $loggedUser = searchUserInDatabase("*", "users", $_SESSION['user']);
 
 if ($loggedUser['role'] !== "admin") {
+    logOperation("[LOGS.PHP] User is not an admin. Sent error 403.");
     http_response_code(403);
     exit;
 }
@@ -56,8 +58,12 @@ if ($loggedUser['role'] !== "admin") {
         <div id="content">
 
         <?php $dir = "../logs"; ?>
-        <?php if(!isset($_GET["id"])) { ?>
+        <?php if(!isset($_GET["id"])) { 
 
+            logOperation("[LOGS.PHP] GET id not set, displaying all log files.");
+
+            ?>
+            
             <div id="title-container">
                 <h2>Administració de logs</h2>
             </div>
@@ -71,7 +77,6 @@ if ($loggedUser['role'] !== "admin") {
                         <th>Nom d'arxiu</th>
                         <th>Tamany (bytes)</th>
                         <th>Línies</th>
-                        <th>Data de creació</th>
                         <th>Data d'última modificació</th>
                         <th></th>
                     </tr>
@@ -79,7 +84,16 @@ if ($loggedUser['role'] !== "admin") {
 
                 <?php  
                     
+                   
                     $files = glob($dir . "/*.txt");
+
+                    logOperation("[LOGS.PHP] Successfully got log files from $dir.");
+
+                    usort($files, function($a, $b) {
+                        return filemtime($b) - filemtime($a);
+                    });
+
+                    logOperation("[LOGS.PHP] Successfully sorted log files by last modified time.");
 
                     $perPage = 25;
                     $quantityOfPages = ceil(count($files) / $perPage);
@@ -104,19 +118,14 @@ if ($loggedUser['role'] !== "admin") {
                         <td><?php echo basename($file); ?></td>
                         <td><?php echo filesize($file); ?></td>
                         <td><?php echo count(file($file)); ?></td>
-                        <?php 
-                            if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-                                $creationTime = filectime($file);
-                            } else {
-                                $stat = stat($file);
-                                $creationTime = $stat['ctime'];
-                            }
-                        ?>
-                        <td><?php echo date("Y-m-d H:i:s", $creationTime) ; ?></td>
                         <td><?php echo date("Y-m-d H:i:s", filemtime($file)); ?></td>
                         <td><a href='?id=<?php echo basename($file)?>'>Veure detalls</a></td>
                     </tr>
-                    <?php } ?>
+                    <?php } 
+
+                    logOperation("[LOGS.PHP] Successfully printed log files in table");
+
+                    ?>
 
                 </tbody>
             </table>
@@ -159,12 +168,16 @@ if ($loggedUser['role'] !== "admin") {
 
             </div>
                             
-            <?php } else { 
+        <?php } else { 
 
                     $file = $dir."/".$_GET["id"];
                     // echo $file;
-                    if(file_exists($file)) { ?>
+                    if(file_exists($file)) { 
 
+                        logOperation("[LOGS.PHP] ".$_GET["id"]." exists, loading data");
+                        
+                        ?>
+                        
                          <div id="title-container">
                             <h1><a href="/admin/logs.php">&#8592;</a> Administració del log <?php echo htmlspecialchars($_GET["id"]); ?></h1>
                         </div> 
@@ -177,15 +190,6 @@ if ($loggedUser['role'] !== "admin") {
                                 <p><strong>Nom: </strong><?php echo basename($file); ?></p>
                                 <p><strong>Tamany: </strong><?php echo filesize($file);?> bytes</p>
                                 <p><strong>Línies: </strong><?php echo count(file($file));  ?></p>
-                                <?php 
-                                    if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-                                        $creationTime = filectime($file);
-                                    } else {
-                                        $stat = stat($file);
-                                        $creationTime = $stat['ctime'];
-                                    }
-                                ?>
-                                <p><strong>Data de creació: </strong><?php echo date("Y-m-d H:i:s", $creationTime); ?></p>
                                 <p><strong>Data d'última modificació: </strong><?php echo date("Y-m-d H:i:s", filemtime($file)); ?></p>
                              
                             </div>
@@ -204,6 +208,7 @@ if ($loggedUser['role'] !== "admin") {
 
                     <?php } else {
 
+                        logOperation("[LOGS.PHP] ".$_GET["id"]." doesn't exist, returned to logs.php");
                         header('Location: /admin/logs.php');
 
                     } ?>
