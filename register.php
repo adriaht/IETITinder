@@ -98,8 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
            
             // Validar que los datos requeridos no sean nulos o vacíos
             if (!$email || !$name || !$surname || !$alias || !$birth_date || !$latitude || !$longitude || !$sex || !$sexual_orientation || !$password) {
-                echo json_encode(['success' => false,
-                 'message' =>'El correo electrónico es requerido y no recibido en el servidor']);
+                echo json_encode(['success' => false, 'message' =>'El correo electrónico es requerido y no recibido en el servidor']);
                 exit;
             }
 
