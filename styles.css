@@ -1340,10 +1340,15 @@ nav ul {
 }
 
 nav ul li a {
-
-    color: black;
+    color: gray;
     text-decoration: none;
 } 
+
+.navActive{
+    color: #FF6B6B;
+    text-shadow: 2px 2px 8px pink;
+}
+
 
 /* END OF NAV */
 

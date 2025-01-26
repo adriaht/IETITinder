@@ -370,3 +370,9 @@ function toggleSubmenu(button){
     }
 }
 /* SUBMIT FUNCTIONALITY END ---------------------------------------------------------------------- */ 
+
+
+document.addEventListener("DOMContentLoaded", async () => {
+    //NAV changer
+    document.getElementById("navProfile").classList.add("navActive");
+})

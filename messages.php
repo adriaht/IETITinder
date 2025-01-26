@@ -422,9 +422,9 @@ function updateMessageLiked($messageID, $liked){
 
             <nav>
                 <ul>
-                    <li><a href="/discover.php">Descobrir</a></li>
-                    <li><a href="/messages.php">Missatges</a></li>
-                    <li><a href="/profile.php">Perfil</a></li>
+                    <li><a id="navDiscover" href="/discover.php">Descobrir</a></li>
+                    <li><a id="navMessages" href="/messages.php">Missatges</a></li>
+                    <li><a id="navProfile" href="/profile.php">Perfil</a></li>
                 </ul>
             </nav>
         
