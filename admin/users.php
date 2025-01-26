@@ -73,6 +73,83 @@ function getUserInteractionData($userID) {
     }
 }
 
+function getUserPhotos($userID) {
+
+        try {
+
+            logOperation("[USERS.PHP] Requested photos of user $userID.");
+
+            // Initialize BBDD
+            $pdo = startPDO();
+    
+            // Gets photos of user
+            $sql = "SELECT photo_ID, path FROM photos WHERE user_ID = :userId";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindParam(':userId', $userID);
+            $stmt->execute();
+
+            logOperation("[USERS.PHP] Query sent to get photos: $sql");
+    
+            // Load user photos from the query
+            $photos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            // Cleans stored space for pdo and the query used. 
+            unset($stmt);
+            unset($pdo);
+    
+            logOperation("[USERS.PHP] Successfully got photos of user in GET method get_user_photos. Returned data to JS");
+    
+            return array_values($photos);
+        
+    
+        } catch (PDOException $e) {
+    
+           logOperation("[USERS.PHP] Connection error while getting photos: " . $e->getMessage(), "ERROR");
+            return false;
+
+        }
+}
+
+
+function userExists($userID) {
+
+    try {
+
+        logOperation("[USERS.PHP] Checking if user $userID exists.");
+
+        // Initialize BBDD
+        $pdo = startPDO();
+
+        // Gets photos of user
+        $sql = "SELECT user_ID FROM users WHERE user_ID = :userId";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':userId', $userID);
+        $stmt->execute();
+
+        logOperation("[USERS.PHP] Query sent to see if user exists: $sql");
+
+        // Load user photos from the query
+        $user = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        unset($stmt);
+        unset($pdo);
+
+        if($user){
+            logOperation("[USERS.PHP] User $userID exists.");
+            return true;
+        } else {
+            logOperation("[USERS.PHP] User $userID doesn't exist.");
+            return false;
+        }
+
+    } catch (PDOException $e) {
+
+       logOperation("[USERS.PHP] Connection error while checking if user exists: " . $e->getMessage(), "ERROR");
+    return false;
+
+    }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -83,7 +160,7 @@ function getUserInteractionData($userID) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IETinder - Panell d'Administració</title>
     <link rel="stylesheet" type="text/css" href="/styles.css?t=<?php echo time();?>" />
-    
+    <script src="users.js"></script>
 </head>
 <body class="admin-panel">
 
@@ -277,6 +354,9 @@ function getUserInteractionData($userID) {
 
         <?php } else { ?>
 
+            <?php 
+            if(userExists($_GET["id"])) {
+            ?>
             <div id="overflow-container">
                 
                 <div id="title-container">
@@ -285,13 +365,19 @@ function getUserInteractionData($userID) {
 
                 <div id="user-content">
 
-                <?php 
-                
-                $selectedUser = searchUserInDatabase("*", "users", $_GET["id"]);
-                $age = getAge($selectedUser["birth_date"]);
-                $userInteractionData = getUserInteractionData($_GET["id"]);
-      
-                ?>
+                    <?php 
+                    
+                        $selectedUser = searchUserInDatabase("*", "users", $_GET["id"]);
+                        $age = getAge($selectedUser["birth_date"]);
+                        $userInteractionData = getUserInteractionData($_GET["id"]);
+                        $userPhotos = getUserPhotos($_GET["id"]);
+                    ?>
+
+                    <script>
+
+                        const userPhotos = <?php echo json_encode($userPhotos); ?>;
+
+                    </script>
 
                     <div id="user-info">
 
@@ -332,13 +418,18 @@ function getUserInteractionData($userID) {
 
                     <div id="user-photos">
 
-                        <img src="/images/user1_photo1.jpg" alt="">
+                        <img id="user-image">
+
+                    </div>
 
                 </div>
-            </div>
 
             </div>
             
+            <?php } else {
+                 header('Location: /admin/users.php'); }
+            ?>
+
         <?php } ?>
 
         </div>
