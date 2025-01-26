@@ -35,7 +35,7 @@ function getUserInteractionData($userID) {
 
         // Se calcular las perferencias y se añaden a la consulta SQL para obtener usuarios
 
-        logOperation("[USERS.PHP] Started to get user preferences");
+        logOperation("[USERS.PHP] Started to get user $userID interaction data");
 
         $sql = "SELECT 
             (SELECT COUNT(*) FROM interactions WHERE `from` = :loggedUserId) AS interactions_done,
@@ -44,7 +44,7 @@ function getUserInteractionData($userID) {
             (SELECT COUNT(*) FROM interactions WHERE `to` = :loggedUserId AND `state` = 'like') AS received_likes,
             (SELECT COUNT(*) FROM matches WHERE participant1 = :loggedUserId OR participant2 = :loggedUserId) AS matches_count;";
         
-        logOperation("[USERS.PHP] Sent query to get user preferences: $sql");
+        logOperation("[USERS.PHP] Sent query to get user $userID interaction data: $sql");
 
         // Algorithm query
 
@@ -58,14 +58,14 @@ function getUserInteractionData($userID) {
         unset($stmt);
         unset($pdo);
 
-        logOperation("[USERS.PHP] Successfully got data of user preference in GET method get_logged_user_preferences. Returned data to JS");
+        logOperation("[USERS.PHP] Successfully got data of user interaction.");
 
         // Send successful objects of users
         return $user;
 
     } catch (PDOException $e) {
 
-        logOperation("[USERS.PHP] Connection error in discover.php in GET method get_logged_user_preferences: " . $e->getMessage(), "ERROR");
+        logOperation("[USERS.PHP] Connection error getting user $userID interaction data: " . $e->getMessage(), "ERROR");
 
         // catch error and send it to JS
         return false;
@@ -97,14 +97,14 @@ function getUserPhotos($userID) {
             unset($stmt);
             unset($pdo);
     
-            logOperation("[USERS.PHP] Successfully got photos of user in GET method get_user_photos. Returned data to JS");
+            logOperation("[USERS.PHP] Successfully got photos of user $userID");
     
             return array_values($photos);
         
     
         } catch (PDOException $e) {
     
-           logOperation("[USERS.PHP] Connection error while getting photos: " . $e->getMessage(), "ERROR");
+           logOperation("[USERS.PHP] Connection error while getting photos of user $userID: " . $e->getMessage(), "ERROR");
             return false;
 
         }
