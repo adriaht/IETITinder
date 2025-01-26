@@ -127,7 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
     } catch (PDOException $e) {
-        logOperation("Database error in login.php", "ERROR");
+        logOperation("Database error in login.php: $e", "ERROR");
         $errors['db'] = 'Error de connexió. Torna-ho a intentar més tard.';
     }
 }
