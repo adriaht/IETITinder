@@ -18,6 +18,8 @@ if ($loggedUser['role'] !== "admin") {
     exit;
 }
 
+
+
 ?>
 
 <!DOCTYPE html>
@@ -53,272 +55,160 @@ if ($loggedUser['role'] !== "admin") {
 
         <div id="content">
 
+        <?php $dir = "../logs"; ?>
+        <?php if(!isset($_GET["id"])) { ?>
+
             <div id="title-container">
-                <h2>Visualitzador de logs</h2>
+                <h2>Administració de logs</h2>
             </div>
 
             <div id="table-container">
 
-                <table>
+            <table class="logs">
 
-                    <thead>
-                        <tr>
-                            <th>ID usuari</th>
-                            <th>Nom</th>
-                            <th>Email</th>
-                            <th>Rol</th>
-                            <th>Última conexió</th>
-                            <th>Validat</th>
-                            <th></th>
-                        </tr>
-                    </thead>
+                <thead>
+                    <tr>
+                        <th>Nom d'arxiu</th>
+                        <th>Tamany (bytes)</th>
+                        <th>Línies</th>
+                        <th>Data de creació</th>
+                        <th>Data d'última modificació</th>
+                        <th></th>
+                    </tr>
+                </thead>
 
-                    <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Maria López</td>
-                            <td>maria.lopez@example.com</td>
-                            <td>Administrador</td>
-                            <td>2025-01-23 14:32</td>
-                            <td>Sí</td>
-                            <td><a href="#">Veure més</a></td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Joan Ferrer</td>
-                            <td>joan.ferrer@example.com</td>
-                            <td>Editor</td>
-                            <td>2025-01-22 09:15</td>
-                            <td>No</td>
-                            <td><a href="#">Veure més</a></td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Laura Vidal</td>
-                            <td>laura.vidal@example.com</td>
-                            <td>Usuari</td>
-                            <td>2025-01-24 18:47</td>
-                            <td>Sí</td>
-                            <td><a href="#">Veure més</a></td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Laura Vidal</td>
-                            <td>laura.vidal@example.com</td>
-                            <td>Usuari</td>
-                            <td>2025-01-24 18:47</td>
-                            <td>Sí</td>
-                            <td><a href="#">Veure més</a></td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Laura Vidal</td>
-                            <td>laura.vidal@example.com</td>
-                            <td>Usuari</td>
-                            <td>2025-01-24 18:47</td>
-                            <td>Sí</td>
-                            <td><a href="#">Veure més</a></td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Laura Vidal</td>
-                            <td>laura.vidal@example.com</td>
-                            <td>Usuari</td>
-                            <td>2025-01-24 18:47</td>
-                            <td>Sí</td>
-                            <td><a href="#">Veure més</a></td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Laura Vidal</td>
-                            <td>laura.vidal@example.com</td>
-                            <td>Usuari</td>
-                            <td>2025-01-24 18:47</td>
-                            <td>Sí</td>
-                            <td><a href="#">Veure més</a></td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Laura Vidal</td>
-                            <td>laura.vidal@example.com</td>
-                            <td>Usuari</td>
-                            <td>2025-01-24 18:47</td>
-                            <td>Sí</td>
-                            <td><a href="#">Veure més</a></td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Laura Vidal</td>
-                            <td>laura.vidal@example.com</td>
-                            <td>Usuari</td>
-                            <td>2025-01-24 18:47</td>
-                            <td>Sí</td>
-                            <td><a href="#">Veure més</a></td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Laura Vidal</td>
-                            <td>laura.vidal@example.com</td>
-                            <td>Usuari</td>
-                            <td>2025-01-24 18:47</td>
-                            <td>Sí</td>
-                            <td><a href="#">Veure més</a></td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Laura Vidal</td>
-                            <td>laura.vidal@example.com</td>
-                            <td>Usuari</td>
-                            <td>2025-01-24 18:47</td>
-                            <td>Sí</td>
-                            <td><a href="#">Veure més</a></td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Laura Vidal</td>
-                            <td>laura.vidal@example.com</td>
-                            <td>Usuari</td>
-                            <td>2025-01-24 18:47</td>
-                            <td>Sí</td>
-                            <td><a href="#">Veure més</a></td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Laura Vidal</td>
-                            <td>laura.vidal@example.com</td>
-                            <td>Usuari</td>
-                            <td>2025-01-24 18:47</td>
-                            <td>Sí</td>
-                            <td><a href="#">Veure més</a></td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Laura Vidal</td>
-                            <td>laura.vidal@example.com</td>
-                            <td>Usuari</td>
-                            <td>2025-01-24 18:47</td>
-                            <td>Sí</td>
-                            <td><a href="#">Veure més</a></td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Laura Vidal</td>
-                            <td>laura.vidal@example.com</td>
-                            <td>Usuari</td>
-                            <td>2025-01-24 18:47</td>
-                            <td>Sí</td>
-                            <td><a href="#">Veure més</a></td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Laura Vidal</td>
-                            <td>laura.vidal@example.com</td>
-                            <td>Usuari</td>
-                            <td>2025-01-24 18:47</td>
-                            <td>Sí</td>
-                            <td><a href="#">Veure més</a></td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Laura Vidal</td>
-                            <td>laura.vidal@example.com</td>
-                            <td>Usuari</td>
-                            <td>2025-01-24 18:47</td>
-                            <td>Sí</td>
-                            <td><a href="#">Veure més</a></td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Laura Vidal</td>
-                            <td>laura.vidal@example.com</td>
-                            <td>Usuari</td>
-                            <td>2025-01-24 18:47</td>
-                            <td>Sí</td>
-                            <td><a href="#">Veure més</a></td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Laura Vidal</td>
-                            <td>laura.vidal@example.com</td>
-                            <td>Usuari</td>
-                            <td>2025-01-24 18:47</td>
-                            <td>Sí</td>
-                            <td><a href="#">Veure més</a></td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Laura Vidal</td>
-                            <td>laura.vidal@example.com</td>
-                            <td>Usuari</td>
-                            <td>2025-01-24 18:47</td>
-                            <td>Sí</td>
-                            <td><a href="#">Veure més</a></td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Laura Vidal</td>
-                            <td>laura.vidal@example.com</td>
-                            <td>Usuari</td>
-                            <td>2025-01-24 18:47</td>
-                            <td>Sí</td>
-                            <td><a href="#">Veure més</a></td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Laura Vidal</td>
-                            <td>laura.vidal@example.com</td>
-                            <td>Usuari</td>
-                            <td>2025-01-24 18:47</td>
-                            <td>Sí</td>
-                            <td><a href="#">Veure més</a></td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Laura Vidal</td>
-                            <td>laura.vidal@example.com</td>
-                            <td>Usuari</td>
-                            <td>2025-01-24 18:47</td>
-                            <td>Sí</td>
-                            <td><a href="#">Veure més</a></td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Laura Vidal</td>
-                            <td>laura.vidal@example.com</td>
-                            <td>Usuari</td>
-                            <td>2025-01-24 18:47</td>
-                            <td>Sí</td>
-                            <td><a href="#">Veure més</a></td>
-                        </tr>
-                        <tr>
-                            <td>25</td>
-                            <td>Laura Vidal</td>
-                            <td>laura.vidal@example.com</td>
-                            <td>Usuari</td>
-                            <td>2025-01-24 18:47</td>
-                            <td>Sí</td>
-                            <td><a href="#">Veure més</a></td>
-                        </tr>
+                <?php  
+                    
+                    $files = glob($dir . "/*.txt");
 
-                    </tbody>
+                    $perPage = 25;
+                    $quantityOfPages = ceil(count($files) / $perPage);
+                    
+                    $currentPage = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
+                
+                    if ($currentPage < 1) {
+                        $currentPage = 1;
+                    } 
+                
+                    if ($currentPage > $quantityOfPages) {
+                        $currentPage = $quantityOfPages;
+                    }
 
-                </table>
+                    $paginatedFiles = array_slice($files, ($currentPage - 1) * $perPage,  $perPage);
+                ?>
+
+                <tbody>
+
+                    <?php foreach ($paginatedFiles as $file) { ?> 
+                    <tr>
+                        <td><?php echo basename($file); ?></td>
+                        <td><?php echo filesize($file); ?></td>
+                        <td><?php echo count(file($file)); ?></td>
+                        <?php 
+                            if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+                                $creationTime = filectime($file);
+                            } else {
+                                $stat = stat($file);
+                                $creationTime = $stat['ctime'];
+                            }
+                        ?>
+                        <td><?php echo date("Y-m-d H:i:s", $creationTime) ; ?></td>
+                        <td><?php echo date("Y-m-d H:i:s", filemtime($file)); ?></td>
+                        <td><a href='?id=<?php echo basename($file)?>'>Veure detalls</a></td>
+                    </tr>
+                    <?php } ?>
+
+                </tbody>
+            </table>
 
             </div>
 
             <div id="pagination">
 
-                <ul>
-                    <li class="disabled"><a href="#">←</a></li>
-                    <li class="active"><a href="#">1</a></li>
-                    <li><a href="#">2</a></li>
-                    <li><a href="#">3</a></li>
-                    <li><a href="#">4</a></li>
-                    <li><a href="#">5</a></li>
-                    <li><a href="#">→</a></li>
-                </ul>
+                <ul>    
+                    <?php 
+
+                        // PREVIOUS PAGE ( << )
+                        if ($currentPage > 1) {
+                            $previousPage = $currentPage - 1;
+                            echo "<li><a href='?page=$previousPage'>&laquo;</a></li>";
+                        }
+
+                        // NUMBER GENERATION
+                        $maxShownPages = 5; // Max anchors (max. 5)
+                        $initialPage = max(1, $currentPage - floor($maxShownPages / 2)); // Dinamic initial paging (HIGHEST OF --> 1 or (currentPage - 2))
+                        $endingPage = min($quantityOfPages, $initialPage + $maxShownPages - 1); // Dinamic initial paging (LOWEST OF --> total pages or (currentPage + 2))
+
+                        // Anchor generation
+                        for ($i = $initialPage; $i <= $endingPage; $i++) {
+                            if ($i == $currentPage) {
+                                echo "<li class='active'><a href='?page=$i'>$i</a></li>"; // Página actual
+                            } else {
+                                echo "<li><a href='?page=$i'>$i</a></li>";
+                            }
+                        }
+
+                        // NEXT PAGE ( >> )
+                        if ($currentPage < $quantityOfPages) {
+                            $nextPage = $currentPage + 1;
+                            echo "<li><a href='?page=$nextPage'>&raquo;</a></li>";
+                        }
+
+                    ?>
+                </ul>    
 
             </div>
+                            
+            <?php } else { 
+
+                    $file = $dir."/".$_GET["id"];
+                    // echo $file;
+                    if(file_exists($file)) { ?>
+
+                         <div id="title-container">
+                            <h1><a href="/admin/logs.php">&#8592;</a> Administració del log <?php echo htmlspecialchars($_GET["id"]); ?></h1>
+                        </div> 
+
+                        <div id="log-content">
+
+                            <div id="log-metadata">
+
+                                <h2>Metadades</h2>  
+                                <p><strong>Nom: </strong><?php echo basename($file); ?></p>
+                                <p><strong>Tamany: </strong><?php echo filesize($file);?> bytes</p>
+                                <p><strong>Línies: </strong><?php echo count(file($file));  ?></p>
+                                <?php 
+                                    if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+                                        $creationTime = filectime($file);
+                                    } else {
+                                        $stat = stat($file);
+                                        $creationTime = $stat['ctime'];
+                                    }
+                                ?>
+                                <p><strong>Data de creació: </strong><?php echo date("Y-m-d H:i:s", $creationTime); ?></p>
+                                <p><strong>Data d'última modificació: </strong><?php echo date("Y-m-d H:i:s", filemtime($file)); ?></p>
+                             
+                            </div>
+
+                            <div id="log-print">
+
+                                <?php
+                                 $content = file_get_contents($file);
+                                 echo nl2br($content);
+                                ?>
+
+                            </div>
+
+                        </div>
+                        
+
+                    <?php } else {
+
+                        header('Location: /admin/logs.php');
+
+                    } ?>
+
+            <?php } ?>
 
         </div>
        

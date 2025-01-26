@@ -1674,9 +1674,8 @@ body.admin-panel div.dashboard #content #title-container a {
 
 body.admin-panel div.dashboard #content #title-container  a:hover {
     color: #FF6B6B;
- }
+}
  
-
 /* MARK: USERS */
 body.admin-panel div.dashboard #content #table-container {
     width: 100%;
@@ -1685,7 +1684,9 @@ body.admin-panel div.dashboard #content #table-container {
     overflow-x: auto;
 }
 
-body.admin-panel div.dashboard #content #table-container table {
+/* MARK: USER TABLE */
+
+body.admin-panel div.dashboard #content #table-container table.users {
     min-width: 1500px; 
     width: 100%;   
     table-layout: fixed;
@@ -1695,7 +1696,7 @@ body.admin-panel div.dashboard #content #table-container table {
 
 }
 
-body.admin-panel div.dashboard #content #table-container table th {
+body.admin-panel div.dashboard #content #table-container table.users th {
     border-bottom: 2px solid black;
     text-align: left;
     font-size: 1.2rem;
@@ -1703,52 +1704,128 @@ body.admin-panel div.dashboard #content #table-container table th {
     position: sticky;
 }
 
-body.admin-panel div.dashboard #content #table-container table th:last-child {
+body.admin-panel div.dashboard #content #table-container table.users th:last-child {
     border: none;
 }
 
-body.admin-panel div.dashboard #content #table-container table tr:nth-child(even){
+body.admin-panel div.dashboard #content #table-container table.users tr:nth-child(even){
     background-color: rgb(240, 240, 240);
 }
 
-
-body.admin-panel div.dashboard #content #table-container table th, 
-body.admin-panel div.dashboard #content #table-container table td {
+body.admin-panel div.dashboard #content #table-container table.users th, 
+body.admin-panel div.dashboard #content #table-container table.users td {
 
     padding: 10px 0px;
 }
 
-
-body.admin-panel div.dashboard #content #table-container table th:first-child, 
-body.admin-panel div.dashboard #content #table-container table td:first-child {
+body.admin-panel div.dashboard #content #table-container table.users th:first-child, 
+body.admin-panel div.dashboard #content #table-container table.users td:first-child {
 
     width: 50px;
 }
 
-body.admin-panel div.dashboard #content #table-container table th:nth-child(3), 
-body.admin-panel div.dashboard #content #table-container table td:nth-child(3) {
+body.admin-panel div.dashboard #content #table-container table.users th:nth-child(3), 
+body.admin-panel div.dashboard #content #table-container table.users td:nth-child(3) {
 
     width: 300px;
 }
 
-body.admin-panel div.dashboard #content #table-container table th:nth-child(4), 
-body.admin-panel div.dashboard #content #table-container table td:nth-child(4) {
+body.admin-panel div.dashboard #content #table-container table.users th:nth-child(4), 
+body.admin-panel div.dashboard #content #table-container table.users td:nth-child(4) {
 
     width: auto;
 }
 
-body.admin-panel div.dashboard #content #table-container table th:nth-child(7), 
-body.admin-panel div.dashboard #content #table-container table td:nth-child(7) {
+body.admin-panel div.dashboard #content #table-container table.users th:nth-child(7), 
+body.admin-panel div.dashboard #content #table-container table.users td:nth-child(7) {
 
     width: 100px;
 }
-body.admin-panel div.dashboard #content #table-container table th:nth-child(8), 
-body.admin-panel div.dashboard #content #table-container table td:nth-child(8){
+body.admin-panel div.dashboard #content #table-container table.users th:nth-child(8), 
+body.admin-panel div.dashboard #content #table-container table.users td:nth-child(8){
 
     width: 120px;
 }
 
-body.admin-panel div.dashboard #content #table-container table td:last-child a {
+body.admin-panel div.dashboard #content #table-container table.users td:last-child a {
+    text-decoration: none; 
+    padding: 8px;
+    margin-left: 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    background: linear-gradient(to right, #ff6b6b, #cc2faa);
+    color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* MARK: END USER TABLE */
+
+/* MARK: LOGS TABLE */
+
+body.admin-panel div.dashboard #content #table-container table.logs {
+    min-width: 1500px; 
+    width: 100%;   
+    table-layout:auto;
+    overflow-x: auto;
+    border-collapse: collapse;
+    position: relative;
+
+}
+
+body.admin-panel div.dashboard #content #table-container table.logs th {
+    border-bottom: 2px solid black;
+    text-align: left;
+    font-size: 1.2rem;
+    padding-left: 0;
+    position: sticky;
+}
+
+body.admin-panel div.dashboard #content #table-container table.logs th:last-child {
+    border: none;
+}
+
+body.admin-panel div.dashboard #content #table-container table.logs tr:nth-child(even){
+    background-color: rgb(240, 240, 240);
+}
+
+body.admin-panel div.dashboard #content #table-container table.logs th, 
+body.admin-panel div.dashboard #content #table-container table.logs td {
+
+    padding: 10px 0px;
+}
+
+/*
+body.admin-panel div.dashboard #content #table-container table.logs th:first-child, 
+body.admin-panel div.dashboard #content #table-container table.logs td:first-child {
+
+    width: auto;
+}
+*/
+body.admin-panel div.dashboard #content #table-container table.logs th:nth-child(3), 
+body.admin-panel div.dashboard #content #table-container table.logs td:nth-child(3) {
+
+    width: 200px;
+}
+/*
+body.admin-panel div.dashboard #content #table-container table.logs th:nth-child(4), 
+body.admin-panel div.dashboard #content #table-container table.logs td:nth-child(4) {
+
+    width: auto;
+}
+
+body.admin-panel div.dashboard #content #table-container table.logs th:nth-child(7), 
+body.admin-panel div.dashboard #content #table-container table.logs td:nth-child(7) {
+
+    width: auto;
+}
+body.admin-panel div.dashboard #content #table-container table.logs th:nth-child(8), 
+body.admin-panel div.dashboard #content #table-container table.logs td:nth-child(8){
+
+    width: auto;
+}
+*/
+body.admin-panel div.dashboard #content #table-container table.logs td:last-child a {
     text-decoration: none; 
     padding: 8px;
     margin-left: 15px;
@@ -1818,7 +1895,7 @@ body.admin-panel div.dashboard #content #pagination ul li.active a {
 
 }
 
-/* MARK: user*/
+/* MARK: USER CONTENT */
 
 body.admin-panel div.dashboard #content #overflow-container {
     overflow-y: hidden;
@@ -1904,4 +1981,37 @@ body.admin-panel div.dashboard #content #user-content #user-photos #carrousel-co
 body.admin-panel div.dashboard #content #user-content #user-photos #carrousel-container span.dot.active {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Optional: add shadow */
     background-color: white;
+}
+
+/* MARK: LOGS CONTENT */
+
+body.admin-panel div.dashboard #content #log-content {
+    margin-top: 25px;
+    height: 95%;
+    width: 100%;
+    min-width: 1200px;
+display: flex;
+flex-direction: column;
+}
+
+body.admin-panel div.dashboard #content #log-content #log-metadata {
+    height: 20%;
+    width: 450px;
+    margin-bottom: 25px;
+
+}
+
+body.admin-panel div.dashboard #content #log-content #log-metadata h2 {
+    padding: 5px 0px;
+    border-bottom: 2px solid black;
+    margin-bottom: 10px;
+}
+
+body.admin-panel div.dashboard #content #log-content #log-print {
+    height: 75%;
+    border: 2px solid black;
+    overflow-x: auto;
+    overflow-y: auto;
+    margin-bottom: 25px;
+    padding: 10px;
 }

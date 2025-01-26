@@ -232,7 +232,7 @@ function userExists($userID) {
            
             <div id="table-container">
 
-                <table>
+                <table class="users">
 
                     <thead>
                     <tr>
@@ -393,19 +393,20 @@ function userExists($userID) {
                         <p><strong>Longitut: </strong><?php echo $selectedUser["longitude"];?></p>
 
                         <h2>Compte</h2>
-                        <p><strong>Rol: </strong><?php echo htmlspecialchars($selectedUser["role"]); ?></p>
+                        <p><strong>Rol: </strong><?php if($selectedUser["role"] === "user") {echo "Usuari";} else {echo "Administrador";};?></p>
                         <p><strong>Email: </strong><?php echo htmlspecialchars($selectedUser["email"]); ?></p>
                         <p><strong>Data de creació: </strong><?php echo htmlspecialchars($selectedUser["creation_date"]); ?></p>
                         <p><strong>Data d'última conexió: </strong><?php echo htmlspecialchars($selectedUser["last_login_date"]); ?></p>
-                        <p><strong>Desactivat: </strong><?php echo htmlspecialchars($selectedUser["deactivated"]); ?></p>
-                        <p><strong>Validat: </strong><?php echo htmlspecialchars($selectedUser["validated"]); ?></p>
+                        
+                        <p><strong>Desactivat: </strong><?php if($selectedUser["deactivated"] === 1) {echo "SÍ";} else {echo "NO";};?></p>
+                        <p><strong>Validat: </strong><?php if($selectedUser["validated"] === 1) {echo "SÍ";} else {echo "NO";};?></p>
                         <p><strong>Data d'expiració de la validació: </strong><?php echo htmlspecialchars($selectedUser["expirate_date"]); ?></p>
                         <p><strong>Codi de validació: </strong><?php echo htmlspecialchars($selectedUser["validate_code"]); ?></p>
 
                         <h2>Preferències</h2>
-                        <p><strong>Distància: </strong><?php echo htmlspecialchars($selectedUser["distance_user_preference"]); ?></p>
-                        <p><strong>Edat mínima: </strong><?php echo htmlspecialchars($selectedUser["min_age_user_preference"]); ?></p>
-                        <p><strong>Edat màxima: </strong><?php echo htmlspecialchars($selectedUser["max_age_user_preference"]); ?></p>
+                        <p><strong>Distància: </strong><?php echo htmlspecialchars($selectedUser["distance_user_preference"]); ?> km</p>
+                        <p><strong>Edat mínima: </strong><?php echo htmlspecialchars($selectedUser["min_age_user_preference"]); ?> anys</p>
+                        <p><strong>Edat màxima: </strong><?php echo htmlspecialchars($selectedUser["max_age_user_preference"]); ?> anys</p>
 
                         <h2>Estadístiques</h2>
                         <p><strong>Interaccions realitzades: </strong><?php echo htmlspecialchars($userInteractionData["interactions_done"]); ?></p>

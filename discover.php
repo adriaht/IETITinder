@@ -72,8 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
         $userMinAgePreference = $loggedUser["min_age_user_preference"];
         $userMaxAgePreference  = $loggedUser["max_age_user_preference"];
 
-        $parametersForLog = "[DISCOVER.PHP] DATA PASSED TO ALGORITHM: User $userID | User sex: $userSex | Orientation: $userSexualOrientation | Sex target: $userSexTarget | 
-        latitude,longitude: $userLatitude , $userLongitude | MAX DISTANCE = $userMaxDistancePreference| MIN AGE = $userMinAgePreference |  MAX AGE =  $userMaxAgePreference |";
+        $parametersForLog = "[DISCOVER.PHP] DATA PASSED TO ALGORITHM: User $userID | User sex: $userSex | Orientation: $userSexualOrientation | Sex target: $userSexTarget | latitude,longitude: $userLatitude , $userLongitude | MAX DISTANCE = $userMaxDistancePreference| MIN AGE = $userMinAgePreference |  MAX AGE =  $userMaxAgePreference |";
         logOperation($parametersForLog);
         
         $sql = "";
