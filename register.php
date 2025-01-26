@@ -1,5 +1,15 @@
 <?php
 // INICIO DEL PHP
+
+
+ require __DIR__ . '/vendor/autoload.php';
+
+ //Import PHPMailer classes into the global namespace
+ //These must be at the top of your script, not inside a function
+ use PHPMailer\PHPMailer\PHPMailer;
+ use PHPMailer\PHPMailer\SMTP;
+
+
 session_start();
 // Gets input from the request 
 
@@ -34,59 +44,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['validacio'])) {
                 } else {
 
                     // html para mostrar que el email no ha sido validado y redirigir a register
-                    echo '
-                    <!DOCTYPE html>
-                    <html lang="ca">
-                    <head>
-                        <meta charset="UTF-8">
-                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                        <title>Error de Validació</title>
-                    </head>
-                    <body style="font-family: \'Montserrat\', sans-serif; line-height: 1.6; color: #333; background: linear-gradient(135deg, #ff6b6b, #cc2faa, #4158D0); background-size: 200% 200%; animation: gradient 15s ease infinite; padding: 20px; display: flex; align-items: center; justify-content: center; min-height: 100vh;">
-                        <div style="max-width: 600px; margin: 0 auto; padding: 20px; background-color: #fff; border: 1px solid #ddd; border-radius: 10px;">
-                            <h2 style="color: #FF6B6B; text-align: center; font-size: 2.5rem; font-weight: bold; animation: pulse 2s infinite;">Error de Validació</h2>
-                            <p style="text-align: center; font-size: 1.25rem; margin-top: 20px;">
-                                Ho sentim, hi ha hagut un error al validar l\'usuari. Si us plau, torna a intentar-ho més tard.
-                            </p>
-                            <div style="text-align: center; margin: 20px 0;">
-                                <a href="register.php" 
-                                style="background-color: #FF6B6B; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block; font-size: 1rem; font-weight: 600;">
-                                Tornar a Registrar
-                                </a>
-                            </div>
-                        </div>
-                    </body>
-                    </html>';
+                   
                                     }
 
 
                 // // dar validacion al usuaro en la base de datos
                 // echo "   " . "El email y el código son válidos.";
             } else {
-                echo '
-                <!DOCTYPE html>
-                <html lang="ca">
-                <head>
-                    <meta charset="UTF-8">
-                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <title>Sense coincidències</title>
-                </head>
-                <body style="font-family: \'Montserrat\', sans-serif; line-height: 1.6; color: #333; background: linear-gradient(135deg, #ff6b6b, #cc2faa, #4158D0); background-size: 200% 200%; animation: gradient 15s ease infinite; padding: 20px; display: flex; align-items: center; justify-content: center; min-height: 100vh;">
-                    <div style="max-width: 600px; margin: 0 auto; padding: 20px; background-color: #fff; border: 1px solid #ddd; border-radius: 10px;">
-                        <h2 style="color: #FF6B6B; text-align: center; font-size: 2.5rem; font-weight: bold; animation: pulse 2s infinite;">Sense coincidències</h2>
-                        <p style="text-align: center; font-size: 1.25rem; margin-top: 20px;">
-                            No s\'ha trobat cap coincidència en la cerca. Si us plau, revisa les dades introduïdes i torna a intentar-ho.
-                        </p>
-                        <div style="text-align: center; margin: 20px 0;">
-                            <a href="search.php" 
-                            style="background-color: #FF6B6B; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block; font-size: 1rem; font-weight: 600;">
-                            Tornar a Cercar
-                            </a>
-                        </div>
-                    </div>
-                </body>
-                </html>';
-            }
+                           }
 
 
         } else {
@@ -133,11 +98,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
            
             // Validar que los datos requeridos no sean nulos o vacíos
             if (!$email || !$name || !$surname || !$alias || !$birth_date || !$latitude || !$longitude || !$sex || !$sexual_orientation || !$password) {
-                echo json_encode([
-                    'success' => false,
-                    'message' =>
-                        'El correo electrónico es requerido y no recibido en el servidor'
-                ]);
+                echo json_encode(['success' => false,
+                 'message' =>'El correo electrónico es requerido y no recibido en el servidor']);
                 exit;
             }
 
@@ -145,7 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (searchEmailInDatabase($email)) {
                 // si no esta registrado, llamamos a la funcion de enviar el correo de validacion
                 $verificationCode = generateValidationCode();
-                $validateEmail = sendValidateEmail($email, $verificationCode);
+                $validateEmail = sendValidateEmail($email, $verificationCode,$name);
                 if ($validateEmail) {
                     // se envia el correo de validacion correctamente
 
@@ -312,8 +274,52 @@ function generateValidationCode()
 }
 
 
+// funcion para enviar el correo, donde solo necesitamos pasar el email, el nombre y el cuerpo del mensaje
+function sendEmail($email, $subject, $message){
+
+    $mail = new PHPMailer(true);
+
+try {
+    //Server settings
+    $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+    $mail->isSMTP();                                            //Send using SMTP
+    $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
+    $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+    $mail->Username   = 'iesIETinder5@gmail.com';                     //SMTP username
+    $mail->Password   = 'ncvk zvri tong aqpf';                               //SMTP password
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
+    $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+
+    //Recipients
+    $mail->setFrom('iesIETinder5@gmail.com', 'Tinder Contact');
+    $mail->addAddress($email, $subject);     //Add a recipient
+    $mail->addCC('adriah.t.22@gmail.com');
+
+
+    //Content
+    $mail->isHTML(true);                                  //Set email format to HTML
+    $mail->Subject = 'Here is the subject';
+    $mail->Body    = $message;
+    $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+
+
+
+    if ($mail->send()) {
+        echo json_encode(['success' => true, 'message' => 'Message has been sent']);
+        return true; // Retorna true si el correo se envió correctamente
+    } else {
+        $_SESSION["ERRORS"][] = "No se pudo enviar el correo.";
+        return false;
+    }
+} catch (Exception $e) {
+    echo json_encode(['success' => false, 'message' => "Message could not be sent. Mailer Error: {$mail->ErrorInfo}"]);
+}
+}
+
+
+
 // funcion para enviar el correo de validacion, hay que cambiar el from por el usuario del servidor
-function sendValidateEmail($email, $code)
+function sendValidateEmail($email, $code, $name)
 {
     if (!isset($_SESSION["ERRORS"])) {
         $_SESSION["ERRORS"] = [];
@@ -332,10 +338,7 @@ function sendValidateEmail($email, $code)
     // Construir el parámetro validacio
     $validacioParam = $encryptedEmail . "_" . $encryptedCode;
 
-    // Parámetros del correo
-    $from = "tinder5@ieticloudpro.ieti.site";
-    $to = $email;
-    $subject = 'Aquest és un codi de validació';
+
 
     // Crear el mensaje como HTML
     $mensaje = '
@@ -356,8 +359,8 @@ function sendValidateEmail($email, $code)
                     ' . htmlspecialchars($code) . '
                 </span>
                 <p style="margin-top: 20px; font-size: 0.875rem;">Aquest codi és vàlid durant 48 hores.</p>
-                <p>Per confirmar, fes clic aquí: 
-                    <a href="https://tinder5.ieti.site/register.php?validacio=' . $validacioParam . '" 
+                <p>Per confirmar, fes clic aquí:
+                    <a href="https://tinder5.ieti.site/register.php?validacio=' . $validacioParam . '"
                        style="background-color: #FF6B6B; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block; font-size: 1rem; font-weight: 600;">
                        Confirmar
                     </a>
@@ -369,21 +372,16 @@ function sendValidateEmail($email, $code)
     </body>
     </html>
 ';
-    // Cabeceras
-    $cabeceras = 'MIME-Version: 1.0' . "\r\n";
-    $cabeceras .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
-    $cabeceras .= 'From: ' . $from . "\r\n";
-    $cabeceras .= 'Reply-To: ' . $from . "\r\n";
 
-    // Intentar enviar el correo
-    if (mail($to, $subject, $mensaje, $cabeceras)) {
-        return true; // Retorna true si el correo se envió correctamente
-    } else {
-        $_SESSION["ERRORS"][] = "No se pudo enviar el correo.";
-        return false;
-    }
+
+if(sendEmail($email,$name, $mensaje)){
+    return true;
+}else{
+    return false;
 }
 
+
+}
 
 
 // funcion para agregar la imagen en la base de datos, la cual la llamaremos dentro de otra funcion
