@@ -15,9 +15,11 @@ if (!isset($_SESSION['user'])) {
 $loggedUser = searchUserInDatabase("role", "users", $_SESSION['user']);
 if ($loggedUser['role'] !== "admin") {
     logOperation("[USERS.PHP] User is not an admin. Sent error 403.");
-    http_response_code(403);
-    exit;
+    header("HTTP/1.1 403 Forbidden");
+    include("/errors/error403.php");
+    die();
 }
+
 
 function getAge($date){
     logOperation("[USERS.PHP] Calculating age from birthday $date.");
