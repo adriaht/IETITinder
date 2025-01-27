@@ -16,7 +16,7 @@ if (!isset($_SESSION['user'])) {
 // Store loggedUser Object
 $loggedUser = searchUserInDatabase("*", "users", $_SESSION['user']);
 
-logOperation("[DISCOVER.PHP] Session started");
+logOperation("[DISCOVER.PHP] Session started for user ".$_SESSION['user']);
 
 
 // FUNCTION TO ESTABLISH USER preference. Ex: if heterosexual, then return opposite sex.
@@ -72,8 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
         $userMinAgePreference = $loggedUser["min_age_user_preference"];
         $userMaxAgePreference  = $loggedUser["max_age_user_preference"];
 
-        $parametersForLog = "[DISCOVER.PHP] DATA PASSED TO ALGORITHM: User $userID | User sex: $userSex | Orientation: $userSexualOrientation | Sex target: $userSexTarget | 
-        latitude,longitude: $userLatitude , $userLongitude | MAX DISTANCE = $userMaxDistancePreference| MIN AGE = $userMinAgePreference |  MAX AGE =  $userMaxAgePreference |";
+        $parametersForLog = "[DISCOVER.PHP] DATA PASSED TO ALGORITHM: User $userID | User sex: $userSex | Orientation: $userSexualOrientation | Sex target: $userSexTarget | latitude,longitude: $userLatitude , $userLongitude | MAX DISTANCE = $userMaxDistancePreference| MIN AGE = $userMinAgePreference |  MAX AGE =  $userMaxAgePreference |";
         logOperation($parametersForLog);
         
         $sql = "";
@@ -118,7 +117,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
             ORDER BY ponderation DESC, last_login_date DESC, creation_date, distance ASC";
         }
 
-        logOperation("[DISCOVER.PHP] Sent query to get users: $sql" , "INFO");
+        logOperation("[DISCOVER.PHP] Sent query to get users: $sql");
 
         // Algorithm query
 
@@ -156,7 +155,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
         }
 
         logOperation("[DISCOVER.PHP] Got data of ".count($users)." user in query get_users");
-
         logOperation("[DISCOVER.PHP] Successfully got data of users in GET method get_users");
         
         if (count($users) > 0) {
@@ -170,7 +168,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
             $stmt = $pdo->prepare($sql);
             $stmt->execute();
 
-            logOperation("[DISCOVER.PHP] Query sent to get photos: $sql" , "INFO");
+            logOperation("[DISCOVER.PHP] Query sent to get photos: $sql");
 
             // insert in user["photos"]["photo path"]
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -276,12 +274,14 @@ function insertInteraction($input, $loggedUserID){
     $stmt->bindParam(':state', $interactionState);
     $stmt->execute();
 
+    logOperation("[DISCOVER.PHP] Query sent to INSERT INTERACTION: $sql", "INFO");
+
     // Cleans space of the query and PDO
     unset($stmt);
     unset($pdo);
 
     // LOG
-    logOperation("Interaction INSERTED successful: ".$loggedUserID." gave $interactionState to $interactedUserID", "INFO");
+    logOperation("[DISCOVER.PHP] Interaction INSERTED successful: ".$loggedUserID." gave $interactionState to $interactedUserID", "INFO");
     echo json_encode(['success' => true, 'message' => "Interaction successful: ".$loggedUserID. " gave $interactionState to $interactedUserID"]);
     exit;
 }
@@ -300,17 +300,19 @@ function checkMatch($input, $loggedUserID){
     $stmt->bindParam(':fromLikedUser', $interactedUserID);
     $stmt->bindParam(':toLoggedUser', $loggedUserID);
     $stmt->execute();
-    
+
+    logOperation("[DISCOVER.PHP] Query sent to CHECK MATCH: $sql", "INFO");
+
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
     // Both are successful responses, but we have to register if there's match or no 
     // LOG
     if($row) {
-        logOperation("CHECK MATCH: YES between user $interactedUserID and user $loggedUserID", "INFO");
+        logOperation("[DISCOVER.PHP] CHECK MATCH: YES between user $interactedUserID and user $loggedUserID", "INFO");
         echo json_encode(['success' => true, 'match' => true, 'message' => "MATCH: l'usuari $loggedUserID i l'usuari $interactedUserID"]);
         exit;
     } else {
-        logOperation("CHECK MATCH: NO between user $interactedUserID and user $loggedUserID", "INFO");
+        logOperation("[DISCOVER.PHP] CHECK MATCH: NO between user $interactedUserID and user $loggedUserID", "INFO");
         echo json_encode(['success' => true, 'match' => false, 'message' => "NO MATCH: hi ha match $loggedUserID y i  $interactedUserID"]);
         exit;
     }
@@ -332,11 +334,13 @@ function insertMatch($input, $loggedUserID){
     $stmt->bindParam(':loggedUser', $interactedUserID);
     $stmt->execute();
     
+    logOperation("[DISCOVER.PHP] Query sent to INSERT MATCH: $sql", "INFO");
+
     // Cleans stored space for query and PDO
     unset($stmt);
     unset($pdo);
 
-    logOperation("Match inserted between user $interactedUserID and user $loggedUserID", "INFO");
+    logOperation("[DISCOVER.PHP] Match inserted between user $interactedUserID and user $loggedUserID", "INFO");
     // Sends response to 
     echo json_encode(['success' => true, 'message' => "Match creat entre usuari $interactedUserID i usuari $loggedUserID"]);
     exit;
@@ -406,8 +410,6 @@ function updateUserPreferences($input, $loggedUserID) {
 
 // THIS WILL GET ALL POST REQUESTS. Each call in JS will have an endpoint as key_value to handle each endpoint request
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-    logOperation($_SERVER["CONTENT_TYPE"]);
     
     try {
 
@@ -491,9 +493,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <nav>
                 <ul>
-                    <li><a href="/discover.php">Descobrir</a></li>
-                    <li><a href="/messages.php">Missatges</a></li>
-                    <li><a href="/profile.php">Perfil</a></li>
+                    <li><a id="navDiscover" href="/discover.php">Descobrir</a></li>
+                    <li><a id="navMessages" href="/messages.php">Missatges</a></li>
+                    <li><a id="navProfile" href="/profile.php">Perfil</a></li>
                 </ul>
             </nav>
         

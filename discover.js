@@ -2,18 +2,23 @@ let fetchedUsers = [];
 
 document.addEventListener("DOMContentLoaded", async () => {
 
+    //NAV changer
+    document.getElementById("navDiscover").classList.add("navActive");
+
     // Gets array of fetched users
     fetchedUsers = await fetchUsers();
-    console.log("INITIAL USER FETCH");
-    console.log(fetchedUsers);
+    // console.log("INITIAL USER FETCH");
+    // console.log(fetchedUsers);
     
     // If there is any user to discover
     if (fetchedUsers && fetchedUsers.length > 0) {
 
+        insertLog(`Found users that match preference when first logged`, "INFO");
         renderUserCard(fetchedUsers, 0);
 
     } else {
 
+        insertLog(`NOT FOUND users that match preference when first logged`, "INFO");
         renderNoUsersLeft();
 
     }
@@ -28,8 +33,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             
             // Gets user preference data to show in fields
             const userPreference = await fetchLoggedUserPreferences();
-            console.log("INITIAL PREFERENCE DATA")
-            console.log(userPreference);
+            //console.log("INITIAL PREFERENCE DATA")
+            //console.log(userPreference);
 
             if (userPreference){
                 greyBackground.style.display = "inline";
@@ -38,7 +43,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             } else {
                 MostrarAlertas("error", "No s'han pogut carregar les preferencies de l'usuari" )
             }
-
 
         } else {
 
@@ -124,6 +128,8 @@ async function renderPreferencesSubmenu(distance, minAge, maxAge) {
     header.appendChild(submenu);
 
     submenu.addEventListener("submit", handleSubmittedPreference)
+
+    insertLog(`Opened submenu`, "INFO");
 }
 
 // Deletes submenu of preference, restores button to " . . . " and hides grey background 
@@ -136,6 +142,7 @@ function deletePreferencesSubmenu() {
 
     const submenu = document.getElementById("submenu");
     submenu.remove();
+    insertLog(`Closed submenu`, "INFO");
 }
 
 // Gets form, checks for errors and show errors or send POST request to update user preferences in BBDD
@@ -174,14 +181,16 @@ function handleSubmittedPreference(e){
 
     if (!errors.length) {
 
+        insertLog(`Data sent by user is correct: DISTANCE ${distance} | MIN_AGE ${minAge} | MAX_AGE ${maxAge}`, "INFO");
         errorDiv.innerHTML = "";
         updateUserPreferences(distance, minAge, maxAge);
 
     } else {
 
+        insertLog(`Data sent by user DON'T respect limits: DISTANCE ${distance} | MIN_AGE ${minAge} | MAX_AGE ${maxAge}`, "INFO");
         submitButton.classList.remove("disabled");
         showErrorsInSubmittedPreference(errors.join("\n"));
-
+        
     }
 
 }
@@ -219,8 +228,9 @@ async function updateUserPreferences(distance, minAge, maxAge) {
 
                 // Fetches user data based on new filters and updates card
                 fetchedUsers = await fetchUsers();
-                console.log("FETCHED USERS AFTER PREFERENCE CHANGE");
-                console.log(fetchedUsers);
+
+                //console.log("FETCHED USERS AFTER PREFERENCE CHANGE");
+                //console.log(fetchedUsers);
 
                 setTimeout(() => {
 
@@ -229,11 +239,11 @@ async function updateUserPreferences(distance, minAge, maxAge) {
 
                      // If there is any user to discover, show card
                     if (fetchedUsers && fetchedUsers.length > 0) {
-
+                        insertLog(`[DISCOVER.PHP] Found users that match the new user preference. Rendering users`, "INFO");
                         renderUserCard(fetchedUsers, 0);
 
                     } else { // show no users let
-
+                        insertLog(`[DISCOVER.PHP] NOT FOUNF users that match the new user preference. Rendering users`, "INFO");
                         renderNoUsersLeft();
 
                     }
@@ -441,6 +451,8 @@ function renderUserCard(users, index) {
 
     // If there are no users left after render, set empty content
     if (index >= users.length) {
+
+        insertLog(`Ran out of users left. Showing NO USERS LEFT`, "INFO");
         renderNoUsersLeft();
         return;
     }
@@ -712,6 +724,7 @@ function MostrarAlertas(nameAlerta, missageAlert) {
     setTimeout(() => {
         typeAlerta.style.display = "none";
         typeAlerta.remove(); // Elimina el elemento del DOM
+        insertLog(`Hide alert: ${missageAlert}`, "INFO");
     }, 3000); // 3 segundos
-    
+    insertLog(`Showed alert: [${typeAlerta}] ${missageAlert}`, "INFO");
 }

@@ -250,6 +250,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Gets endpoint and redirects to function that will handle the AJAX call
         switch ($input['endpoint']){
+            case "updateMessageLike":
+                $messageID = $input['messageID'] ?? null;
+                $liked = $input['liked'] ?? null;
+                updateMessageLiked($messageID, $liked);
+                break;
             case "insertMessage":
                 $matchID = $input['matchID'] ?? null;
                 $senderID = $input['senderID'] ?? null;
@@ -305,6 +310,34 @@ function insertMessage($matchID, $senderID, $messageContent){
 }
 
 
+//Funcion para actualizar el Message Liked
+function updateMessageLiked($messageID, $liked){
+    try {
+        $pdo = startPDO();
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $sql = "UPDATE conversations
+                SET liked = :liked
+                WHERE message_ID = :messageID";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':liked', $liked);
+        $stmt->bindParam(':messageID', $messageID);
+        $stmt->execute();
+        
+        unset($stmt);
+        unset($pdo);
+
+        logOperation("[MESSAGES.PHP] Successfully updated like to: " . $liked . " for messageID: " . $messageID . " in GET method updateMessageLike", "INFO");
+        echo json_encode(['success' => true, 'message' => "Successfully updated like for messageID: " . $messageID]);
+        exit;
+
+    } catch (PDOException $e) {
+        logOperation("[MESSAGES.PHP] Connection error updating like to: " . $liked . " for messageID: " . $messageID . " in GET method updateMessageLike" . $e->getMessage(), "ERROR");
+        echo json_encode(['success' => false, 'message' => 'Error en la conexión: ' . $e->getMessage()]);
+        exit;
+    }
+}
+
+
 ?>
 
 <!DOCTYPE html>
@@ -314,6 +347,10 @@ function insertMessage($matchID, $senderID, $messageContent){
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IETinder - Missatges</title>
     <link rel="stylesheet" type="text/css" href="/styles.css?t=<?php echo time();?>" />
+    
+    <!-- Heart icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
     <script src="messages.js"></script>
 </head>
 <body class="body">
@@ -385,9 +422,9 @@ function insertMessage($matchID, $senderID, $messageContent){
 
             <nav>
                 <ul>
-                    <li><a href="/discover.php">Descobrir</a></li>
-                    <li><a href="/messages.php">Missatges</a></li>
-                    <li><a href="/profile.php">Perfil</a></li>
+                    <li><a id="navDiscover" href="/discover.php">Descobrir</a></li>
+                    <li><a id="navMessages" href="/messages.php">Missatges</a></li>
+                    <li><a id="navProfile" href="/profile.php">Perfil</a></li>
                 </ul>
             </nav>
         

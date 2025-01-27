@@ -66,11 +66,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $pdo = startPDO();
         
         if (!$pdo) {
-            logOperation("Error conection" , "ERROR");
+            logOperation("Error conection with database" , "ERROR");
             $errors['db'] = 'Error de connexió. Torna-ho a intentar més tard.';
         } else {
             // Verify email
-            $stmt = $pdo->prepare("SELECT user_ID, password FROM users WHERE email = :email");
+            $stmt = $pdo->prepare("SELECT user_ID, password FROM users WHERE email = :email AND deactivated = 0");
             $stmt->bindParam(':email', $email);
             $stmt->execute();
 
@@ -127,7 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
     } catch (PDOException $e) {
-        logOperation("Database error in login.php", "ERROR");
+        logOperation("Database error in login.php: $e", "ERROR");
         $errors['db'] = 'Error de connexió. Torna-ho a intentar més tard.';
     }
 }
@@ -140,7 +140,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IETinder - Login</title>
     <link rel="stylesheet" type="text/css" href="/styles.css?t=<?php echo time();?>" />
-
 </head>
 <body class="body-login">
     <div class="container">
