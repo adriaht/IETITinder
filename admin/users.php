@@ -16,7 +16,7 @@ $loggedUser = searchUserInDatabase("role", "users", $_SESSION['user']);
 if ($loggedUser['role'] !== "admin") {
     logOperation("[USERS.PHP] User is not an admin. Sent error 403.");
     header("HTTP/1.1 403 Forbidden");
-    include("/errors/error403.php");
+    include("../errors/error403.php");
     die();
 }
 
