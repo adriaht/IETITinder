@@ -14,8 +14,9 @@ if (!isset($_SESSION['user'])) {
 $loggedUser = searchUserInDatabase("*", "users", $_SESSION['user']);
 
 if ($loggedUser['role'] !== "admin") {
-    http_response_code(403);
-    exit;
+    header("HTTP/1.1 403 Forbidden");
+    include("/errors/erro403.php");
+    die();
 }
 
 ?>

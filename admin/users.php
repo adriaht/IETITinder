@@ -338,6 +338,7 @@ function userExists($userID) {
                     // catch error and send it to JS
                     //echo json_encode(['success' => false, 'message' => 'Error en la conexión get_logged_user_preferences: ' . $e->getMessage()]);
                     //exit;
+                    logOperation("[USERS.PHP] Connection Error while loading user: ". $e->getMessage(), "ERROR");
                     echo 'Error en la conexión: ' . $e->getMessage();
 
                     }
