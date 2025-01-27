@@ -67,13 +67,27 @@ function validateData(formData) {
     return errores;
 }
 
+function validatePasswords(password, passwordConfirm) {
+    let errores = [];
+    console.log('entra a la funcion de validar la contraseña ',password, passwordConfirm);
+    if (password !== passwordConfirm) {
+        errores.push("Les contrassenyes no coincideixen.");
+       
+    } if (password.length < 8) {
+        errores.push("La contrasenya ha de tenir almenys 8 caracters.");
+    } if (password.length > 20) {
+        errores.push("La contrasenya ha de tenir menys de 20 caracters.");
+    }
+    console.log('en la funcion hay: ',errores.length, errores); 
+    return errores;
+}
 // funcion de fetch para enviar el correo
 async function sendForgotPasswordForm(event) {
 
     event.preventDefault(); // Evita el recargado de la página
     const formElement1 = event.target; // Formulario que disparó el evento
-    
-    
+
+
     const dataRecoverForm1 = new FormData(formElement1);
     console.log(dataRecoverForm1);
 
@@ -83,10 +97,10 @@ async function sendForgotPasswordForm(event) {
     console.log(areErrors);
     // Selecciona el primer elemento con la clase "error-message"
     const errorDiv = document.getElementById("error-message");
-    
-    
+
+
     errorDiv.innerHTML = ''; // Limpiar errores anteriores
-    
+
     if (areErrors && areErrors.length > 0) {
         console.log('detecta que Hay algun error, hay ' + areErrors.length + ' errores.');
         // Si hay errores, agregarlos al contenedor
@@ -95,10 +109,10 @@ async function sendForgotPasswordForm(event) {
             pElement.textContent = error;
             errorDiv.appendChild(pElement);
         });
-    
+
         // Desplazar la página hacia el div de errores
         errorDiv.scrollIntoView({ behavior: "smooth", block: "start" });
-    
+
     } else {
 
         console.log('No hay errores.');
@@ -108,32 +122,30 @@ async function sendForgotPasswordForm(event) {
             dataRecoverForm1.append('endpoint', 'forgotPassword');
             const response = await fetch('forgot_password.php', {
                 method: 'POST',
-                
+
                 body: dataRecoverForm1, // Deja que el navegador establezca automáticamente el Content-Type
             });
 
-         
-        const register = await response.json();
+
+            const forgotPassword = await response.json();
             if (response.ok) {
 
+                showAlerts("info", "correo enviat, siusplau, valida el teu correo avans de cambiar la contrasenya.");
+                console.log('respuesta todo ok ', forgotPassword.message, forgotPassword.email);
+                 setTimeout(() => {
 
-            
-               
-                showAlerts("info", "contrasenya canviada correctament.");
-                console.log('respuesta todo ok ',register.message);
-                setTimeout(() => {
                     document.getElementById("search_email").style.display = "none";
+
                     document.getElementById("change_password").style.display = "block";
-                    window.location.href = "forgot_password.php";
-                },"3000 ");
-                
-    
+                    
+                 }, 3000);
+
             } else {
                 console.error('Error en la respuesta del servidor al enviar el correo de cambio de contraseña');
-             
+
             }
 
-        }catch (error) {
+        } catch (error) {
             console.error('Error al comunicarse con el servidor en la parte del email:', error);
 
 
@@ -143,28 +155,32 @@ async function sendForgotPasswordForm(event) {
     }
 
 }
+
 // una vez enviado el correo y validado, activamos esta funcion al meter la contraseña
 async function sendChangePasswordForm(event) {
-
+console.log("ENTRA");
     event.preventDefault(); // Evita el recargado de la página
     const formElement2 = event.target; // Formulario que disparó el evento
-    
-    
+
+
     const dataRecoverForm2 = new FormData(formElement2);
     console.log(dataRecoverForm2);
 
 
     const areErrors = validateData(dataRecoverForm2); // Valida los datos y devuelve errores
+    const passwordError = validatePasswords(dataRecoverForm2.get('password'), dataRecoverForm2.get('confirm_password'));
 
+console.log('hay errores de password: ', passwordError.length, passwordError);
     console.log('detecta que Hay algun error, hay ' + areErrors.length + ' errores.');
     console.log(areErrors);
     // Selecciona el primer elemento con la clase "error-message"
-    const errorDiv = document.getElementById("error-message");
-    
-    
+    const errorDiv = document.getElementById("error-message-password");
+   
     errorDiv.innerHTML = ''; // Limpiar errores anteriores
-    
-    if (areErrors && areErrors.length > 0) {
+
+    if (areErrors && areErrors.length > 0 ) {
+        
+        console.log('entra en el error del formulario vacio');
         console.log('detecta que Hay algun error, hay ' + areErrors.length + ' errores.');
         // Si hay errores, agregarlos al contenedor
         areErrors.forEach(error => {
@@ -172,14 +188,29 @@ async function sendChangePasswordForm(event) {
             pElement.textContent = error;
             errorDiv.appendChild(pElement);
         });
-    
+      
+
+        // Desplazar la página hacia el div de errores
+        errorDiv.scrollIntoView({ behavior: "smooth", block: "start" });
+
+    }else if (passwordError && passwordError.length > 0 ) {
+        console.log('entra en el error del password');
+        console.log('detecta que Hay algun error, hay ' + passwordError.length + ' errores.');
+        // Si hay errores, agregarlos al contenedor
+        passwordError.forEach(error => {
+            const pElement = document.createElement("p");
+            pElement.textContent = error;
+            errorDiv.appendChild(pElement);
+        });
+      
+
         // Desplazar la página hacia el div de errores
         errorDiv.scrollIntoView({ behavior: "smooth", block: "start" });
     
-    } else {
+    }else {
 
         console.log('No hay errores.');
-         
+
 
         try {
             dataRecoverForm2.append('endpoint', 'changePassword');
@@ -187,22 +218,24 @@ async function sendChangePasswordForm(event) {
                 method: 'POST',
                 body: dataRecoverForm2, // Deja que el navegador establezca automáticamente el Content-Type
             });
-        
+
             // Lee el cuerpo de la respuesta solo una vez
-            const register = await response.json();  // Lee el JSON de la respuesta
-        
+            const forgot = await response.json();  // Lee el JSON de la respuesta
+
             if (response.ok) {
                 showAlerts("info", "Contrasenya canviada correctament.");
-                console.log('Respuesta todo ok:', register.message);
-                setTimeout(() => {
-                    document.getElementById("search_email").style.display = "block";
-                    document.getElementById("change_password").style.display = "none";
-                    window.location.href = "login.php";
-                }, 3000);
+                console.log('Respuesta todo ok:', forgot.message, forgot.email);
+                // setTimeout(() => {
+
+                //     document.getElementById("search_email").style.display = "block";
+                //     document.getElementById("change_password").style.display = "none";
+                //     window.location.href = "login.php";
+                // }, 3000);
+
             } else {
-                console.error('Error en la respuesta del servidor al cambiar la contraseña');
+                console.error('Error en la respuesta del servidor al cambiar la contraseña', forgot.email);
             }
-        
+
         } catch (error) {
             console.error('Error al comunicarse con el servidor al cambiar la contraseña:', error);
         }
