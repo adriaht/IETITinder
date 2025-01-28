@@ -420,7 +420,7 @@ function sendChangePasswordEmail($email, $name, $code)
             </span>
             <p style="margin-top: 20px; font-size: 0.875rem;">Aquest codi és vàlid durant 24 hores.</p>
             <p>Per restablir la contrassenya, fes clic aquí:
-                <a href="http://localhost:8080/forgot_password.php?cambiarPassword=' . $validacioParam . '"
+                <a href="https://tinder5.ieti.site/forgot_password.php?cambiarPassword=' . $validacioParam . '"
                    style="background-color: #FF6B6B; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block; font-size: 1rem; font-weight: 600;">
                    Restablir Contrassenya
                 </a>
