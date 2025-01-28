@@ -667,7 +667,7 @@ function isEmailAndCodeValid($email, $code)
                 <div class="logo-forgot">IETinder ❤️</div>
                 <p class="footer-text">Uneix-te i troba l'amor a l'Institut Esteve Terradas i Illa</p>
             </div>
-
+<?php if (!$showChangePassword): ?>
             <main class="forgot-password" id="search_email">
                 <div class="informative_header">
                     <h1>introdueix el teu correo</h1>
@@ -696,8 +696,8 @@ function isEmailAndCodeValid($email, $code)
 
             </main>
 
-
-            <main class="forgot-password" id="change_password" style="display: none">
+<?php else: ?>
+            <main class="forgot-password" id="change_password" >
                 <div class="informative_header">
                     <h1>Cambia la contrasenya</h1>
                     <br>
@@ -725,7 +725,7 @@ function isEmailAndCodeValid($email, $code)
                 </form>
 
             </main>
-
+<?php endif; ?>
 
         </div>
     </div>

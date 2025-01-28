@@ -134,7 +134,7 @@ async function sendForgotPasswordForm(event) {
                 console.log('respuesta todo ok ', forgotPassword.message, forgotPassword.email);
                  setTimeout(() => {
 
-                    window.location.href = "forget_password.php";
+                    window.location.href = "forgot_password.php";
                     
                  }, 3000);
 

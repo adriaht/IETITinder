@@ -309,7 +309,7 @@ try {
 
 
     if ($mail->send()) {
-        echo json_encode(['success' => true, 'message' => 'Message has been sent']);
+        logOperation("Correo enviado correctamente", "INFO");
         return true; // Retorna true si el correo se envió correctamente
     } else {
         $_SESSION["ERRORS"][] = "No se pudo enviar el correo.";
