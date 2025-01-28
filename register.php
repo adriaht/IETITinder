@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['validacio'])) {
             // Desencriptar valores para recuperar email y código
             $email = base64_decode(urldecode($encryptedEmail));
             $code = base64_decode(urldecode($encryptedCode));
-
+            var_dump($email, $code) ;
 
             // Verificar si el email y el código coinciden con la base de datos
             if (isEmailAndCodeValid($email, $code)) {
@@ -42,6 +42,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['validacio'])) {
                     // html para mostrar que el email ha sido validado y redirigir a login
                     header('Location: login.php');
                 } else {
+                    echo json_encode(['success' => false, 'message' => 'error al validar el email']);
+                    exit;
 
                     // html para mostrar que el email no ha sido validado y redirigir a register
                    
@@ -51,6 +53,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['validacio'])) {
                 // // dar validacion al usuaro en la base de datos
                 // echo "   " . "El email y el código son válidos.";
             } else {
+
+                echo json_encode(['success' => false, 'message' => 'codigo de validacion no apto']);
+                exit;
                            }
 
 
@@ -280,7 +285,7 @@ function sendEmail($email, $subject, $message){
 
 try {
     //Server settings
-    $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+    $mail->SMTPDebug = 0;                      //Enable verbose debug output
     $mail->isSMTP();                                            //Send using SMTP
     $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
     $mail->SMTPAuth   = true;                                   //Enable SMTP authentication

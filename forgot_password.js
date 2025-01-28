@@ -96,7 +96,7 @@ async function sendForgotPasswordForm(event) {
     console.log('detecta que Hay algun error, hay ' + areErrors.length + ' errores.');
     console.log(areErrors);
     // Selecciona el primer elemento con la clase "error-message"
-    const errorDiv = document.getElementById("error-message");
+    const errorDiv = document.getElementsByClassName("error-message")[0];
 
 
     errorDiv.innerHTML = ''; // Limpiar errores anteriores
@@ -129,19 +129,21 @@ async function sendForgotPasswordForm(event) {
 
             const forgotPassword = await response.json();
             if (response.ok) {
-
-                showAlerts("info", "correo enviat, siusplau, valida el teu correo avans de cambiar la contrasenya.");
+                if (forgotPassword.success) {
+                showAlerts("info", "correo enviat, siusplau, valida el teu correo per poder cambiar la contrasenya.");
                 console.log('respuesta todo ok ', forgotPassword.message, forgotPassword.email);
                  setTimeout(() => {
 
-                    document.getElementById("search_email").style.display = "none";
-
-                    document.getElementById("change_password").style.display = "block";
+                    window.location.href = "forget_password.php";
                     
                  }, 3000);
 
+                }else {
+                    console.error('ha ocurrido un error al procesar o verificar el correo, porfavor, compruebe los datos y vuelvelo a probar',forgotPassword.message);
+                    showAlerts('error', 'ha ocurrido un error al procesar o verificar el correo, porfavor, compruebe los datos y vuelvelo a probar');
+                }
             } else {
-                console.error('Error en la respuesta del servidor al enviar el correo de cambio de contraseña');
+                console.error('Error en la respuesta del servidor al enviar el correo de cambio de contraseña',forgotPassword.message);
 
             }
 
@@ -174,7 +176,7 @@ console.log('hay errores de password: ', passwordError.length, passwordError);
     console.log('detecta que Hay algun error, hay ' + areErrors.length + ' errores.');
     console.log(areErrors);
     // Selecciona el primer elemento con la clase "error-message"
-    const errorDiv = document.getElementById("error-message-password");
+    const errorDiv = document.getElementsByClassName("error-message")[0];
    
     errorDiv.innerHTML = ''; // Limpiar errores anteriores
 
@@ -223,15 +225,19 @@ console.log('hay errores de password: ', passwordError.length, passwordError);
             const forgot = await response.json();  // Lee el JSON de la respuesta
 
             if (response.ok) {
+                if (!forgot.success) {
+                    console.error('ha ocurrido un error al procesar o verificar el correo, porfavor, compruebe los datos y vuelvelo a probar',forgot.message,forgot.email);
+                    showAlerts('error', forgot.message);
+                }else{
+                    
+              
                 showAlerts("info", "Contrasenya canviada correctament.");
                 console.log('Respuesta todo ok:', forgot.message, forgot.email);
-                // setTimeout(() => {
+                setTimeout(() => {
 
-                //     document.getElementById("search_email").style.display = "block";
-                //     document.getElementById("change_password").style.display = "none";
-                //     window.location.href = "login.php";
-                // }, 3000);
-
+                    window.location.href = "login.php";
+                }, 3000);
+            }
             } else {
                 console.error('Error en la respuesta del servidor al cambiar la contraseña', forgot.email);
             }

@@ -12,35 +12,13 @@ use PHPMailer\PHPMailer\SMTP;
 
 session_start();
 
-$showChangePassword = false; 
-
 
 // parametros get para mostrar la pagina de cambiar contraseña si el correo es valido
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['validat'])&& $_GET['validat'] === 'true') {
-       
-       try{
-        $emailEncrypt = isset($_GET['email']) ? $_GET['email'] : null;
-        $email = base64_decode(urldecode($emailEncrypt));
-        if (searchEmailInDatabase($email)) {
-           
-        $showChangePassword = true;
-      
-
-        } else {
-            echo json_encode(['success' => false, 'message' => 'Correo no valido']);
-            exit;
-        }
-
-       }
-       catch (Exception $e) {
-        logOperation("Error: " . $e->getMessage(), "ERROR");
-        echo json_encode(['success' => false, 'message' => 'Error en el servidor al validar la contraseña']);
-        exit;
-       }
-    }
-
-// parametro get para comprovar que el correo enviado se ha validado
+    
+    // parametro get para comprovar que el correo enviado se ha validado
+    
+    // parametro get para comprovar que el correo enviado se ha validado
     if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['cambiarPassword'])) {
         $validacioParam = $_GET['cambiarPassword'];
         try {
@@ -63,14 +41,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 // Verificar si el email y el código coinciden con la base de datos
                 if (isEmailAndCodeValid($email, $code)) {
                     // guardar el email en la sesion para mas tarde usarlo al cambiar la contraseña
-                    $_SESSION['email']=$email;
+                    session_start();
+                    $_SESSION['email'] = $email;
 
                     // aqui cambiaremos el valor del validacion, para mas adelante asegurarnos que 
                     // el usuario desea cambiar la contraseña y verificarlo al actualizar la base de datos
-                    changeValidationUser($email);
-                    echo json_encode(['success' => true, 'message' => 'codigo de validacion apto']);
-                    header('Location: forgot_password.php?validat=true&email=' . $encryptedEmail);
-                    exit;
+                    if (changeValidationUser($email)) {
+
+                        // variable para mostrar el segundo formulario despues de acceder desde el correo
+                        $showChangePassword = true;
+                        // codigo meteremos en el formulario de cambiar la contraseña, para asegurarnos 
+                        // que han llegado letivamente
+                        $securityCode = 1122;
+
+
+                    } else {
+                        echo json_encode(['success' => false, 'message' => 'Error en el servidor al cambiar la validacion del usuario']);
+                        exit;
+                    }
+
 
 
 
@@ -100,25 +89,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ob_clean(); // Limpia cualquier salida previa para no romper el json
     header('Content-Type: application/json; charset=utf-8');
 
-   
+
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['endpoint']) && $_POST['endpoint'] === 'forgotPassword') {
         ob_clean(); // Limpia cualquier salida previa para no romper el json
         header('Content-Type: application/json; charset=utf-8');
 
-      
+
 
         try {
             $email = isset($_POST['forgot_email']) ? $_POST['forgot_email'] : null;
             session_start();
-            $_SESSION['email']=$email;
+            $_SESSION['email'] = $email;
 
             if (searchEmailInDatabase($email)) { //cambiar mas asdelante para que compruebe codigo de william
                 $name = searchNameInDatabase($email);
                 $code = searchCodeInDatabase($email);
                 if (sendChangePasswordEmail($email, $name, $code)) {
 
-                    echo json_encode(['success' => true, 'message' => 'Correo enviado exitosamente','email'=>$_SESSION['email']]);
+                    echo json_encode(['success' => true, 'message' => 'Correo enviado exitosamente', 'email' => $_SESSION['email']]);
                     exit;
 
                 } else {
@@ -142,11 +131,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         }
     } elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['endpoint']) && $_POST['endpoint'] === 'changePassword') {
-            // Aseguramos de que la sesión esté iniciada
-    session_start();
+        // Aseguramos de que la sesión esté iniciada
+        session_start();
 
-    // Recuperar el email desde la sesión
-    $email = isset($_SESSION['email']) ? $_SESSION['email'] : null;
+        // Recuperar el email desde la sesión
+        $email = isset($_SESSION['email']) ? $_SESSION['email'] : null;
         try {
 
             $password = isset($_POST['password']) ? $_POST['password'] : null;
@@ -154,26 +143,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // comprobar si las contraseñas son iguales y si tiene permiso para cambiar en la base de datos
             if (canChangePassword($password, $confirmPassword)) {
-               
-                if (changePasswordInDatabase($password,$email )) {
-                    
-                    if(ValidationUser($email)){
-                        echo json_encode(['success' => true, 'message' => 'Contraseña cambiada exitosamente y usuario validado','email'=>$email]);
-                        exit;
-                    }else{
-                        echo json_encode(['success' => false, 'message' => 'No se pudo validar al usuario']);
-                        exit;
-                    }
-                    
-                   
-                } else {
-                    echo json_encode(['success' => false, 'message' => 'No se pudo cambiar la contraseña','email'=>$email]);
-                    exit;
-                
+                if (isUserValidated($email)) {
 
-            }
+                    if (changePasswordInDatabase($password, $email)) {
+
+                        if (ValidationUser($email)) {
+                            echo json_encode(['success' => true, 'message' => 'Contraseña cambiada exitosamente y usuario validado', 'email' => $email]);
+                            exit;
+                        } else {
+                            echo json_encode(['success' => false, 'message' => 'hubo un error y no se pudo validar al usuario']);
+                            exit;
+                        }
+
+                    } else {
+                        echo json_encode(['success' => false, 'message' => 'hubo un error y no se pudo cambiar la contraseña', 'email' => $email]);
+                        exit;
+
+                    }
+                } else {
+                    echo json_encode(['success' => false, 'message' => 'validacion del usuario no apta, porfavor, comprueba tu correp', 'email' => $email]);
+                    exit;
+                }
             } else {
-                echo json_encode(['success' => false, 'message' => 'Las contraseñas no coinciden o no se ha validado el correo']);
+                echo json_encode(['success' => false, 'message' => 'Las contraseñas no coinciden, vuelva a introducior los datos']);
                 exit;
             }
 
@@ -371,7 +363,7 @@ function sendEmail($email, $subject, $message)
         //Recipients
         $mail->setFrom('iesIETinder5@gmail.com', 'Tinder Contact');
         $mail->addAddress($email, $subject);     //Add a recipient
-      
+
 
 
         //Content
@@ -438,7 +430,7 @@ function sendChangePasswordEmail($email, $name, $code)
         <p style="margin-top: 20px; font-size: 0.875rem; color: #718096;">Salutacions,<br><strong>L\'equip d\'IETinder</strong></p>
     </div>
 </body>
-</html>'; 
+</html>';
 
 
     if (sendEmail($email, $name, $message)) {
@@ -524,47 +516,54 @@ function canChangePassword($password, $confirmPassword)
 
     if ($password !== $confirmPassword) {
         return false;
-    }// aqui iria else if para comprobar la validacion del correo
-    else {
-        try {
-            // Inicializamos la conexión con la base de datos
-            $pdo = startPDO();
-            if (!$pdo) {
-                throw new Exception("No se pudo conectar a la base de datos.");
-            }
+    } else {
+        return true;
+    }
 
-            // Consulta SQL para buscar el correo
-            $sql = "SELECT validated FROM users WHERE email = :email";
-            $stmt = $pdo->prepare($sql);
-            $stmt->bindParam(':email', $email, PDO::PARAM_STR);
-            $stmt->execute();
+}
 
-            // Verificamos si se encontró el correo
-            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+function isUserValidated($email)
+{
 
-            // Cerramos conexión
-            unset($stmt);
-            unset($pdo);
-
-            // Si se encontró el code, devolvemos false
-            if ($user == 0) {
-                return true;
-            } else {
-                return false;
-            }
-
-
-
-        } catch (PDOException $e) {
-            // En caso de error, mostramos un mensaje y salimos
-            logOperation("Error en la conexión: " . $e->getMessage(), "ERROR");
-            return false;
-        } catch (Exception $e) {
-            logOperation("Error general: " . $e->getMessage(), "ERROR");
-            return false;
+    try {
+        // Inicializamos la conexión con la base de datos
+        $pdo = startPDO();
+        if (!$pdo) {
+            throw new Exception("No se pudo conectar a la base de datos.");
         }
 
+        // Consulta SQL para buscar el correo
+        $sql = "SELECT validated FROM users WHERE email = :email";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+        $stmt->execute();
+
+        // Verificamos si se encontró el correo
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // Cerramos conexión
+        unset($stmt);
+        unset($pdo);
+
+      
+        // si el usuario ha validado el correo, validated sera = 0, entonces devolvemos true para seguir 
+    //permitir al usuario cambiar la contraseña, despues lo volveremos a validar 
+    if ($user['validated'] == 0) {
+        return true;
+    } else {
+        return false;
     }
+
+    } catch (PDOException $e) {
+        // En caso de error, mostramos un mensaje y salimos
+        logOperation("Error en la conexión: " . $e->getMessage(), "ERROR");
+        return false;
+    } catch (Exception $e) {
+        logOperation("Error al comprovar si el usuario es valido para cambiar la contraseña: " . $e->getMessage(), "ERROR");
+        return false;
+    }
+
+
 }
 
 function changePasswordInDatabase($password, $email)
@@ -575,7 +574,7 @@ function changePasswordInDatabase($password, $email)
 
 
         // Cifra la contraseña antes de guardarla
-        $hashedPassword = hash("sha512",$password);
+        $hashedPassword = hash("sha512", $password);
 
         // Prepara la consulta SQL para actualizar el campo 'validated'
         $sql = "UPDATE users SET password = :password WHERE email = :email";
@@ -668,10 +667,10 @@ function isEmailAndCodeValid($email, $code)
                 <div class="logo-forgot">IETinder ❤️</div>
                 <p class="footer-text">Uneix-te i troba l'amor a l'Institut Esteve Terradas i Illa</p>
             </div>
-       
-            <main class="forgot-password" id="search_email" >
+
+            <main class="forgot-password" id="search_email">
                 <div class="informative_header">
-                    <h1>introduce tu correo</h1>
+                    <h1>introdueix el teu correo</h1>
                     <br>
                     <p>
                         siusplau, introdueix el teu correo per rebre un email de verificacio, despres podras cambiar
@@ -679,9 +678,9 @@ function isEmailAndCodeValid($email, $code)
                     </p>
                 </div>
                 <br>
-                <form action="forgot" method="POST" id="search_email_form">
+                <form method="POST" id="search_email_form">
 
-                    <div id="error-message">
+                    <div class="error-message">
 
                     </div>
                     <div class="input-group">
@@ -691,13 +690,14 @@ function isEmailAndCodeValid($email, $code)
                     <br>
                     <div class="links-group">
                         <button type="submit" class="primary-button">Enviar</button>
+                        <a href="login.php" class="secondary-link">Ja tens una compte? Inicia sessió</a>
                     </div>
                 </form>
 
             </main>
 
 
-            <main class="forgot-password" id="change_password" style="display: none" >
+            <main class="forgot-password" id="change_password" style="display: none">
                 <div class="informative_header">
                     <h1>Cambia la contrasenya</h1>
                     <br>
@@ -705,7 +705,7 @@ function isEmailAndCodeValid($email, $code)
                 </div>
                 <br>
                 <form action="" method="POST" id="change_password_form">
-                    <div id="error-message-password">
+                    <div class="error-message">
 
                     </div>
                     <div class="input-group">
@@ -720,6 +720,7 @@ function isEmailAndCodeValid($email, $code)
                     <br>
                     <div class="links-group">
                         <button type="submit" class="primary-button">Cambia la contrasenya</button>
+                        <a href="login.php" class="secondary-link">Ja tens una compte? Inicia sessió</a>
                     </div>
                 </form>
 
@@ -748,8 +749,13 @@ function isEmailAndCodeValid($email, $code)
         const formElement2 = document.getElementById("change_password_form");
 
 
-        formElement1.addEventListener("submit", sendForgotPasswordForm);
-        formElement2.addEventListener("submit", sendChangePasswordForm);
+        if (formElement1) {
+            formElement1.addEventListener("submit", sendForgotPasswordForm);
+        }
+        if (formElement2) {
+            formElement2.addEventListener("submit", sendChangePasswordForm);
+        }
+
 
 
     });
