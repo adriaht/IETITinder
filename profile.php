@@ -204,14 +204,14 @@ $perfilDates = searchInDatabase("*", "users", $loggedUserId);
                 if (response.ok) {
                     // Muestra la alerta personalizada 
                     // cuando guarda los datos
-                    showAlerts("info", "Datos guardados");
+                    showAlerts("info", "Dades guardades.");
 
                 } else {
-                    showAlerts("error", "Error al enviar los datos."); // errore en la peticion del servidor
+                    showAlerts("error", "Error en enviar les dades."); // errore en la peticion del servidor
                 }
             } catch (error) {
                 // errores de red, mostrando el error
-                showAlerts("error", "Ocurrió un error inesperado: " + error + ".");
+                showAlerts("error", "Ha ocurregut un error inesperat: " + error + ".");
             }
         }
         });
@@ -297,7 +297,7 @@ $perfilDates = searchInDatabase("*", "users", $loggedUserId);
                             
 
                             <!-- Fecha de nacimiento -->
-                            <label for="data_naixement">Data de naixament:</label>
+                            <label for="data_naixement">Data de naixement:</label>
                             <input type="date" id="data_naixement" name="birth_date"
                                 value="<?php echo htmlspecialchars($perfilDates['birth_date']); ?>" >
                             
