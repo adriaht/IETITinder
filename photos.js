@@ -85,10 +85,12 @@ function renderPhotos(photoContainer, arrPhotos){
 
                 const isDeleted = await deletePhoto(arrPhotos[deleteButton.value].photo_ID, arrPhotos[deleteButton.value].path);
                 if (isDeleted) {
+                    showAlerts("info", "Imatge esborrada correctament")
                     arrPhotos.splice(deleteButton.value, 1)
                     renderPhotos(photoContainer, arrPhotos)
                 } else {
-                    console.log("ERROR AL ELIMINAR LA IMÁGEN")
+                    const error = document.getElementById("error-text")
+                    error.innerText = "Error al esborrar la imatge";
                 }
               
             }
@@ -174,7 +176,8 @@ function renderPhotos(photoContainer, arrPhotos){
 }
 
 async function handlePhotoUpload(input) {
-
+    console.log(input);
+    console.log(input.files);
     const file = input.files[0];
     console.log(file);
 
@@ -198,7 +201,7 @@ async function handlePhotoUpload(input) {
 
         let isUploadedCorrectly = await uploadPhoto(formData);
         if(isUploadedCorrectly) {
-
+            showAlerts("info", "Imatge pujada correctament")
             userReloadedPhotos = await fetchLoggedUserPhotos(); 
             const container = document.getElementById("photos-container")
             renderPhotos(container, userReloadedPhotos);
@@ -286,3 +289,52 @@ async function deletePhoto(photoID, path) {
 
 }
 
+// Función para mostrar alertas, le has de pasar el nombre de la alerta deseada
+//  y el mensaje que quieres transmitir y le adjudicaremos una id para darle estilos en el css
+function showAlerts(nameAlerta, missageAlert) {
+
+    // variables para crear el elemento div y introducirlo en el dom en forma de alerta
+    let typeAlerta;
+    let elementI;
+
+    if (nameAlerta === "info") {
+        typeAlerta = document.createElement('div');
+        typeAlerta.id = 'infoAlert';
+        typeAlerta.classList.add('alert');
+        document.body.appendChild(typeAlerta);
+        elementI = document.createElement('i');
+        typeAlerta.appendChild(elementI);
+        const textAlert = document.createTextNode(missageAlert);
+        typeAlerta.appendChild(textAlert);
+        typeAlerta.style.display = 'block';
+    }
+
+    if (nameAlerta === "error") {
+        typeAlerta = document.createElement('div');
+        typeAlerta.id = 'errorAlert';
+        typeAlerta.classList.add('alert');
+        document.body.appendChild(typeAlerta);
+        elementI = document.createElement('i');
+        typeAlerta.appendChild(elementI);
+        const textAlert = document.createTextNode(missageAlert);
+        typeAlerta.appendChild(textAlert);
+        typeAlerta.style.display = 'block';
+    }
+
+    if (nameAlerta === "warning") {
+        typeAlerta = document.createElement('div');
+        typeAlerta.id = 'warningAlert';
+        typeAlerta.classList.add('alert');
+        document.body.appendChild(typeAlerta);
+        elementI = document.createElement('i');
+        typeAlerta.appendChild(elementI);
+        const textAlert = document.createTextNode(missageAlert);
+        typeAlerta.appendChild(textAlert);
+        typeAlerta.style.display = 'block';
+    }
+
+    setTimeout(() => {
+        typeAlerta.style.display = "none";
+        typeAlerta.remove(); // Elimina el elemento del DOM
+    }, 3000); // 3 segundos
+}

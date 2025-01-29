@@ -6,6 +6,10 @@ let oldconversation = {};
 
 
 document.addEventListener("DOMContentLoaded", async () => {
+
+    //NAV changer
+    document.getElementById("navMessages").classList.add("navActive");
+
     // Get the match_id and user_id from the URL
     const urlParams = new URLSearchParams(window.location.search);
     const action = urlParams.get('action');
@@ -106,7 +110,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     //SEND MESSAGE BUTTON
     const sendMessageButton = document.getElementById("chat-send-button");
-
     sendMessageButton.addEventListener('click', async (e) => {
         let messageText = document.getElementById("chat-text-input").value;
         let match_id = document.getElementById("chat-name").getAttribute("match_ID"); //recogemos el match ID
@@ -115,13 +118,13 @@ document.addEventListener("DOMContentLoaded", async () => {
             insertMessage(match_id, user_ID, messageText);
             renderTextMessage(user_ID, Date.now(), user_ID, messageText);
             scrollToBottom();
-            console.log("SCROOOOLL");
         }
         document.getElementById("chat-text-input").value = "";//vaciamos input
     });
 
+    //GO BACK BUTTON
     const goBackButton = document.getElementById("goBackToMessages");
-        goBackButton.addEventListener('click', async (e) => {
+    goBackButton.addEventListener('click', async (e) => {
         document.getElementById("chat-page").style.display = "none";
         document.getElementById("content").style.display = "block";
         
@@ -207,8 +210,6 @@ async function generateConversation(alias) {
     let userData = await fetchUserNameAndImage(alias); //recogemos nombre y foto de la persona
     let match_ID = await fetchMatchID(alias); //recogemos el matchID
 
-    console.log("USER DATA AQUI: ", userData)
-
     document.getElementById("chat-image").src = userData[0].path;
     document.getElementById("chat-name").textContent = userData[0].name;
 
@@ -216,7 +217,6 @@ async function generateConversation(alias) {
    
     //definimos funcion de Ejecutar Render
     const executeRender = () => {
-        console.log("RENDER CONVERSATION");
         renderConversation(alias, user_ID);
     };
 
@@ -432,7 +432,7 @@ function MostrarAlertas(nameAlerta, missageAlert) {
 }
 
 
-//FUNCIONES DEL CHAT -------------------------------------------------------------------------
+//FUNCIONES DEL CHAT ---------------------------------------------------------------------------------------
 
 // Funcion para coger el match_id
 async function fetchMatchID(alias) {
@@ -478,7 +478,6 @@ async function fetchUserNameAndImage(alias) {
     try {
         const response = await fetch(`messages.php?getUserNameAndImage=${encodeURIComponent(alias)}`);
         const user = await response.json();
-        console.log(user);
         if (user.success){
             insertLog("Sucessfully fetched user name and image in messages.js", "INFO");
             return user.message;
@@ -549,7 +548,7 @@ async function renderConversation(alias, user_ID){
         chatMessagesContainer.innerHTML = ''; //clear
         for (let i = 0; i < conversation.length; i++) {
         const message = conversation[i];
-        renderTextMessage(user_ID, message.creation_date, message.sender_id, message.content); //llamamos a renderizar 1 mensaje        
+        renderTextMessage(user_ID, message.creation_date, message.sender_id, message.content, message.liked, message.message_ID); //llamamos a renderizar 1 mensaje        
         }
         scrollToBottom();
     }
@@ -586,16 +585,16 @@ function scrollToBottom() {
 
 
 // Funcion para renderizar 1 mensaje
-function renderTextMessage(user_ID, creation_date, sender_id, content) {
+function renderTextMessage(user_ID, creation_date, sender_id, content, liked, message_ID) {
     const chatContainer = document.getElementById("chat-messages-container");
     let lastTextMessage = chatContainer.lastElementChild; //ultimo mensaje
 
     let messageContainer = document.createElement("div");
     let textMessage = document.createElement('p');
     
-
     textMessage.textContent = content; //mensaje
     messageContainer.setAttribute("data-timestamp", creation_date); //timestamp
+    messageContainer.setAttribute("message-id", message_ID); //message_ID
 
     //Si el contenedor no está vacío, verificamos el último mensaje
     if (lastTextMessage) {
@@ -617,6 +616,8 @@ function renderTextMessage(user_ID, creation_date, sender_id, content) {
         chatContainer.append(textTime);
     }
 
+
+    //propiedades del sender
     if (sender_id == user_ID) {
         messageContainer.classList.add("chat-me");
     } else {
@@ -628,7 +629,75 @@ function renderTextMessage(user_ID, creation_date, sender_id, content) {
         messageContainer.append(messageProfilePicture);
     }
 
-    messageContainer.append(textMessage);
+
+    if (sender_id!=user_ID){
+        messageContainer.append(textMessage);
+    }
+
+    // like
+    if ((sender_id == user_ID && liked==true) || sender_id != user_ID){
+        let messageLiked = document.createElement("i");
+        messageLiked.classList.add("fa","fa-heart");
+        messageLiked.setAttribute("message-liked", liked); //liked
+        if (liked==true){
+            messageLiked.style.color ="#FF6B6B";
+        }
+        if (liked==false){
+            messageLiked.style.color ="#f9c4cd";
+        }
+        if (sender_id != user_ID){
+            messageLiked.addEventListener("click", function (event) {
+                const messageLiked = event.target;
+                let divId = event.target.parentNode.getAttribute("message-id");
+                const isLiked = messageLiked.getAttribute("message-liked");
+
+                // Cambiar el estado
+                if (isLiked==1) {
+                    messageLiked.setAttribute("message-liked", "0");
+                    messageLiked.style.color ="rgb(255 210 218)";
+                    updateMessageLike(message_ID, "0");
+                } else {
+                    messageLiked.setAttribute("message-liked", "1");
+                    messageLiked.style.color ="#FF6B6B";
+                    updateMessageLike(message_ID, "1");
+                }
+                //LLAMAR BBDD        
+            });
+        }
+        messageContainer.append(messageLiked);
+    }
+
+    if (sender_id==user_ID){
+        messageContainer.append(textMessage);
+    }
+
     chatContainer.appendChild(messageContainer);
     
+}
+
+
+
+// Funcion para hacer un update del like del mensaje
+async function updateMessageLike(messageID, liked) {
+    try {
+        const response = await fetch('messages.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({endpoint: "updateMessageLike", messageID, liked})
+        });
+
+        // resultado de JSON a objeto Javascript. PHP devuelve {success: error, message: "abc"}
+        const result = await response.json();
+
+        // Segun resultado, pone mensaje de error o no
+        if (result.success) { 
+            console.log(result.message);
+        } else {
+            console.log(result.message);
+        }
+
+    } catch (error) {
+        console.log('Error al comunicarse con el servidor: ' + error)
+    }
+
 }

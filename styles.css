@@ -134,13 +134,17 @@ body.errors main#content a {
     margin: 10 auto 30px;
 }
 
+.body_forgot_password div.error-message p,
 .body-register  div#error-message p{
     text-align: center;
     color: red;
 }
 
+
+
 .body-login,
-.body-register {
+.body-register,
+.body_forgot_password {
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -157,7 +161,8 @@ body.errors main#content a {
     100% { background-position: 0% 50%; }
 }
 
-.body-register #register-card{
+.body-register #register-card
+{
     padding: 2rem;
     display: flex;
     justify-content: center;
@@ -170,8 +175,13 @@ body.errors main#content a {
     max-height: 500px;
     overflow: auto;
 }
+.body_forgot_password .card-header{
+    padding-top: 70px;
+    padding-bottom: 30px;
+}
 
-.body-login #login-card {
+.body-login #login-card,
+.body_forgot_password #forgot-card  {
     padding: 2rem;
     display: flex;
     justify-content: center;
@@ -184,7 +194,8 @@ body.errors main#content a {
 }
 
 .body-login .logo-login,
-.body-register .logo-register {
+.body-register .logo-register,
+.body_forgot_password .logo-forgot {
     text-align: center;
     margin-bottom: 1rem;
     color: #FF6B6B;
@@ -214,7 +225,8 @@ body.errors main#content a {
 }
 
 .body-login label,
-.body-register label
+.body-register label,
+.body_forgot_password label
  {
     display: block;
     margin-bottom: 0.5rem;
@@ -224,7 +236,8 @@ body.errors main#content a {
 }
 
 .body-login input,
-.body-register input {
+.body-register input ,
+.body_forgot_password input {
     width: 100%;
     padding: 0.75rem 1rem;
     border: 1px solid #e2e8f0;
@@ -244,7 +257,8 @@ body.errors main#content a {
 }
 
 .body-login .primary-button,
-.body-register .primary-button {
+.body-register .primary-button,
+.body_forgot_password .primary-button {
     width: 100%;
     padding: 0.75rem 1rem;
     background: linear-gradient(to right, #ff6b6b, #cc2faa);
@@ -261,25 +275,29 @@ body.errors main#content a {
 }
 
 .body-login .primary-button:hover,
-.body-register .primary-button:hover {
+.body-register .primary-button:hover,
+.body_forgot_password .primary-button:hover {
     opacity: 0.9;
 }
 
 .body-login .primary-button:disabled,
-.body-register .primary-button:disabled {
+.body-register .primary-button:disabled,
+.body_forgot_password .primary-button:disabled {
     opacity: 0.7;
     cursor: not-allowed;
 }
 
 .body-login .links-group,
-.body-register .links-group {
+.body-register .links-group,
+.body_forgot_password .links-group {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
 }
 
 .body-login .secondary-link,
-.body-register .secondary-link {
+.body-register .secondary-link,
+.body_forgot_password .secondary-link {
     color: #4a5568;
     text-decoration: none;
     font-size: 0.875rem;
@@ -288,7 +306,8 @@ body.errors main#content a {
 }
 
 .body-login .secondary-link:hover,
-.body-register .secondary-link:hover {
+.body-register .secondary-link:hover,
+.body_forgot_password .secondary-link:hover {
     color: #ff6b6b;
 }
 
@@ -301,12 +320,20 @@ body.errors main#content a {
 }
 
 .body-login .footer-text,
-.body-register .footer-text {
+.body-register .footer-text
+.body_forgot_password .footer-text {
     text-align: center;
     color: #718096;
     font-size: 0.875rem;
     margin-bottom: 2rem;
     font-family: 'Inter', sans-serif;
+}
+.body_forgot_password .informative_header {
+    text-align: center;
+    color: #718096;
+    margin-top: 12px;
+    font-family: 'Inter', sans-serif;
+
 }
 
 /* MARK: INSIDE APP */
@@ -1013,10 +1040,84 @@ main.profile #butonsEditProfile {
     font-family: "Poppins";
 }
 
+#delete-account {
+
+    width: 380px;
+    height: auto;
+
+    position: absolute;
+    top: 160px;
+    left: 50%; /* Move the element to the center based on its left edge */
+    transform: translateX(-50%); /* Offset the element by half of its width */
+
+    z-index: 20;
+
+    background-color: white;
+    padding: 20px;
+    
+    text-align: center;
+
+    font-family: 'Inter', sans-serif;
+}
+
+#delete-account p {
+    margin: 15px 0;
+
+}
+
+#delete-account #delete-errors {
+    padding:0;
+    text-align: center;
+}
+
+#delete-account #delete-errors p {
+
+    color: #e53e3e;
+    font-size: 0.875rem;
+    font-weight: 100;
+    font-family: 'Inter', sans-serif;
+}
+
+#delete-account form input:first-child {
+    text-align: center;
+    padding: 10px 0px;
+    font-size: 1.02rem;
+
+}
+
+#delete-account form input:first-child:focus {
+    outline: none;
+    border-color: #ff6b6b;
+    box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
+}
+
+
+#delete-account #cancel {
+    padding: 10px 20px;
+    margin-right: 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    background: #e0e0e0;
+    color: black;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#delete-account #confirm  {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    background: linear-gradient(to right, #ff6b6b, #cc2faa);
+    color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+
 
 /*  END PROFILE EDITION*/
-
-
 
 /* MARK: PHOTOS*/
 main.photos {
@@ -1076,7 +1177,7 @@ main div#photos-container div.disabled {
     cursor: default;
 }
  */
- main.photos div#photos-container div img {
+main.photos div#photos-container div img {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -1266,77 +1367,17 @@ nav ul {
 }
 
 nav ul li a {
-
-    color: black;
+    color: gray;
     text-decoration: none;
 } 
 
+.navActive{
+    color: #FF6B6B;
+    text-shadow: 2px 2px 8px pink;
+}
+
+
 /* END OF NAV */
-
-/* ADMIN PANEL */
-
-body.admin-panel div.dashboard {
-
-    width: 98%;
-    height: 98vh;
-    background-color: white;
-    border-radius: 25px;
-
-}
-
-body.admin-panel div.dashboard {
-
-    width: 98%;
-    height: 98vh;
-    background-color: white;
-    border-radius: 25px;
-    text-align: center;
-
-}
-
-body.admin-panel div.dashboard {
-
-    width: 99vw;
-    height: 98vh;
-    background-color: white;
-    border-radius: 25px;
-    text-align: center;
-
-}
-
-
-/* ADMIN PANEL */
-
-body.admin-panel div.dashboard {
-
-    width: 98%;
-    height: 98vh;
-    background-color: white;
-    border-radius: 25px;
-
-}
-
-body.admin-panel div.dashboard {
-
-    width: 98%;
-    height: 98vh;
-    background-color: white;
-    border-radius: 25px;
-    text-align: center;
-
-}
-
-body.admin-panel div.dashboard {
-
-    width: 99vw;
-    height: 98vh;
-    background-color: white;
-    border-radius: 25px;
-    text-align: center;
-
-}
-
-
 
 /* MARK: MESSAGES CHAT header*/
 .chat-header {
@@ -1490,6 +1531,14 @@ body.admin-panel div.dashboard {
     border-color: #FF6B6B;
 }
 
+.fa-heart:before{
+    font-size: 24px;
+    margin: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 
 /* MARK: CHAT Tab PROFILE */
 
@@ -1530,5 +1579,480 @@ body.admin-panel div.dashboard {
     font-family: "Poppins";
 }
 
+/* MARK: ADMIN PANEL */
+body.admin-panel {
+    min-width: 1480px;
+    overflow-x: auto;
+}
+
+body.admin-panel div.dashboard {
+
+    width: 98%;
+    height: 98vh;
+    background-color: white;
+    border-radius: 25px;
+    display: flex;
+
+}
 
 
+/* MARK: NAVIGATION */
+body.admin-panel div.dashboard #navigation {
+
+    background-color: #d9d9d9;
+
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
+    min-width: 12%;
+    width: auto;
+    padding: 16px;
+
+    border-right: 2px transparent black;
+
+}
+
+body.admin-panel div.dashboard #navigation #header .logo {
+    font-size: 1.75rem;
+    padding: 0;
+    padding-left: 5px;
+    text-align: center;
+}
+
+body.admin-panel div.dashboard #navigation nav {
+    padding: 0;
+    margin-top: 20px;
+
+}
+
+body.admin-panel div.dashboard #navigation nav ul {
+
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+
+}
+
+body.admin-panel div.dashboard #navigation nav ul li:not(li:last-child) {
+
+    padding: 8px;
+    font-size: 1.25rem;
+    border-bottom: 2px solid black;
+
+}
+
+body.admin-panel div.dashboard #navigation nav ul li:last-child {
+
+    margin-top: 50px;
+    text-align: center;
+
+}
+
+body.admin-panel div.dashboard #navigation nav ul li:not(li:last-child):hover {
+
+    color:  white;
+    border-bottom: 2px solid white;
+
+}
+
+body.admin-panel div.dashboard #navigation nav ul li:not(li:last-child):hover a{
+
+    color:  white;
+
+}
+
+
+body.admin-panel div.dashboard #navigation nav ul li:not(li:last-child).active {
+
+    color:  #FF6B6B;
+    border-bottom: 2px solid #FF6B6B;
+    pointer-events: none;
+
+}
+
+body.admin-panel div.dashboard #navigation nav ul li.active a {
+
+    color:  #FF6B6B;
+}
+
+body.admin-panel div.dashboard #navigation li:last-child a {
+
+    text-decoration: none; 
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1.15rem;
+    background: linear-gradient(to right, #ff6b6b, #cc2faa);
+    color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+}
+
+
+/* MARK: CONTENT */
+
+body.admin-panel div.dashboard #content {
+    padding: 34px;
+    width: 88%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+/* MARK: title */
+body.admin-panel div.dashboard #content #title-container {
+    width: 100%;
+    height: 5%;
+}
+
+body.admin-panel div.dashboard #content #title-container a {
+   text-decoration: none;   
+   color: #000000;
+}
+
+body.admin-panel div.dashboard #content #title-container  a:hover {
+    color: #FF6B6B;
+}
+ 
+/* MARK: USERS */
+body.admin-panel div.dashboard #content #table-container {
+    width: 100%;
+    height: 90%;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+/* MARK: USER TABLE */
+
+body.admin-panel div.dashboard #content #table-container table.users {
+    min-width: 1500px; 
+    width: 100%;   
+    table-layout: fixed;
+    overflow-x: auto;
+    border-collapse: collapse;
+    position: relative;
+
+}
+
+body.admin-panel div.dashboard #content #table-container table.users th {
+    border-bottom: 2px solid black;
+    text-align: left;
+    font-size: 1.2rem;
+    padding-left: 0;
+    position: sticky;
+}
+
+body.admin-panel div.dashboard #content #table-container table.users th:last-child {
+    border: none;
+}
+
+body.admin-panel div.dashboard #content #table-container table.users tr:nth-child(even){
+    background-color: rgb(240, 240, 240);
+}
+
+body.admin-panel div.dashboard #content #table-container table.users th, 
+body.admin-panel div.dashboard #content #table-container table.users td {
+
+    padding: 10px 0px;
+}
+
+body.admin-panel div.dashboard #content #table-container table.users th:first-child, 
+body.admin-panel div.dashboard #content #table-container table.users td:first-child {
+
+    width: 50px;
+}
+
+body.admin-panel div.dashboard #content #table-container table.users th:nth-child(3), 
+body.admin-panel div.dashboard #content #table-container table.users td:nth-child(3) {
+
+    width: 300px;
+}
+
+body.admin-panel div.dashboard #content #table-container table.users th:nth-child(4), 
+body.admin-panel div.dashboard #content #table-container table.users td:nth-child(4) {
+
+    width: auto;
+}
+
+body.admin-panel div.dashboard #content #table-container table.users th:nth-child(7), 
+body.admin-panel div.dashboard #content #table-container table.users td:nth-child(7) {
+
+    width: 100px;
+}
+body.admin-panel div.dashboard #content #table-container table.users th:nth-child(8), 
+body.admin-panel div.dashboard #content #table-container table.users td:nth-child(8){
+
+    width: 120px;
+}
+
+body.admin-panel div.dashboard #content #table-container table.users td:last-child a {
+    text-decoration: none; 
+    padding: 8px;
+    margin-left: 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    background: linear-gradient(to right, #ff6b6b, #cc2faa);
+    color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* MARK: END USER TABLE */
+
+/* MARK: LOGS TABLE */
+
+body.admin-panel div.dashboard #content #table-container table.logs {
+    min-width: 1500px; 
+    width: 100%;   
+    table-layout:auto;
+    overflow-x: auto;
+    border-collapse: collapse;
+    position: relative;
+
+}
+
+body.admin-panel div.dashboard #content #table-container table.logs th {
+    border-bottom: 2px solid black;
+    text-align: left;
+    font-size: 1.2rem;
+    padding-left: 0;
+    position: sticky;
+}
+
+body.admin-panel div.dashboard #content #table-container table.logs th:last-child {
+    border: none;
+}
+
+body.admin-panel div.dashboard #content #table-container table.logs tr:nth-child(even){
+    background-color: rgb(240, 240, 240);
+}
+
+body.admin-panel div.dashboard #content #table-container table.logs th, 
+body.admin-panel div.dashboard #content #table-container table.logs td {
+
+    padding: 10px 0px;
+}
+
+/*
+body.admin-panel div.dashboard #content #table-container table.logs th:first-child, 
+body.admin-panel div.dashboard #content #table-container table.logs td:first-child {
+
+    width: auto;
+}
+*/
+body.admin-panel div.dashboard #content #table-container table.logs th:nth-child(3), 
+body.admin-panel div.dashboard #content #table-container table.logs td:nth-child(3) {
+
+    width: 200px;
+}
+/*
+body.admin-panel div.dashboard #content #table-container table.logs th:nth-child(4), 
+body.admin-panel div.dashboard #content #table-container table.logs td:nth-child(4) {
+
+    width: auto;
+}
+
+body.admin-panel div.dashboard #content #table-container table.logs th:nth-child(7), 
+body.admin-panel div.dashboard #content #table-container table.logs td:nth-child(7) {
+
+    width: auto;
+}
+body.admin-panel div.dashboard #content #table-container table.logs th:nth-child(8), 
+body.admin-panel div.dashboard #content #table-container table.logs td:nth-child(8){
+
+    width: auto;
+}
+*/
+body.admin-panel div.dashboard #content #table-container table.logs td:last-child a {
+    text-decoration: none; 
+    padding: 8px;
+    margin-left: 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    background: linear-gradient(to right, #ff6b6b, #cc2faa);
+    color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+body.admin-panel div.dashboard #content #pagination {
+    width: 100%;
+    height: 5%;
+    margin-top: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+body.admin-panel div.dashboard #content #pagination ul {
+    list-style-type: none;
+    display: flex;
+    gap: 10px;
+}
+
+body.admin-panel div.dashboard #content #pagination ul li {
+
+    display: flex;
+    gap: 10px;
+
+    text-decoration: none; 
+    border-radius: 4px;
+    font-size: 1.15rem;
+    padding: 10px;
+
+    /*
+    background: linear-gradient(to right, #ff6b6b, #cc2faa);
+    color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    */
+    background: #e0e0e0;
+    color: black;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+body.admin-panel div.dashboard #content #pagination ul li a {
+
+    text-decoration: none; 
+    color: black;
+}
+
+body.admin-panel div.dashboard #content #pagination ul li.active {
+
+
+    pointer-events: none;
+    background: linear-gradient(to right, #ff6b6b, #cc2faa);
+    color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+}
+
+body.admin-panel div.dashboard #content #pagination ul li.active a {
+
+    text-decoration: none; 
+    color: white;
+
+}
+
+/* MARK: USER CONTENT */
+
+body.admin-panel div.dashboard #content #overflow-container {
+    overflow-y: hidden;
+}
+
+body.admin-panel div.dashboard #content #user-content {
+    margin-top: 25px;
+    height: 95%;
+    width: 100%;
+    min-width: 1500px; 
+    overflow-x: auto;
+    display: flex;
+    justify-content: space-between;
+    gap: 100px;
+}
+
+body.admin-panel div.dashboard #content #user-content #user-info {
+    width: 55%;
+}
+
+body.admin-panel div.dashboard #content #user-content #user-info h2 {
+    padding: 5px 0px;
+    border-bottom: 2px solid black;
+    margin-bottom: 10px;
+}
+
+p:has(+ h2) {
+    margin-bottom: 20px;
+}
+
+body.admin-panel div.dashboard #content #user-content #user-info p:last-child {
+    margin-bottom: 25px;
+}
+
+body.admin-panel div.dashboard #content #user-content #user-photos {
+    width: 45%;
+    text-align: center;
+    position: relative;
+}
+
+body.admin-panel div.dashboard #content #user-content #user-photos img {
+    width: 460px;
+    height: 760px;
+    object-fit: cover;
+    object-position: center;
+}
+
+body.admin-panel div.dashboard #content #user-content #user-photos #carrousel-container {
+
+    position: absolute;
+    top: 700px;
+    left: 50%; /* Move the element to the center based on its left edge */
+    transform: translateX(-50%); /* Offset the element by half of its width */
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    color: white;
+    background: linear-gradient(to right, #ff6b6b, #cc2faa);
+    padding: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5); /* Optional: add shadow */
+    border-radius: 5px;
+
+    font-family: "Poppins";
+
+    text-align: center;
+    margin-top: 10px;
+}
+
+body.admin-panel div.dashboard #content #user-content #user-photos #carrousel-container span.dot {
+
+    height: 10px;
+    width: 10px;
+    margin: 0 5px;
+    background-color: gray;
+    border-radius: 50%;
+    display: inline-block;
+    cursor: pointer;
+
+}
+
+body.admin-panel div.dashboard #content #user-content #user-photos #carrousel-container span.dot.active {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Optional: add shadow */
+    background-color: white;
+}
+
+/* MARK: LOGS CONTENT */
+
+body.admin-panel div.dashboard #content #log-content {
+    margin-top: 25px;
+    height: 95%;
+    width: 100%;
+    min-width: 1200px;
+display: flex;
+flex-direction: column;
+}
+
+body.admin-panel div.dashboard #content #log-content #log-metadata {
+    height: 20%;
+    width: 450px;
+    margin-bottom: 25px;
+
+}
+
+body.admin-panel div.dashboard #content #log-content #log-metadata h2 {
+    padding: 5px 0px;
+    border-bottom: 2px solid black;
+    margin-bottom: 10px;
+}
+
+body.admin-panel div.dashboard #content #log-content #log-print {
+    height: 75%;
+    border: 2px solid black;
+    overflow-x: auto;
+    overflow-y: auto;
+    margin-bottom: 25px;
+    padding: 10px;
+}

@@ -6,7 +6,7 @@ include("../functions.php"); /* Loads search from users + logs + startPDO */
 
 // Check if session is active. Otherwise, get to login
 if (!isset($_SESSION['user'])) {
-    header('Location: ../login.php');
+    header('Location: /login.php');
     exit;
 }
 
@@ -14,8 +14,9 @@ if (!isset($_SESSION['user'])) {
 $loggedUser = searchUserInDatabase("*", "users", $_SESSION['user']);
 
 if ($loggedUser['role'] !== "admin") {
-    header('Location: ../errors/error403.php');
-    exit;
+    header("HTTP/1.1 403 Forbidden");
+    include("../errors/error403.php");
+    die();
 }
 
 ?>
@@ -33,10 +34,29 @@ if ($loggedUser['role'] !== "admin") {
 <body class="admin-panel">
 
     <div class="dashboard">
-        <header id="header">
-            <p class="logo">IETinder ❤️</p>
-        </header>
-        <h1>BENVINGUT AL PANELL D'ADMINISTRACIÓ</h1>
+
+        <div id="navigation">
+
+            <header id="header">
+                <p class="logo">IETinder ❤️</p>
+            </header>
+
+            <nav>
+                <ul>
+                    <li class="active"><a href="/admin/index.php">Principal</a></li>
+                    <li><a href="/admin/users.php">Usuaris</a></li>
+                    <li><a href="/admin/logs.php">Registres</a></li>
+                    <li><a href="/index.php">Tornar a l'inici</a></li>
+                </ul>
+            </nav>
+
+        </div>
+
+        <div id="content">
+
+           
+        </div>
+       
     </div>
 
 </body>

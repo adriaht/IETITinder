@@ -157,33 +157,11 @@ $perfilDates = searchInDatabase("*", "users", $loggedUserId);
 
         /* SUBMIT FUNCTIONALITY ----------------------------------------------------------------------------- */ 
         const submenuButton = document.getElementById("submenu-button");
-        const greyBackground = document.getElementById("grey-background");
+       
         // Toggle submenu visibility
         submenuButton.addEventListener("click", () => {
-
-            if (submenuButton.innerText === "· · ·") {
-
-                /*
-                const card = document.getElementById("card");
-                const greyBackground = document.createElement("div");
-                greyBackground.id = "grey-background";
-                */
-
-                greyBackground.style.display = "inline";
-                
-                renderSubmenu();
-                submenuButton.innerText = "X";
-
-            } else {
-                /*
-                const greyBackground = document.getElementById("grey-background");
-                greyBackground.remove();
-                */
-                greyBackground.style.display = "none";
-                deleteSubmenu();
-                submenuButton.innerText = "· · ·";
-
-            }
+            toggleSubmenu(submenuButton)
+            
         });
          /* SUBMIT FUNCTIONALITY END ----------------------------------------------------------------------------- */ 
 
@@ -245,99 +223,9 @@ $perfilDates = searchInDatabase("*", "users", $loggedUserId);
     });
 
 
-    function renderUserPhotos(userPhotos){
 
-        // Delete all html inside the main content Div
-        const container = document.getElementById('profile-image-content');
-        //container.innerHTML = ''; 
-
-        // IMAGE 
-        // TE FALTARÁ EL USER O DONDE SEA QUE TENGAS LA IMAGEN
-        const image = document.getElementById('user-image');
-        image.src = userPhotos[0].path;
-
-        /* IMAGE CARROUSELL*/
-
-        /* LOS BOTONCITOS*/ 
-        let carrouselContainer = null;
-        if (userPhotos.length > 1) {
-
-            carrouselContainer = document.createElement('div');
-            carrouselContainer.id = "carrousel-container";
-
-            let currentIndex = 0;
-            const dots = [];
-
-            userPhotos.map((photo , i) => {
-                const dot = document.createElement('span');
-                dot.classList.add('dot');
-                dots.push(dot);
-                if (i === 0) dot.classList.add('active');
-                carrouselContainer.appendChild(dot);
-            })
-
-            console.log(dots);
-
-            carrouselContainer.addEventListener("click", handleCarouselClick) 
-
-            function handleCarouselClick() {
-                
-                currentIndex += 1;
-
-                if (currentIndex >= userPhotos.length) {
-                    currentIndex = 0;
-                }
-
-                image.src = userPhotos[currentIndex].path;
-
-                dots.map(dot => dot.classList.remove('active'));
-                dots[currentIndex].classList.add('active');
-            }
-
-        }
-
-        if(carrouselContainer) {
-            container.insertBefore(carrouselContainer, container.lastElementChild);
-        }
-
-    }
-
-
-    /* SUBMIT FUNCTIONALITY ----------------------------------------------------------------------------- */ 
-    function renderSubmenu() {
-
-        const header = document.getElementById("header");
-
-        // Create submenu
-        const submenu = document.createElement("ul");
-        submenu.id = "submenu";
-
-        // Create list items
-        const options = [
-            { text: "Tancar sessió", href: "/logout.php" },
-            { text: "Modificar contrasenya", href: "#" },
-            { text: "Eliminar compte", href: "#" },
-        ];
-
-        options.map(option => {
-            
-            const a = document.createElement("a");
-            const li = document.createElement("li");
-            li.textContent = option.text;
-            a.href = option.href;
-            a.appendChild(li);
-            submenu.appendChild(a);
-        });
-
-        header.appendChild(submenu);
-    }
-
-    function deleteSubmenu() {
-        const submenu = document.getElementById("submenu");
-        submenu.remove();
-    }
-
-    /* SUBMIT FUNCTIONALITY END ---------------------------------------------------------------------- */ 
+    
+   
 
     // variables para la fincion del mapa
     let map;
@@ -369,13 +257,13 @@ $perfilDates = searchInDatabase("*", "users", $loggedUserId);
     <div class="container">
 
         <div class="card">
+
         <div id="grey-background"></div>
+
             <header id="header"> <!-- added id to header-->
                 <p class="logo">IETinder ❤️</p>
                 <button id="submenu-button" class="button-submenu">· · ·</button>
             </header>
-
-
 
             <!-- Botones de las tabs -->
             <div class="profile-tabs">
@@ -383,7 +271,6 @@ $perfilDates = searchInDatabase("*", "users", $loggedUserId);
                     id="defaultOpen">Editar</button>
                 <button class="profile-tablinks" onclick="openTab(event, 'profileTabs-view')">Veure</button>
             </div>
-
 
             <main id="profileTabs-edit" class="profile content tabcontent">
                 <div id="content-profile">
@@ -470,9 +357,9 @@ $perfilDates = searchInDatabase("*", "users", $loggedUserId);
 
             <nav>
                 <ul>
-                    <li><a href="/discover.php">Descobrir</a></li>
-                    <li><a href="/messages.php">Missatges</a></li>
-                    <li><a href="/profile.php">Perfil</a></li>
+                    <li><a id="navDiscover" href="/discover.php">Descobrir</a></li>
+                    <li><a id="navMessages" href="/messages.php">Missatges</a></li>
+                    <li><a id="navProfile" href="/profile.php">Perfil</a></li>
                 </ul>
             </nav>
 
