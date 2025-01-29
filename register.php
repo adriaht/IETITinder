@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['validacio'])) {
         // comprobar que no este vacio, ya que estaremos esperando una respuesta en js con esta url
         if ($validacioParam === '') {
 
-            echo json_encode(['success' => false, 'message' => 'codigo de validacion no apto']);
+            echo json_encode(['success' => false, 'message' => 'codi de validacio no apte']);
             exit;
 
         }
@@ -54,13 +54,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['validacio'])) {
                 // echo "   " . "El email y el código son válidos.";
             } else {
 
-                echo json_encode(['success' => false, 'message' => 'codigo de validacion no apto']);
+                echo json_encode(['success' => false, 'message' => 'codi de validacio no apte']);
                 exit;
                            }
 
 
         } else {
-            echo json_encode(['success' => false, 'message' => 'codigo de validacion no apto']);
+            echo json_encode(['success' => false, 'message' => 'codi de validacio no apte']);
             exit;
         }
     } catch (Exception $e) {
@@ -103,7 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
            
             // Validar que los datos requeridos no sean nulos o vacíos
             if (!$email || !$name || !$surname || !$alias || !$birth_date || !$latitude || !$longitude || !$sex || !$sexual_orientation || !$password) {
-                echo json_encode(['success' => false, 'message' =>'Hay algun error y se ha recibido algun campo erroneo en el servidor']);
+                echo json_encode(['success' => false, 'message' =>'en el servidor hi ha agut algu un camp buit del formulari']);
                 exit;
             }
 
@@ -146,11 +146,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         
 
 
-                        echo json_encode(['success' => true, 'message' => 'AÑADIDO EN LA BASE DE DATOS']);
+                        echo json_encode(['success' => true, 'message' => 'afegit a la base de dades']);
                         exit;
 
                     } else {
-                        echo json_encode(['success' => false, 'message' => 'error al insertar a la base de dades']);
+                        echo json_encode(['success' => false, 'message' => 'error al afegir a la base de dades']);
                         exit;
 
                     }
@@ -163,13 +163,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
                 } else { //error al enviar el correo de validacion
-                    echo json_encode(['success' => false, 'message' => 'Error al enviar el correo de validació']);
+                    echo json_encode(['success' => false, 'message' => 'Error al enviar el correu de validació']);
                     exit;
                 }
 
             } else {
                 // el correo existe y escapamos
-                echo json_encode(['success' => false, 'message' => 'El correo electrónic ja está registrat']);
+                echo json_encode(['success' => false, 'message' => 'El correu electrónic ja está registrat']);
                 exit;
             }
 
@@ -302,9 +302,9 @@ try {
 
     //Content
     $mail->isHTML(true);                                  //Set email format to HTML
-    $mail->Subject = 'Here is the subject';
+    $mail->Subject = 'Aquest es un misatge de validacio, moltes gracies per fer servir la nostra aplicacio';
     $mail->Body    = $message;
-    $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+    $mail->AltBody = 'aquest es un misatge de validacio, que proporciona el codi necesari per donar de alta';
 
 
 

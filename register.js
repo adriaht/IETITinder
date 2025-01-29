@@ -193,7 +193,7 @@ async function sendRegisterForm(event) {
         if (response.ok) {
         
             if(register.success === true){
-            showAlerts("info", "Usuari registrat correctament, valida el teu correo electrònic.");
+            showAlerts("info", "Usuari registrat correctament, valida el teu correu electrònic.");
             console.log('respuesta todo ok ',register.message);
             setTimeout(() => {
                 window.location.href = "login.php";
