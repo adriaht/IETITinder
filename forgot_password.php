@@ -70,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             }
         } catch (Exception $e) {
             logOperation("Error: " . $e->getMessage(), "ERROR");
-            echo json_encode(['success' => false, 'message' => 'Error en el servidor al validar']);
+            echo json_encode(['success' => false, 'message' => 'Error al servidor al validar']);
             exit;
         }
     }
@@ -97,14 +97,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $code = searchCodeInDatabase($email);
 
                 if (sendChangePasswordEmail($email, $name, $code)) {
-                    echo json_encode(['success' => true, 'message' => 'Correo enviat exitosament', 'email' => $_SESSION['email']]);
+                    echo json_encode(['success' => true, 'message' => 'Correu enviat exitosament', 'email' => $_SESSION['email']]);
                     exit;
                 } else {
-                    echo json_encode(['success' => false, 'message' => 'Ha surgit un error al enviar el correo']);
+                    echo json_encode(['success' => false, 'message' => 'Ha surgit un error al enviar el correu']);
                     exit;
                 }
             } else {
-                echo json_encode(['success' => false, 'message' => 'No s\'ha pugut validar el correo amb la base de dades']);
+                echo json_encode(['success' => false, 'message' => 'No s\'ha pugut validar el correu amb la base de dades']);
                 exit;
             }
         } catch (Exception $e) {
@@ -130,22 +130,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     if (changePasswordInDatabase($password, $email)) {
 
                         if (ValidationUser($email)) {
-                            echo json_encode(['success' => true, 'message' => 'Contraseña cambiada exitosament y usuari validat', 'email' => $email]);
+                            echo json_encode(['success' => true, 'message' => 'Contraseña cambiada exitosament i usuari validat', 'email' => $email]);
                             exit;
                         } else {
-                            echo json_encode(['success' => false, 'message' => 'hubo surgit un problema i no s\'ha pugut validar el correo', 'email' => $email]);
+                            echo json_encode(['success' => false, 'message' => 'ha surgit un problema i no s\'ha pugut validar el correu', 'email' => $email]);
                             exit;
                         }
                     } else {
-                        echo json_encode(['success' => false, 'message' => 'hubo surgit un problema i no s\'ha pugut cambiar la contrasenya', 'email' => $email]);
+                        echo json_encode(['success' => false, 'message' => 'ha surgit un problema i no s\'ha pugut cambiar la contrasenya', 'email' => $email]);
                         exit;
                     }
                 } else {
-                    echo json_encode(['success' => false, 'message' => 'validacio de usuari no apta, siusplau, comproba el correp', 'email' => $email]);
+                    echo json_encode(['success' => false, 'message' => 'validacio de usuari no apta, siusplau, comproba el correu', 'email' => $email]);
                     exit;
                 }
             } else {
-                echo json_encode(['success' => false, 'message' => 'Las contrasenyas no coincideixen, torna a introduir les dades']);
+                echo json_encode(['success' => false, 'message' => 'Las contrasenyes no coincideixen, torna a introduir les dades']);
                 exit;
             }
         } catch (Exception $e) {
@@ -338,9 +338,9 @@ function sendEmail($email, $subject, $message)
 
         //Content
         $mail->isHTML(true);                                  //Set email format to HTML
-        $mail->Subject = 'Here is the subject';
+        $mail->Subject = 'Hem rebut un misatge per recuperar la compte, cambia la teva contrasenya';
         $mail->Body = $message;
-        $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+        $mail->AltBody = 'aquest es un misatge per cambiar la contrasenya ';
 
 
 
@@ -348,7 +348,7 @@ function sendEmail($email, $subject, $message)
 
             return true; // Retorna true si el correo se envió correctamente
         } else {
-            $_SESSION["ERRORS"][] = "No se pudo enviar el correo.";
+            $_SESSION["ERRORS"][] = "no s\'ha pogut enviar el correu.";
             return false;
         }
     } catch (Exception $e) {

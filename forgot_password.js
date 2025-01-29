@@ -71,7 +71,7 @@ function validatePasswords(password, passwordConfirm) {
     let errores = [];
     console.log('entra a la funcion de validar la contraseña ',password, passwordConfirm);
     if (password !== passwordConfirm) {
-        errores.push("Les contrassenyes no coincideixen.");
+        errores.push("Les contrasenyes no coincideixen.");
        
     } if (password.length < 8) {
         errores.push("La contrasenya ha de tenir almenys 8 caracters.");
@@ -87,13 +87,13 @@ function validatePasswords(password, passwordConfirm) {
  
      // Si falta alguno de estos requisitos, añadir un error
      if (!tieneMayuscula) {
-         errores.push("La contrasenya ha de tenir almenys una lletra majúscula.");
+         errores.push("La contrasenya ha de tenir almenys una lletra MAJUSCULA.");
      }
      if (!tieneMinuscula) {
-         errores.push("La contrasenya ha de tenir almenys una lletra minúscula.");
+         errores.push("La contrasenya ha de tenir almenys una lletra MINUSCULA.");
      }
      if (!tieneNumero) {
-         errores.push("La contrasenya ha de tenir almenys un número.");
+         errores.push("La contrasenya ha de tenir almenys un NUMERO.");
      }
 
 
@@ -149,7 +149,7 @@ async function sendForgotPasswordForm(event) {
             const forgotPassword = await response.json();
             if (response.ok) {
                 if (forgotPassword.success) {
-                showAlerts("info", "correo enviat, siusplau, valida el teu correo per poder cambiar la contrasenya.");
+                showAlerts("info", "correu enviat, siusplau, valida el teu correo per poder cambiar la contrasenya.");
                 console.log('respuesta todo ok ', forgotPassword.message, forgotPassword.email);
                  setTimeout(() => {
 
