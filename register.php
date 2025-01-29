@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['validacio'])) {
         // comprobar que no este vacio, ya que estaremos esperando una respuesta en js con esta url
         if ($validacioParam === '') {
 
-            echo json_encode(['success' => false, 'message' => 'codi de validacio no apte']);
+            echo json_encode(['success' => false, 'message' => 'codi de validació no apte']);
             exit;
 
         }
@@ -54,13 +54,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['validacio'])) {
                 // echo "   " . "El email y el código son válidos.";
             } else {
 
-                echo json_encode(['success' => false, 'message' => 'codi de validacio no apte']);
+                echo json_encode(['success' => false, 'message' => 'codi de validació no apte']);
                 exit;
                            }
 
 
         } else {
-            echo json_encode(['success' => false, 'message' => 'codi de validacio no apte']);
+            echo json_encode(['success' => false, 'message' => 'codi de validació no apte']);
             exit;
         }
     } catch (Exception $e) {
@@ -103,7 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
            
             // Validar que los datos requeridos no sean nulos o vacíos
             if (!$email || !$name || !$surname || !$alias || !$birth_date || !$latitude || !$longitude || !$sex || !$sexual_orientation || !$password) {
-                echo json_encode(['success' => false, 'message' =>'en el servidor hi ha agut algu un camp buit del formulari']);
+                echo json_encode(['success' => false, 'message' =>'en el servidor hi ha hagut algun camp buit del formulari']);
                 exit;
             }
 
@@ -302,9 +302,9 @@ try {
 
     //Content
     $mail->isHTML(true);                                  //Set email format to HTML
-    $mail->Subject = 'Aquest és un missatge de validació, moltes gràcies per fer servir la nostra aplicació';
+    $mail->Subject = 'Aquest és un missatge de validació, moltes gràcies per fer servir la nostra aplicació.';
     $mail->Body    = $message;
-    $mail->AltBody = 'aquest es un misatge de validacio, que proporciona el codi necesari per donar de alta';
+    $mail->AltBody = "Aquest és un misatge de validacio, que proporciona el codi necessari per donar d'alta.";
 
 
 
@@ -691,7 +691,7 @@ $errors = [];
                     </div>
                     <br>
                     <div class="input-group">
-                        <label for="birth_date">Data de naixament</label>
+                        <label for="birth_date">Data de naixement</label>
                         <input type="date" id="birth_date" name="birth_date" value="">
                     </div>
                     <br>
@@ -731,7 +731,7 @@ $errors = [];
                     </div>
                     <br>
                     <div class="input-group">
-                        <label for="password">Contrasenya</label>
+                        <label for="password">Contrassenya</label>
                         <input type="password" id="password" name="password">
 
                     </div>
@@ -741,7 +741,7 @@ $errors = [];
 
                     <button type="submit" class="primary-button">Registrar-se</button>
 
-                    <a href="login.php" class="secondary-link">Ja tens una compte? Inicia sessió</a>
+                    <a href="login.php" class="secondary-link">Ja tens un compte? Inicia sessió</a>
                 </div>
             </form>
             <br>

@@ -243,7 +243,7 @@ async function updateUserPreferences(distance, minAge, maxAge) {
                         renderUserCard(fetchedUsers, 0);
 
                     } else { // show no users let
-                        insertLog(`[DISCOVER.PHP] NOT FOUNF users that match the new user preference. Rendering users`, "INFO");
+                        insertLog(`[DISCOVER.PHP] NOT FOUND users that match the new user preference. Rendering users`, "INFO");
                         renderNoUsersLeft();
 
                     }
