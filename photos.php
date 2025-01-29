@@ -5,7 +5,6 @@ session_start();
 
 include("functions.php"); /* Loads search from users + logs + startPDO */ 
 
-// $_SESSION['user'] = 7;
 
 // Check if session is active. Otherwise, get to login
 if (!isset($_SESSION['user'])) {
@@ -16,12 +15,12 @@ if (!isset($_SESSION['user'])) {
 // Store loggedUser Object
 $loggedUser = searchUserInDatabase("*", "users", $_SESSION['user']);
 
-logOperation("[PROFILE.PHP] Session started");
+logOperation("[PHOTOS.PHP] Session started for user ".$_SESSION['user']);
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['action'] === 'get_user_photos') {
 
     try {
-        logOperation("[PROFILE.PHP] [PHOTOS] User requested own photos.");
+        logOperation("[PHOTOS.PHP] User requested own photos.");
         // Initialize BBDD
         $pdo = startPDO();
 
@@ -31,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
         $stmt = $pdo->prepare($sql);
         $stmt->bindParam(':loggedUserId', $userID);
         $stmt->execute();
-        logOperation("[PROFILE.PHP] [PHOTOS] Query sent: $sql");
+        logOperation("[PHOTOS.PHP] Query sent to get photos: $sql");
 
         // Load user photos from the query
         $photos = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -40,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
         unset($stmt);
         unset($pdo);
 
-        logOperation("[PROFILE.PHP] [PHOTOS] Successfully got photos of user in GET method get_user_photos. Returned data to JS");
+        logOperation("[PHOTOS.PHP] Successfully got photos of user in GET method get_user_photos. Returned data to JS");
 
         // Send successful objects of users
         echo json_encode(['success' => true, 'message' => array_values($photos)]);
@@ -48,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
 
     } catch (PDOException $e) {
 
-       logOperation("[PROFILE.PHP] [PHOTOS] Connection error in GET method get_user_photos: " . $e->getMessage(), "ERROR");
+       logOperation("[PHOTOS.PHP] Connection error in GET method get_user_photos: " . $e->getMessage(), "ERROR");
         // catch error and send it to JS
         echo json_encode(['success' => false, 'message' => 'Error en la conexión getUser: ' . $e->getMessage()]);
         exit;
@@ -61,7 +60,7 @@ function deletePhoto($input){
     $photoID = $input["photoID"];
     $path = $input["path"];
 
-    logOperation("[PROFILE.PHP] [PHOTOS] Starting photo $photoID deletion");
+    logOperation("[PHOTOS.PHP] Starting photo $photoID deletion");
 
     // Initialize BBDD
     $pdo = startPDO();
@@ -71,13 +70,13 @@ function deletePhoto($input){
     $stmt->bindParam(':photoID', $photoID);
     $stmt->execute();
 
-    logOperation("[PROFILE.PHP] [PHOTOS] Query sent for photo deletion: $sql");
+    logOperation("[PHOTOS.PHP] Query sent for photo deletion: $sql");
     
     // Cleans stored space for query and PDO
     unset($stmt);
     unset($pdo);
     
-    logOperation("[PROFILE.PHP] [PHOTOS] Photo $photoID deleted in BBDD successfully");
+    logOperation("[PHOTOS.PHP] Photo $photoID deleted in BBDD successfully");
 
     // FILE DELETION
     $file = __DIR__ . $path;
@@ -86,13 +85,13 @@ function deletePhoto($input){
 
         if (unlink($file)) {
 
-            logOperation("[PROFILE.PHP] [PHOTOS] File deleted successfully.");
+            logOperation("[PHOTOS.PHP] File deleted successfully.");
             echo json_encode(['success' => true, 'message' => "Error deleting the file $file"]);
             exit;
 
         } else {
 
-            logOperation("[PROFILE.PHP] [PHOTOS] Error deleting the file $file", "ERROR");
+            logOperation("[PHOTOS.PHP] Error deleting the file $file", "ERROR");
             echo json_encode(['success' => false, 'message' => "Error deleting the file $file"]);
             exit;
 
@@ -100,12 +99,13 @@ function deletePhoto($input){
 
     } else {
 
-        logOperation("[PROFILE.PHP] [PHOTOS] File $file does not exist.", "ERROR");
+        logOperation("[PHOTOS.PHP] File $file does not exist.", "ERROR");
         echo json_encode(['success' => false, 'message' => "File $file does not exist."]);
         exit;
 
     }
 
+    logOperation("[PHOTOS.PHP] Photo $photoID deleted successfully");
     // Sends response to 
     echo json_encode(['success' => true, 'message' => "Photo deleted successfully"]);
     exit;
@@ -116,14 +116,14 @@ function handleImageUpload($file, $user_ID){
     if(isset($file)) {
 
         if (filesize($file["tmp_name"]) <= 0) {
-            logOperation("Uploaded file has no contents.", "ERROR");
+            logOperation("[PHOTOS.PHP] Uploaded file has no contents.", "ERROR");
             echo json_encode(["success" => false, "message" => "Upload error: " . 'Uploaded file has no contents.']);
             exit;
         }
 
         $image_type = exif_imagetype($file["tmp_name"]);
         if (!$image_type) {
-            logOperation("Uploaded file is not an image.", "ERROR");
+            logOperation("[PHOTOS.PHP] Uploaded file is not an image.", "ERROR");
             echo json_encode(["success" => false, "message" => "Upload error: " . 'Uploaded file is not an image.']);
             exit;
         }
@@ -131,20 +131,20 @@ function handleImageUpload($file, $user_ID){
         $image_extension = image_type_to_extension($image_type, true);
         $valid_extensions = [".jpg", ".jpeg", ".png", ".webp"];
         if(!in_array($image_extension, $valid_extensions)){
-            logOperation("Invalid extension of file uploaded", "ERROR");
+            logOperation("[PHOTOS.PHP] Invalid extension of file uploaded", "ERROR");
             echo json_encode(["success" => false, "message" => "Upload error: " . 'Invalid extension']);
             exit;
         }
 
         $image_name = bin2hex(random_bytes(16)) . $image_extension;
-        logOperation("Name of received image = $image_name");
+        logOperation("[PHOTOS.PHP] Name of received image = $image_name");
 
         $uploadDir = __DIR__ . "/images//";
         $targetPath = $uploadDir . $image_name;
-        logOperation("Path to move file = $targetPath");
+        logOperation("[PHOTOS.PHP] Path to move file = $targetPath");
 
         $pathForDatabase = "/images/$image_name";
-        logOperation("Path to store in database = $pathForDatabase");
+        logOperation("[PHOTOS.PHP] Path to store in database = $pathForDatabase");
 
         // Check for errors
         if ($file["error"] === UPLOAD_ERR_OK) {
@@ -152,7 +152,7 @@ function handleImageUpload($file, $user_ID){
             // Move the uploaded file
             if (move_uploaded_file($file["tmp_name"], $targetPath)) {
 
-                logOperation("File moved successfully, executing insertPhotoInBBDD function with parameters: $image_extension, $pathForDatabase, $user_ID");
+                logOperation("[PHOTOS.PHP] File moved successfully, executing insertPhotoInBBDD function with parameters: $image_extension, $pathForDatabase, $user_ID");
                 insertPhotoInBBDD($image_extension, $pathForDatabase, $user_ID);
 
                 echo json_encode(["success" => true, "message" => "File uploaded successfully!", "path" => $targetPath]);
@@ -160,7 +160,7 @@ function handleImageUpload($file, $user_ID){
 
             } else {
 
-                logOperation("Failed to move uploaded file.");
+                logOperation("[PHOTOS.PHP] Failed to move uploaded file.");
                 echo json_encode(["success" => false, "message" => "Failed to move uploaded file."]);
                 exit;
 
@@ -168,14 +168,14 @@ function handleImageUpload($file, $user_ID){
 
         } else {
 
-            logOperation("Upload error: " . $file["error"], "ERROR");
+            logOperation("[PHOTOS.PHP] Upload error: " . $file["error"], "ERROR");
             echo json_encode(["success" => false, "message" => "Upload error: " . $file["error"]]);
             exit;
 
         }
 
     } else {
-        logOperation("No file uploaded in PHP", "ERROR");
+        logOperation("[PHOTOS.PHP] No file uploaded in PHP", "ERROR");
         echo json_encode(["success" => false, "message" => "No file uploaded."]);
         exit;
 
@@ -193,7 +193,7 @@ function insertPhotoInBBDD($type, $path, $user_ID){
 
     // Inserts interaction in database (from loggedUser to the user interacted with and the type (like/dislike))
     $sql = "INSERT INTO photos (user_ID, type, path) VALUES (:loggedUserID, :typeOfFile, :pathOfFile)";
-    logOperation($sql);
+    logOperation("[PHOTOS.PHP] Query sent to insert photo in database: $sql");
 
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':loggedUserID', $user_ID);
@@ -221,14 +221,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Send error if there's no input
         if (!$input) {
-            logOperation("[DISCOVER.PHP] Invalid input for POST request.", "ERROR");
+            logOperation("[PHOTOS.PHP] Invalid input for POST request.", "ERROR");
             echo json_encode(['success' => false, 'message' => 'Dades invàlides']);
             exit;
         }
 
         // Checks if there's an endpoint defined
         if (!isset($input['endpoint'])) {
-            logOperation("[DISCOVER.PHP] Endpoint not defined for POST request.", "ERROR");
+            logOperation("[PHOTOS.PHP] Endpoint not defined for POST request.", "ERROR");
             echo json_encode(['success' => false, 'message' => 'Endpoint no especificat.']);
             exit;
         }
@@ -250,13 +250,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 exit;
 
             default: // In case of 
-                logOperation("[DISCOVER.PHP] Endpoint not found for POST request. Endpoint sent: ".$input["logMessage"], "ERROR");
+                logOperation("[PHOTOS.PHP] Endpoint not found for POST request. Endpoint sent: ".$input["logMessage"], "ERROR");
                 echo json_encode(['success' => false, 'message' => 'Endpoint desconegut.']);
                 exit;
         }
 
     } catch (PDOException $e) {
-        logOperation("[DISCOVER.PHP] Connection error in POST method: " . $e->getMessage(), "ERROR");
+        logOperation("[PHOTOS.PHP] Connection error in POST method: " . $e->getMessage(), "ERROR");
         echo json_encode(['success' => false, 'message' => 'Error en la conexió: ' . $e->getMessage()]);
         exit;
     }

@@ -96,8 +96,8 @@ function validateData(formData) {
 function initMap() {
 
     // coger las cordenadas del formulario, dependiendo del usuario que este iniciado
-    const latitude =  parseFloat('2');
-    const longitude = parseFloat('2');
+    const latitude =  parseFloat('40');
+    const longitude = parseFloat('-73');
 
     // Coordenadas iniciales
     const initialPosition = { lat: latitude, lng: longitude };
@@ -188,14 +188,20 @@ async function sendRegisterForm(event) {
             method: 'POST',
             body: dataRegisterForm, // Deja que el navegador establezca automáticamente el Content-Type
         });
+        const register = await response.json();
     
         if (response.ok) {
-            const register = await response.json();
-            showAlerts("info", "Usuari registrat correctament, valida el teu correo electrònic.");
+        
+            if(register.success === true){
+            showAlerts("info", "Usuari registrat correctament, valida el teu correu electrònic.");
             console.log('respuesta todo ok ',register.message);
             setTimeout(() => {
                 window.location.href = "login.php";
-            },"2000 ");
+            },"3000 ");
+        }else{
+            console.log('respuesta final: ',register.message);
+            showAlerts("error", register.message);
+        }
             
 
         } else {
