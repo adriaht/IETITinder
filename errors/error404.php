@@ -19,7 +19,7 @@
             <main id="content" class="discover content">
 
                 <h1>UPS! ERROR 404!</h1>
-                <h2>Ens sembla que aqui no es possible trobar el teu amor!</h2>
+                <h2>Sembla que no és possible trobar el teu amor aquí!</h2>
                 <a href="/index.php">Tornar a l'aplicació</a>
 
             </main>

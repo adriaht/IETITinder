@@ -51,8 +51,8 @@ function validateData(formData) {
     // variables de traduccion, ya que el formulario es en ingles y la base de datos també
     const fieldTranslations = {
         email: "Correu electrònic",
-        password: "Contrasenya",
-        confirm_password: "Confirma la contrasenya"
+        password: "Contrassenya",
+        confirm_password: "Confirma la contrassenya"
     };
 
     let errores = [];
@@ -71,12 +71,12 @@ function validatePasswords(password, passwordConfirm) {
     let errores = [];
     console.log('entra a la funcion de validar la contraseña ',password, passwordConfirm);
     if (password !== passwordConfirm) {
-        errores.push("Les contrasenyes no coincideixen.");
+        errores.push("Les contrassenyes no coincideixen.");
        
     } if (password.length < 8) {
-        errores.push("La contrasenya ha de tenir almenys 8 caracters.");
+        errores.push("La contrassenya ha de tindre almenys 8 càracters.");
     } if (password.length > 20) {
-        errores.push("La contrasenya ha de tenir menys de 20 caracters.");
+        errores.push("La contrassenya ha de tindre menys de 20 càracters.");
     }
 
     // comprobar si hay mayusculas, minusculas y numeros
@@ -87,13 +87,13 @@ function validatePasswords(password, passwordConfirm) {
  
      // Si falta alguno de estos requisitos, añadir un error
      if (!tieneMayuscula) {
-         errores.push("La contrasenya ha de tenir almenys una lletra MAJUSCULA.");
+         errores.push("La contrassenya ha de tindre almenys una lletra MAJÚSCULA.");
      }
      if (!tieneMinuscula) {
-         errores.push("La contrasenya ha de tenir almenys una lletra MINUSCULA.");
+         errores.push("La contrassenya ha de tindre almenys una lletra MINÚSCULA.");
      }
      if (!tieneNumero) {
-         errores.push("La contrasenya ha de tenir almenys un NUMERO.");
+         errores.push("La contrassenya ha de tindre almenys un NÚMERO.");
      }
 
 
@@ -149,7 +149,7 @@ async function sendForgotPasswordForm(event) {
             const forgotPassword = await response.json();
             if (response.ok) {
                 if (forgotPassword.success) {
-                showAlerts("info", "Correu enviat, si us plau, valida el teu correu per poder cambiar la contrasenya.");
+                showAlerts("info", "Correu enviat, si us plau, valida el teu correu per poder canviar la contrassenya.");
                 console.log('respuesta todo ok ', forgotPassword.message, forgotPassword.email);
                  setTimeout(() => {
 
@@ -159,7 +159,7 @@ async function sendForgotPasswordForm(event) {
 
                 }else {
                     console.error('ha ocurrido un error al procesar o verificar el correo, porfavor, compruebe los datos y vuelvelo a probar',forgotPassword.message);
-                    showAlerts('error', 'S\'ha produit un error al procesar o verificar el correu, si us plau, comproba les dades i torna a probar-ho');
+                    showAlerts('error', 'S\'ha produit un error al processar o verificar el correu, si us plau, comprova les dades i torna a provar-ho');
                 }
             } else {
                 console.error('Error en la respuesta del servidor al enviar el correo de cambio de contraseña',forgotPassword.message);
@@ -250,7 +250,7 @@ console.log('hay errores de password: ', passwordError.length, passwordError);
                 }else{
                     
               
-                showAlerts("info", "Contrasenya canviada correctament.");
+                showAlerts("info", "Contrassenya canviada correctament.");
                 console.log('Respuesta todo ok:', forgot.message, forgot.email);
                 setTimeout(() => {
 

@@ -172,7 +172,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
 
                 <div class="input-group <?php echo isset($errors['email']) || isset($errors['password']) ? 'error' : ''; ?>">
-                    <label for="password">Contrasenya</label>
+                    <label for="password">Contrassenya</label>
                     <div class="password-input">
                         <input type="password" id="password" name="password" required>
                         <!-- <button type="button" id="togglePassword" class="toggle-password">👁️</button> -->

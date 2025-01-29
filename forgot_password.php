@@ -625,7 +625,7 @@ function isEmailAndCodeValid($email, $code)
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Change Password</title>
+    <title>IETinder - Change Password</title>
     <link rel="stylesheet" type="text/css" href="/styles.css?t=<?php echo time(); ?>" />
     <script src="forgot_password.js"></script>
 </head>
@@ -643,8 +643,8 @@ function isEmailAndCodeValid($email, $code)
                     <h1>Introdueix el teu correu</h1>
                     <br>
                     <p>
-                        Siusplau, introdueix el teu correu per rebre un email de verificació, despres podras cambiar
-                        la teva contrasenya
+                        Si us plau, introdueix el teu correu per rebre un email de verificació, després podràs canviar
+                        la teva contrassenya.
                     </p>
                 </div>
                 <br>
@@ -660,7 +660,7 @@ function isEmailAndCodeValid($email, $code)
                     <br>
                     <div class="links-group">
                         <button type="submit" class="primary-button">Enviar</button>
-                        <a href="login.php" class="secondary-link">Ja tens una compte? Inicia sessió</a>
+                        <a href="login.php" class="secondary-link">Ja tens un compte? Inicia sessió</a>
                     </div>
                 </form>
 
@@ -669,9 +669,9 @@ function isEmailAndCodeValid($email, $code)
 <?php else: ?>
             <main class="forgot-password" id="change_password" >
                 <div class="informative_header">
-                    <h1>Cambia la contrasenya</h1>
+                    <h1>Canvia la contrassenya</h1>
                     <br>
-                    <p>Introdueix la contrasenya desitjada y confirma-la per poder cambiarla</p>
+                    <p>Introdueix la contrassenya desitjada y confirma-la per poder canviar-la</p>
                 </div>
                 <br>
                 <form action="" method="POST" id="change_password_form">
@@ -679,18 +679,18 @@ function isEmailAndCodeValid($email, $code)
 
                     </div>
                     <div class="input-group">
-                        <label for="password">Contrasenya: </label>
+                        <label for="password">Contrassenya: </label>
                         <input type="password" id="password" name="password" placeholder="Contrasenya">
                     </div>
                     <div class="input-group">
-                        <label for="confirm_password">Confirma la contrasenya: </label>
+                        <label for="confirm_password">Confirma la contrassenya: </label>
                         <input type="password" id="confirm_password" name="confirm_password"
                             placeholder="Confirma la contrasenya">
                     </div>
                     <br>
                     <div class="links-group">
-                        <button type="submit" class="primary-button">Cambia la contrasenya</button>
-                        <a href="login.php" class="secondary-link">Ja tens una compte? Inicia sessió</a>
+                        <button type="submit" class="primary-button">Canvia la contrassenya</button>
+                        <a href="login.php" class="secondary-link">Ja tens un compte? Inicia sessió</a>
                     </div>
                 </form>
 
