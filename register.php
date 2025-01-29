@@ -612,7 +612,7 @@ function setEmailValidated($email)
         $pdo = startPDO();
 
         // Prepara la consulta SQL para actualizar el campo 'validated'
-        $sql = "UPDATE users SET validated = 1 WHERE email = :email";
+        $sql = "UPDATE users SET validated = 1, deactivated = 0 WHERE email = :email";
         $stmt = $pdo->prepare($sql);
 
         // Vincula el parámetro de correo electrónico
