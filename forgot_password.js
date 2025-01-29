@@ -149,7 +149,7 @@ async function sendForgotPasswordForm(event) {
             const forgotPassword = await response.json();
             if (response.ok) {
                 if (forgotPassword.success) {
-                showAlerts("info", "Correu enviat, siusplau, valida el teu correo per poder cambiar la contrasenya.");
+                showAlerts("info", "Correu enviat, si us plau, valida el teu correu per poder cambiar la contrasenya.");
                 console.log('respuesta todo ok ', forgotPassword.message, forgotPassword.email);
                  setTimeout(() => {
 
@@ -159,7 +159,7 @@ async function sendForgotPasswordForm(event) {
 
                 }else {
                     console.error('ha ocurrido un error al procesar o verificar el correo, porfavor, compruebe los datos y vuelvelo a probar',forgotPassword.message);
-                    showAlerts('error', 'S\'ha produit un error al procesar o verificar el correu, siusplau, comproba les dades i torna a probar-ho');
+                    showAlerts('error', 'S\'ha produit un error al procesar o verificar el correu, si us plau, comproba les dades i torna a probar-ho');
                 }
             } else {
                 console.error('Error en la respuesta del servidor al enviar el correo de cambio de contraseña',forgotPassword.message);
