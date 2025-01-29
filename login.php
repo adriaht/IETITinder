@@ -181,7 +181,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <button type="submit" class="primary-button">Iniciar Sessió</button>
 
                 <div class="links-group">
-                    <a href="#" class="secondary-link">¿Has oblidat la contrasenya?</a>
+                    <a href="forgot_password.php" class="secondary-link">¿Has oblidat la contrasenya?</a>
                     <a href="register.php" class="secondary-link">Crea una compte nova</a>
                 </div>
             </form>

@@ -134,13 +134,17 @@ body.errors main#content a {
     margin: 10 auto 30px;
 }
 
+.body_forgot_password div.error-message p,
 .body-register  div#error-message p{
     text-align: center;
     color: red;
 }
 
+
+
 .body-login,
-.body-register {
+.body-register,
+.body_forgot_password {
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -157,7 +161,8 @@ body.errors main#content a {
     100% { background-position: 0% 50%; }
 }
 
-.body-register #register-card{
+.body-register #register-card
+{
     padding: 2rem;
     display: flex;
     justify-content: center;
@@ -170,8 +175,13 @@ body.errors main#content a {
     max-height: 500px;
     overflow: auto;
 }
+.body_forgot_password .card-header{
+    padding-top: 70px;
+    padding-bottom: 30px;
+}
 
-.body-login #login-card {
+.body-login #login-card,
+.body_forgot_password #forgot-card  {
     padding: 2rem;
     display: flex;
     justify-content: center;
@@ -184,7 +194,8 @@ body.errors main#content a {
 }
 
 .body-login .logo-login,
-.body-register .logo-register {
+.body-register .logo-register,
+.body_forgot_password .logo-forgot {
     text-align: center;
     margin-bottom: 1rem;
     color: #FF6B6B;
@@ -214,7 +225,8 @@ body.errors main#content a {
 }
 
 .body-login label,
-.body-register label
+.body-register label,
+.body_forgot_password label
  {
     display: block;
     margin-bottom: 0.5rem;
@@ -224,7 +236,8 @@ body.errors main#content a {
 }
 
 .body-login input,
-.body-register input {
+.body-register input ,
+.body_forgot_password input {
     width: 100%;
     padding: 0.75rem 1rem;
     border: 1px solid #e2e8f0;
@@ -244,7 +257,8 @@ body.errors main#content a {
 }
 
 .body-login .primary-button,
-.body-register .primary-button {
+.body-register .primary-button,
+.body_forgot_password .primary-button {
     width: 100%;
     padding: 0.75rem 1rem;
     background: linear-gradient(to right, #ff6b6b, #cc2faa);
@@ -261,25 +275,29 @@ body.errors main#content a {
 }
 
 .body-login .primary-button:hover,
-.body-register .primary-button:hover {
+.body-register .primary-button:hover,
+.body_forgot_password .primary-button:hover {
     opacity: 0.9;
 }
 
 .body-login .primary-button:disabled,
-.body-register .primary-button:disabled {
+.body-register .primary-button:disabled,
+.body_forgot_password .primary-button:disabled {
     opacity: 0.7;
     cursor: not-allowed;
 }
 
 .body-login .links-group,
-.body-register .links-group {
+.body-register .links-group,
+.body_forgot_password .links-group {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
 }
 
 .body-login .secondary-link,
-.body-register .secondary-link {
+.body-register .secondary-link,
+.body_forgot_password .secondary-link {
     color: #4a5568;
     text-decoration: none;
     font-size: 0.875rem;
@@ -288,7 +306,8 @@ body.errors main#content a {
 }
 
 .body-login .secondary-link:hover,
-.body-register .secondary-link:hover {
+.body-register .secondary-link:hover,
+.body_forgot_password .secondary-link:hover {
     color: #ff6b6b;
 }
 
@@ -301,12 +320,20 @@ body.errors main#content a {
 }
 
 .body-login .footer-text,
-.body-register .footer-text {
+.body-register .footer-text
+.body_forgot_password .footer-text {
     text-align: center;
     color: #718096;
     font-size: 0.875rem;
     margin-bottom: 2rem;
     font-family: 'Inter', sans-serif;
+}
+.body_forgot_password .informative_header {
+    text-align: center;
+    color: #718096;
+    margin-top: 12px;
+    font-family: 'Inter', sans-serif;
+
 }
 
 /* MARK: INSIDE APP */
