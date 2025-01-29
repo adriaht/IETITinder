@@ -103,7 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
            
             // Validar que los datos requeridos no sean nulos o vacíos
             if (!$email || !$name || !$surname || !$alias || !$birth_date || !$latitude || !$longitude || !$sex || !$sexual_orientation || !$password) {
-                echo json_encode(['success' => false, 'message' =>'El correo electrónico es requerido y no recibido en el servidor']);
+                echo json_encode(['success' => false, 'message' =>'Hay algun error y se ha recibido algun campo erroneo en el servidor']);
                 exit;
             }
 
@@ -150,7 +150,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         exit;
 
                     } else {
-                        echo json_encode(['success' => false, 'message' => 'error al insertar en la base de datos']);
+                        echo json_encode(['success' => false, 'message' => 'error al insertar a la base de dades']);
                         exit;
 
                     }
@@ -163,13 +163,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
                 } else { //error al enviar el correo de validacion
-                    echo json_encode(['success' => false, 'message' => 'Error al enviar el correo de validacion']);
+                    echo json_encode(['success' => false, 'message' => 'Error al enviar el correo de validació']);
                     exit;
                 }
 
             } else {
                 // el correo existe y escapamos
-                echo json_encode(['success' => false, 'message' => 'El correo electrónico ya esta registrado']);
+                echo json_encode(['success' => false, 'message' => 'El correo electrónic ja está registrat']);
                 exit;
             }
 
@@ -238,7 +238,7 @@ function searchEmailInDatabase($email)
         }
 
         // Consulta SQL para buscar el correo
-        $sql = "SELECT email FROM users WHERE email = :email";
+        $sql = "SELECT email FROM users WHERE email = :email AND deactivated=1";
         $stmt = $pdo->prepare($sql);
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
         $stmt->execute();
@@ -360,7 +360,7 @@ function sendValidateEmail($email, $code, $name)
             <p>Gràcies per registrar-te al nostre lloc. Si us plau, utilitza el següent codi per completar el teu procés de validació:</p>
             <div style="text-align: center; margin: 20px 0;">
                 <span style="display: inline-block; font-size: 1.5rem; font-weight: bold; background: #f4f4f4; padding: 10px 20px; border-radius: 5px; border: 1px solid #ddd;">
-                    ' . htmlspecialchars($code) . '
+                    ' . htmlspecialchars($validacioParam) . '
                 </span>
                 <p style="margin-top: 20px; font-size: 0.875rem;">Aquest codi és vàlid durant 48 hores.</p>
                 <p>Per confirmar, fes clic aquí:

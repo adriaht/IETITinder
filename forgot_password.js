@@ -78,6 +78,25 @@ function validatePasswords(password, passwordConfirm) {
     } if (password.length > 20) {
         errores.push("La contrasenya ha de tenir menys de 20 caracters.");
     }
+
+    // comprobar si hay mayusculas, minusculas y numeros
+     // Comprobamos si la contraseña contiene una mayúscula, una minúscula y un número
+     let tieneMayuscula = /[A-Z]/.test(password);
+     let tieneMinuscula = /[a-z]/.test(password);
+     let tieneNumero = /[0-9]/.test(password);
+ 
+     // Si falta alguno de estos requisitos, añadir un error
+     if (!tieneMayuscula) {
+         errores.push("La contrasenya ha de tenir almenys una lletra majúscula.");
+     }
+     if (!tieneMinuscula) {
+         errores.push("La contrasenya ha de tenir almenys una lletra minúscula.");
+     }
+     if (!tieneNumero) {
+         errores.push("La contrasenya ha de tenir almenys un número.");
+     }
+
+
     console.log('en la funcion hay: ',errores.length, errores); 
     return errores;
 }
