@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             // comprobar que no este vacio, ya que estaremos esperando una respuesta en js con esta url
             if ($validacioParam === '') {
 
-                echo json_encode(['success' => false, 'message' => 'codigo recibido no es apto']);
+                echo json_encode(['success' => false, 'message' => 'el codi rebut no es apte']);
                 exit;
 
             }
@@ -56,22 +56,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
 
                     } else {
-                        echo json_encode(['success' => false, 'message' => 'Error en el servidor al cambiar la validacion del usuario']);
+                        echo json_encode(['success' => false, 'message' => 'Error en el servidor al cambiar la validacio de usuari']);
                         exit;
                     }
-
-
-
-
                 } else {
 
-                    echo json_encode(['success' => false, 'message' => 'codigo de validacion no apto']);
+                    echo json_encode(['success' => false, 'message' => 'codi de validacio erroni']);
                     exit;
                 }
-
-
             } else {
-                echo json_encode(['success' => false, 'message' => 'codigo de validacion no apto']);
+                echo json_encode(['success' => false, 'message' => 'codi de validacio no apte']);
                 exit;
             }
         } catch (Exception $e) {
@@ -89,13 +83,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ob_clean(); // Limpia cualquier salida previa para no romper el json
     header('Content-Type: application/json; charset=utf-8');
 
-
-
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['endpoint']) && $_POST['endpoint'] === 'forgotPassword') {
         ob_clean(); // Limpia cualquier salida previa para no romper el json
         header('Content-Type: application/json; charset=utf-8');
-
-
 
         try {
             $email = isset($_POST['forgot_email']) ? $_POST['forgot_email'] : null;
@@ -105,28 +95,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (searchEmailInDatabase($email)) { //cambiar mas asdelante para que compruebe codigo de william
                 $name = searchNameInDatabase($email);
                 $code = searchCodeInDatabase($email);
+
                 if (sendChangePasswordEmail($email, $name, $code)) {
-
-                    echo json_encode(['success' => true, 'message' => 'Correo enviado exitosamente', 'email' => $_SESSION['email']]);
+                    echo json_encode(['success' => true, 'message' => 'Correo enviat exitosament', 'email' => $_SESSION['email']]);
                     exit;
-
                 } else {
-
-                    echo json_encode(['success' => false, 'message' => 'No se pudo enviar el correo']);
+                    echo json_encode(['success' => false, 'message' => 'Ha surgit un error al enviar el correo']);
                     exit;
-
                 }
-
             } else {
-
-                echo json_encode(['success' => false, 'message' => 'No se pudo validar el correo con la base de datos']);
+                echo json_encode(['success' => false, 'message' => 'No s\'ha pugut validar el correo amb la base de dades']);
                 exit;
             }
-
-
         } catch (Exception $e) {
             logOperation("Error general al enviar el correo: " . $e->getMessage(), "ERROR");
-
             exit;
 
         }
@@ -148,41 +130,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     if (changePasswordInDatabase($password, $email)) {
 
                         if (ValidationUser($email)) {
-                            echo json_encode(['success' => true, 'message' => 'Contraseña cambiada exitosamente y usuario validado', 'email' => $email]);
+                            echo json_encode(['success' => true, 'message' => 'Contraseña cambiada exitosament y usuari validat', 'email' => $email]);
                             exit;
                         } else {
-                            echo json_encode(['success' => false, 'message' => 'hubo un error y no se pudo validar al usuario']);
+                            echo json_encode(['success' => false, 'message' => 'hubo surgit un problema i no s\'ha pugut validar el correo', 'email' => $email]);
                             exit;
                         }
-
                     } else {
-                        echo json_encode(['success' => false, 'message' => 'hubo un error y no se pudo cambiar la contraseña', 'email' => $email]);
+                        echo json_encode(['success' => false, 'message' => 'hubo surgit un problema i no s\'ha pugut cambiar la contrasenya', 'email' => $email]);
                         exit;
-
                     }
                 } else {
-                    echo json_encode(['success' => false, 'message' => 'validacion del usuario no apta, porfavor, comprueba tu correp', 'email' => $email]);
+                    echo json_encode(['success' => false, 'message' => 'validacio de usuari no apta, siusplau, comproba el correp', 'email' => $email]);
                     exit;
                 }
             } else {
-                echo json_encode(['success' => false, 'message' => 'Las contraseñas no coinciden, vuelva a introducior los datos']);
+                echo json_encode(['success' => false, 'message' => 'Las contrasenyas no coincideixen, torna a introduir les dades']);
                 exit;
             }
-
-
         } catch (Exception $e) {
             logOperation("Error general al cambiar la contraseña: " . $e->getMessage(), "ERROR");
 
             exit;
-
         }
     }
-
-
-
 }
-
-
 
 function startPDO()
 {
@@ -220,8 +192,6 @@ function logOperation($message, $type = "INFO")
 
     file_put_contents($logFile, $logMessage, FILE_APPEND);
 }
-
-
 
 // funcion para buscar el correo en la base de datos, debuelve true si no lo encuentra y false si existe algun correo registrado
 function searchEmailInDatabase($email)
