@@ -640,10 +640,10 @@ function isEmailAndCodeValid($email, $code)
 <?php if (!$showChangePassword): ?>
             <main class="forgot-password" id="search_email">
                 <div class="informative_header">
-                    <h1>introdueix el teu correo</h1>
+                    <h1>Introdueix el teu correu</h1>
                     <br>
                     <p>
-                        siusplau, introdueix el teu correo per rebre un email de verificacio, despres podras cambiar
+                        Siusplau, introdueix el teu correu per rebre un email de verificació, despres podras cambiar
                         la teva contrasenya
                     </p>
                 </div>
@@ -671,7 +671,7 @@ function isEmailAndCodeValid($email, $code)
                 <div class="informative_header">
                     <h1>Cambia la contrasenya</h1>
                     <br>
-                    <p>introdueix la contrasenya desitjada y confirma-la per poder cambiarla</p>
+                    <p>Introdueix la contrasenya desitjada y confirma-la per poder cambiarla</p>
                 </div>
                 <br>
                 <form action="" method="POST" id="change_password_form">
@@ -679,11 +679,11 @@ function isEmailAndCodeValid($email, $code)
 
                     </div>
                     <div class="input-group">
-                        <label for="password">Contrasenya</label>
+                        <label for="password">Contrasenya: </label>
                         <input type="password" id="password" name="password" placeholder="Contrasenya">
                     </div>
                     <div class="input-group">
-                        <label for="confirm_password">Confirma la contrasenya</label>
+                        <label for="confirm_password">Confirma la contrasenya: </label>
                         <input type="password" id="confirm_password" name="confirm_password"
                             placeholder="Confirma la contrasenya">
                     </div>
