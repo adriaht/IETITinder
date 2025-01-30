@@ -302,7 +302,7 @@ try {
 
     //Content
     $mail->isHTML(true);                                  //Set email format to HTML
-    $mail->Subject = 'Aquest és un missatge de validació, moltes gràcies per fer servir la nostra aplicació.';
+    $mail->Subject = 'Aquest es un misatge de validacio, moltes gracies per fer servir la nostra aplicacio.';
     $mail->Body    = $message;
     $mail->AltBody = "Aquest és un misatge de validacio, que proporciona el codi necessari per donar d'alta.";
 
